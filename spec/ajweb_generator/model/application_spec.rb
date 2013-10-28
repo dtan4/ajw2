@@ -5,7 +5,7 @@ module AjwebGenerator
     let(:app) { AjwebGenerator::Application.new }
     let(:dirname) { "outdir" }
     let(:default_html) { "/index.html" }
-    let(:default_css) { "/index.cs" }
+    let(:default_css) { "/index.css" }
     let(:default_js) { "/index.js" }
 
     before(:all) do
