@@ -6,6 +6,11 @@ module Ajw2::Template
 
     describe "#input" do
       context "with valid input type" do
+        # it "should call #escape_options" do
+        #   element.should_receive(:escape_options).with(type: "text")
+        #   element.input(type: "text")
+        # end
+
         context "with type only" do
           subject { element.input(type: "text") }
           it { should be_instance_of String }
@@ -30,13 +35,7 @@ module Ajw2::Template
           it { should == '<input type="text" value="fuga">' }
         end
 
-        context "with double quotes" do
-          subject { element.input(type: "text", value: '" onclick="alert(1)"') }
-          it { should be_instance_of String }
-          it { should == '<input type="text" value="&quot; onclick=&quot;alert(1)&quot;">' }
-        end
-
-        context "with html tags" do
+        context "with special characters" do
           subject { element.input(type: "text", value: '"> <script>alert(1)</script>') }
           it { should be_instance_of String }
           it { should == '<input type="text" value="&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;">' }
@@ -48,6 +47,32 @@ module Ajw2::Template
           lambda {
             element.input(type: "INVALID_TYPE")
           }.should raise_error Exception
+        end
+      end
+    end
+
+    describe "#escape_options" do
+      context "with plain characters only" do
+        let(:result) { element.escape_options(type: "text", id: "hoge") }
+
+        it "should be a Hash object" do
+          result.should be_instance_of Hash
+        end
+
+        it "should return escaped options" do
+          result.should == {type: "text", id: "hoge"}
+        end
+      end
+
+      context "with special characters" do
+        let(:result) { element.escape_options(type: "text", value: '"> <script>alert(1)</script>') }
+
+        it "should be a Hash object" do
+          result.should be_instance_of Hash
+        end
+
+        it "should return escaped options" do
+          result.should == {type: "text", value: "&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;"}
         end
       end
     end

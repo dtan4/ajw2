@@ -7,7 +7,7 @@ module Ajw2::Template
     def input(options)
       raise Exception unless options[:type] && INPUT_TYPE.include?(options[:type])
 
-      options = options.each_pair { |key, val| options[key] = CGI.escapeHTML(val) }
+      options = escape_options(options)
 
       erb = '<input type="<%= options[:type] %>"'
       erb << ' id="<%= options[:id] %>"' if options[:id]
@@ -16,6 +16,10 @@ module Ajw2::Template
       erb << '>'
 
       ERB.new(erb).result(binding)
+    end
+
+    def escape_options(options)
+      options.each_pair { |key, val| options[key] = CGI.escapeHTML(val) }
     end
   end
 end
