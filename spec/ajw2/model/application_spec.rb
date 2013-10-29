@@ -1,8 +1,8 @@
 require "spec_helper"
 
-module AjwebGenerator
+module Ajw2
   describe Application do
-    let(:app) { AjwebGenerator::Application.new }
+    let(:app) { Ajw2::Application.new }
     let(:dirname) { "outdir" }
     let(:default_html) { "/index.html" }
     let(:default_css) { "/index.css" }
@@ -36,28 +36,28 @@ module AjwebGenerator
 
     describe "#html_generate" do
       it "should call FileUtils#write_file" do
-        AjwebGenerator::FileUtils.should_receive(:write_file)
+        Ajw2::FileUtils.should_receive(:write_file)
         app.html_generate(dirname)
       end
     end
 
     describe "#css_generate" do
       it "should call FileUtils#write_file" do
-        AjwebGenerator::FileUtils.should_receive(:write_file)
+        Ajw2::FileUtils.should_receive(:write_file)
         app.css_generate(dirname)
       end
     end
 
     describe "#js_generate" do
       it "should call FileUtils#write_file" do
-        AjwebGenerator::FileUtils.should_receive(:write_file)
+        Ajw2::FileUtils.should_receive(:write_file)
         app.js_generate(dirname)
       end
     end
 
     describe "#db_generate" do
       it "should call FileUtils#write_file" do
-        AjwebGenerator::FileUtils.should_receive(:write_file)
+        Ajw2::FileUtils.should_receive(:write_file)
         app.db_generate(dirname)
       end
     end

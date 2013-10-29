@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe AjwebGenerator do
+describe Ajw2 do
   it 'should have a version number' do
-    AjwebGenerator::VERSION.should_not be_nil
+    Ajw2::VERSION.should_not be_nil
   end
 end

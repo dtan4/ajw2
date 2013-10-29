@@ -1,6 +1,6 @@
 require "spec_helper"
 
-module AjwebGenerator
+module Ajw2
   describe FileUtils do
     before(:all) do
       @filename = "example.txt"
@@ -11,7 +11,7 @@ module AjwebGenerator
     describe "#write_file" do
       shared_examples_for "writing is successful" do |overwrite|
         before(:all) do
-          @result = AjwebGenerator::FileUtils.write_file(@filename, @text, overwrite)
+          @result = Ajw2::FileUtils.write_file(@filename, @text, overwrite)
         end
 
         it "should return true" do
@@ -53,7 +53,7 @@ module AjwebGenerator
         context "and overwrite is false" do
           before(:all) do
             open(@filename, "w") { |f| f.puts @exist_text }
-            @result = AjwebGenerator::FileUtils.write_file(@filename, @text, false)
+            @result = Ajw2::FileUtils.write_file(@filename, @text, false)
           end
 
           it "should return false" do

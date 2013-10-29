@@ -1,4 +1,4 @@
-module AjwebGenerator
+module Ajw2
   class FileUtils
     def self.write_file(filename, text, overwrite)
       return false if File.exists?(filename) && !overwrite

@@ -1,4 +1,4 @@
-module AjwebGenerator
+module Ajw2
   class Compiler
     def generate_source(ajmlfile, out_dir)
 

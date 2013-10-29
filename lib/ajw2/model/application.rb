@@ -1,4 +1,4 @@
-module AjwebGenerator
+module Ajw2
   class Application
     DEFAULT_HTML_NAME = "/index.html"
     DEFAULT_CSS_NAME = "/index.css"
@@ -14,7 +14,7 @@ module AjwebGenerator
     def html_generate(dirname)
       htmlname = dirname << DEFAULT_HTML_NAME
       html = ""
-      AjwebGenerator::FileUtils.write_file(htmlname, )
+      Ajw2::FileUtils.write_file(htmlname, )
     end
 
     def css_generate(dirname)

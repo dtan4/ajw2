@@ -1,8 +1,8 @@
 require "spec_helper"
 
-module AjwebGenerator
+module Ajw2
   describe Compiler do
-    let(:compiler) { AjwebGenerator::Compiler.new }
+    let(:compiler) { Ajw2::Compiler.new }
 
     describe "#generate_source" do
       pending

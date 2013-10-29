@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ajweb_generator/version'
+require 'ajw2/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ajweb_generator"
-  spec.version       = AjwebGenerator::VERSION
+  spec.name          = "ajw2"
+  spec.version       = Ajw2::VERSION
   spec.authors       = ["dtan4"]
   spec.email         = ["dtanshi45@gmail.com"]
   spec.summary       = %q{TODO: Write a short summary. Required.}

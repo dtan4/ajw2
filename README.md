@@ -1,4 +1,4 @@
-# AjwebGenerator
+# Ajw2
 
 TODO: Write a gem description
 
@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'ajweb_generator'
+    gem 'ajw2'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ajweb_generator
+    $ gem install ajw2
 
 ## Usage
 

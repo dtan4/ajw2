@@ -1,3 +1,3 @@
-module AjwebGenerator
+module Ajw2
   VERSION = "0.0.1"
 end
