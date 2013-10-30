@@ -4,6 +4,20 @@ module Ajw2::Template
   describe Element do
     let(:element) { Ajw2::Template::Element.new }
 
+    describe "#plain_text" do
+      context "with plain text entirely" do
+        subject { element.plain_text("hogehoge") }
+        it { should be_instance_of String }
+        it { should == "hogehoge" }
+      end
+
+      context "with special characters" do
+        subject { element.plain_text('<script>alert("hoge");</script>') }
+        it { should be_instance_of String }
+        it { should == '&lt;script&gt;alert(&quot;hoge&quot;);&lt;/script&gt;'}
+      end
+    end
+
     describe "#input" do
       context "with valid input type" do
         # it "should call #escape_options" do
