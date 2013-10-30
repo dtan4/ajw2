@@ -1,11 +1,8 @@
 require "erb"
 
 module Ajw2::Template
-  class Element
+  class Element < Ajw2::Template::HTML
     INPUT_TYPE = %w{hidden text search url telephone email password datetime date month week time datetime-local number range color checkbox radio file submit image reset button}
-    def plain_text(text)
-      CGI.escapeHTML(text)
-    end
 
     def input(options, child_elements = {})
       raise Exception unless options[:type] && INPUT_TYPE.include?(options[:type])
@@ -19,10 +16,6 @@ module Ajw2::Template
       erb << '>'
 
       ERB.new(erb).result(binding)
-    end
-
-    def escape_options(options)
-      options.each_pair { |key, val| options[key] = CGI.escapeHTML(val) }
     end
   end
 end

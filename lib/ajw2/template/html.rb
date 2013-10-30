@@ -12,5 +12,13 @@ module Ajw2::Template
 
       ERB.new(headers.join("\n") + "\n").result(binding)
     end
+
+    def plain_text(text)
+      CGI.escapeHTML(text)
+    end
+
+    def escape_options(options)
+      options.each_pair { |key, val| options[key] = CGI.escapeHTML(val) }
+    end
   end
 end

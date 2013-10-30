@@ -4,20 +4,6 @@ module Ajw2::Template
   describe Element do
     let(:element) { Ajw2::Template::Element.new }
 
-    describe "#plain_text" do
-      context "with plain text entirely" do
-        subject { element.plain_text("hogehoge") }
-        it { should be_instance_of String }
-        it { should == "hogehoge" }
-      end
-
-      context "with special characters" do
-        subject { element.plain_text('<script>alert("hoge");</script>') }
-        it { should be_instance_of String }
-        it { should == '&lt;script&gt;alert(&quot;hoge&quot;);&lt;/script&gt;'}
-      end
-    end
-
     describe "#input" do
       context "with valid input type" do
         # it "should call #escape_options" do
@@ -62,35 +48,6 @@ module Ajw2::Template
           lambda {
             element.input(type: "INVALID_TYPE")
           }.should raise_error Exception
-        end
-      end
-    end
-
-    describe "#escape_options" do
-      context "with plain characters only" do
-        let(:result) { element.escape_options(type: "text", id: "hoge") }
-
-        it "should be a Hash object" do
-          result.should be_instance_of Hash
-        end
-
-        it "should return escaped options" do
-          result.should == {type: "text", id: "hoge"}
-        end
-      end
-
-      context "with special characters" do
-        let(:result) {
-          element.escape_options(type: "text", value: '"> <script>alert(1)</script>')
-        }
-
-        it "should be a Hash object" do
-          result.should be_instance_of Hash
-        end
-
-        it "should return escaped options" do
-          result.should ==
-            {type: "text", value: "&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;"}
         end
       end
     end
