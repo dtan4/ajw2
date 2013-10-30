@@ -38,7 +38,8 @@ module Ajw2::Template
         context "with special characters" do
           subject { element.input(type: "text", value: '"> <script>alert(1)</script>') }
           it { should be_instance_of String }
-          it { should == '<input type="text" value="&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;">' }
+          it { should ==
+            '<input type="text" value="&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;">' }
         end
       end
 
@@ -65,14 +66,17 @@ module Ajw2::Template
       end
 
       context "with special characters" do
-        let(:result) { element.escape_options(type: "text", value: '"> <script>alert(1)</script>') }
+        let(:result) {
+          element.escape_options(type: "text", value: '"> <script>alert(1)</script>')
+        }
 
         it "should be a Hash object" do
           result.should be_instance_of Hash
         end
 
         it "should return escaped options" do
-          result.should == {type: "text", value: "&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;"}
+          result.should ==
+            {type: "text", value: "&quot;&gt; &lt;script&gt;alert(1)&lt;/script&gt;"}
         end
       end
     end
