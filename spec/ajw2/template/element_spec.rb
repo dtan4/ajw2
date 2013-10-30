@@ -11,28 +11,28 @@ module Ajw2::Template
         #   element.input(type: "text")
         # end
 
-        context "with type only" do
-          subject { element.input(type: "text") }
+        shared_examples_for "valid_type" do |options, expect|
+          subject { element.input(options) }
           it { should be_instance_of String }
-          it { should == '<input type="text">' }
+          it { should == expect }
+        end
+
+        context "with type only" do
+          it_behaves_like "valid_type", {type: "text"}, '<input type="text">'
         end
 
         context "with type and id" do
-          subject { element.input(type: "text", id: "hoge") }
-          it { should be_instance_of String }
-          it { should == '<input type="text" id="hoge">' }
+          it_behaves_like "valid_type", {type: "text", id: "hoge"}, '<input type="text" id="hoge">'
         end
 
         context "with type, id and value" do
-          subject { element.input(type: "text", id: "hoge", value: "fuga") }
-          it { should be_instance_of String }
-          it { should == '<input type="text" id="hoge" value="fuga">' }
+          it_behaves_like "valid_type", {type: "text", id: "hoge", value: "fuga"},
+          '<input type="text" id="hoge" value="fuga">'
         end
 
         context "with type and value" do
-          subject { element.input(type: "text", value: "fuga") }
-          it { should be_instance_of String }
-          it { should == '<input type="text" value="fuga">' }
+          it_behaves_like "valid_type", {type: "text", value: "fuga"},
+          '<input type="text" value="fuga">'
         end
 
         context "with special characters" do
