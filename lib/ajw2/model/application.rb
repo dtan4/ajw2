@@ -14,7 +14,6 @@ module Ajw2
     def html_generate(dirname)
       htmlname = dirname << DEFAULT_HTML_NAME
       html = ""
-      Ajw2::FileUtils.write_file(htmlname, )
     end
 
     def css_generate(dirname)

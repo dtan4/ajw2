@@ -35,31 +35,15 @@ module Ajw2
     end
 
     describe "#html_generate" do
-      it "should call FileUtils#write_file" do
-        Ajw2::FileUtils.should_receive(:write_file)
-        app.html_generate(dirname)
-      end
     end
 
     describe "#css_generate" do
-      it "should call FileUtils#write_file" do
-        Ajw2::FileUtils.should_receive(:write_file)
-        app.css_generate(dirname)
-      end
     end
 
     describe "#js_generate" do
-      it "should call FileUtils#write_file" do
-        Ajw2::FileUtils.should_receive(:write_file)
-        app.js_generate(dirname)
-      end
     end
 
     describe "#db_generate" do
-      it "should call FileUtils#write_file" do
-        Ajw2::FileUtils.should_receive(:write_file)
-        app.db_generate(dirname)
-      end
     end
 
     after(:each) do
