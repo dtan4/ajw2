@@ -1,4 +1,5 @@
 require "ajw2/version"
+require "ajw2/ajml"
 require "ajw2/generator/compiler"
 require "ajw2/model/application"
 require "ajw2/template/html"
