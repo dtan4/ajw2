@@ -148,45 +148,49 @@ module Ajw2
 
     describe "#extract_application_section" do
       context "with ajml that contains application section" do
-        subject { Ajw2::Ajml.extract_application_section(AJML_HASH) }
-        it { should eql AJML_HASH_APPLICATION }
+        it "should extract application section" do
+          result = Ajw2::Ajml.extract_application_section(AJML_HASH)
+          result.should eql AJML_HASH_APPLICATION
+        end
       end
 
       context "with ajml that doesn't contain application section" do
-        subject { Ajw2::Ajml.extract_application_section(AJML_HASH_APPLICATION) }
-        it { should eql AJML_HASH_APPLICATION }
+        it "should return the same to input" do
+          result = Ajw2::Ajml.extract_application_section(AJML_HASH_APPLICATION)
+          result.should eql AJML_HASH_APPLICATION
+        end
       end
     end
 
     describe "#validate" do
       pending do
-      let(:invalid_ajml) { load File.expand_path("../fixtures/result_invalid.rb", __dir__) }
+        let(:invalid_ajml) { load File.expand_path("../fixtures/result_invalid.rb", __dir__) }
 
-      context "with valid Ajml" do
-        subject { Ajw2::Ajml.validate(AJML_HASH) }
-        it { should be_true }
-      end
-
-      context "with invalid Ajml" do
-        context "which name is missing" do
-          subject { Ajw2::Ajml.validate(invalid_ajml) }
+        context "with valid Ajml" do
+          subject { Ajw2::Ajml.validate(AJML_HASH) }
           it { should be_true }
         end
 
-        context "which interfaces is missing" do
-          subject { Ajw2::Ajml.validate(ajml) }
-          it { should be_true }
-        end
+        context "with invalid Ajml" do
+          context "which name is missing" do
+            subject { Ajw2::Ajml.validate(invalid_ajml) }
+            it { should be_true }
+          end
 
-        context "which databases is missing" do
-          subject { Ajw2::Ajml.validate(ajml) }
-          it { should be_true }
-        end
+          context "which interfaces is missing" do
+            subject { Ajw2::Ajml.validate(ajml) }
+            it { should be_true }
+          end
 
-        context "which events is missing" do
-          subject { Ajw2::Ajml.validate(ajml) }
-          it { should be_true }
-        end
+          context "which databases is missing" do
+            subject { Ajw2::Ajml.validate(ajml) }
+            it { should be_true }
+          end
+
+          context "which events is missing" do
+            subject { Ajw2::Ajml.validate(ajml) }
+            it { should be_true }
+          end
         end
       end
     end
