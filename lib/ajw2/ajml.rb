@@ -4,7 +4,16 @@ require "yaml"
 
 module Ajw2
   class Ajml
-    def self.parse(path)
+    attr_reader :name, :interfaces, :databases, :events
+
+    def initialize
+      @name = ""
+      @interfaces = {}
+      @databases = {}
+      @events = {}
+    end
+
+    def parse(path)
       ext = File.extname(path)
 
       case ext
@@ -19,26 +28,26 @@ module Ajw2
       end
     end
 
-    def self.parse_xml(path)
+    def parse_xml(path)
       xml = open(path).read
       extract_application_section(Hash.from_xml(xml))
     end
 
-    def self.parse_json(path)
+    def parse_json(path)
       json = open(path).read
       extract_application_section(JSON.parse(json))
     end
 
-    def self.parse_yaml(path)
+    def parse_yaml(path)
       yaml = open(path).read
       extract_application_section(YAML.load(yaml))
     end
 
-    def self.extract_application_section(ajml)
+    def extract_application_section(ajml)
       (ajml["ajml"] && ajml["ajml"]["application"]) ? ajml["ajml"]["application"] : ajml
     end
 
-    def self.validate(ajml)
+    def validate(ajml)
       result = true
       msg = []
 
@@ -65,15 +74,15 @@ module Ajw2
       return result, msg
     end
 
-    def self.validate_interfaces(interfaces)
+    def validate_interfaces(interfaces)
       true
     end
 
-    def self.validate_databases(databases)
+    def validate_databases(databases)
       true
     end
 
-    def self.validate_events(events)
+    def validate_events(events)
       true
     end
   end
