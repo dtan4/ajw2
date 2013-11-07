@@ -38,7 +38,42 @@ module Ajw2
       (ajml["ajml"] && ajml["ajml"]["application"]) ? ajml["ajml"]["application"] : ajml
     end
 
-    def validate(ajml)
+    def self.validate(ajml)
+      result = true
+      msg = []
+
+      unless ajml["name"]
+        result = false
+        msg << "name is missing"
+      end
+
+      unless ajml["interfaces"]
+        result = false
+        msg << "interfaces section is missing"
+      end
+
+      unless ajml["databases"]
+        result = false
+        msg << "databases section is missing"
+      end
+
+      unless ajml["events"]
+        result = false
+        msg << "events section is missing"
+      end
+
+      return result, msg
+    end
+
+    def self.validate_interfaces(interfaces)
+      true
+    end
+
+    def self.validate_databases(databases)
+      true
+    end
+
+    def self.validate_events(events)
       true
     end
   end

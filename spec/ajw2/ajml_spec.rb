@@ -163,33 +163,38 @@ module Ajw2
     end
 
     describe "#validate" do
-      pending do
-        let(:invalid_ajml) { load File.expand_path("../fixtures/result_invalid.rb", __dir__) }
+      let(:invalid_ajml) { load File.expand_path("../fixtures/result_invalid.rb", __dir__) }
 
-        context "with valid Ajml" do
-          subject { Ajw2::Ajml.validate(AJML_HASH) }
-          it { should be_true }
+      context "with valid Ajml" do
+        before(:all) { @result, @msg = Ajw2::Ajml.validate(AJML_HASH_APPLICATION) }
+
+        it "should return true"do
+          @result.should be_true
         end
 
-        context "with invalid Ajml" do
-          context "which name is missing" do
-            subject { Ajw2::Ajml.validate(invalid_ajml) }
-            it { should be_true }
+        it "should return Array message" do
+          @msg.should be_instance_of Array
+        end
+
+        it "should return no message" do
+          @msg.should have(0).items
+        end
+      end
+
+      context "with invalid Ajml" do
+        shared_examples_for "validate_invalid_ajml" do
+          before(:all) { @result, @msg = Ajw2::Ajml.validate(ajml) }
+
+          it "should return false" do
+            @result.should be_false
           end
 
-          context "which interfaces is missing" do
-            subject { Ajw2::Ajml.validate(ajml) }
-            it { should be_true }
+          it "should return Array message" do
+            @msg.should be_instance_of Array
           end
 
-          context "which databases is missing" do
-            subject { Ajw2::Ajml.validate(ajml) }
-            it { should be_true }
-          end
-
-          context "which events is missing" do
-            subject { Ajw2::Ajml.validate(ajml) }
-            it { should be_true }
+          it "should return with specified message" do
+            @msg.should eql expected_msg
           end
         end
       end
