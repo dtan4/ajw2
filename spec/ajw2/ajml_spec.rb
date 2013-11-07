@@ -10,13 +10,15 @@ module Ajw2
       @yml_path = File.expand_path("../fixtures/chat.yml", __dir__)
       @invalid_path = File.expand_path("../fixtures/chat.txt", __dir__)
 
-      load File.expand_path("../fixtures/ajml_hash.rb", __dir__)
-      load File.expand_path("../fixtures/ajml_hash_application.rb", __dir__)
+      # load Hash fixtures
+      load File.expand_path("../fixtures/ajml_classic.rb", __dir__)
+      load File.expand_path("../fixtures/ajml_sections.rb", __dir__)
+      load File.expand_path("../fixtures/ajml.rb", __dir__)
       puts @ajml_path
     end
 
     describe "#initialize" do
-      subject { Ajw2::Ajml.new }
+      subject { Ajw2::Ajml.new}
       it { should respond_to(:name) }
       it { should respond_to(:interfaces) }
       it { should respond_to(:databases) }
@@ -32,21 +34,36 @@ module Ajw2
     end
 
     describe "#parse" do
-      before(:each) do
-        @ajml = Ajw2::Ajml.new
-      end
-
       shared_examples_for "parse_ajml_file" do
-        subject { @ajml.parse(path) }
-        it { should be_true }
-        it { "should be equal to AJML_HASH_APPLICATION" }
+        before(:all) do
+          @ajml = Ajw2::Ajml.new
+          @result = @ajml.parse(path)
+        end
+
+        it "should return true" do
+          @result.should be_true
+        end
+
+        it "should set name" do
+          @ajml.name.should == "chat"
+        end
+
+        it "should set interfaces" do
+          @ajml.interfaces.should eql FIXTURE_INTERFACES
+        end
+
+        it "should set databases" do
+          @ajml.databases.should eql FIXTURE_DATABASES
+        end
+
+        it "should set events" do
+          @ajml.events.should eql FIXTURE_EVENTS
+        end
       end
 
       context "with .ajml" do
         let(:path) { @ajml_path }
         it_behaves_like "parse_ajml_file"
-
-        it "should call #parse_xml"
       end
 
       context "with .xml" do
@@ -94,7 +111,8 @@ module Ajw2
       end
     end
 
-    describe "#parse_xml" do
+    # describe "#parse_xml" do
+    pending "#parse_xml" do
       before(:each) do
         @ajml = Ajw2::Ajml.new
       end
@@ -112,7 +130,8 @@ module Ajw2
       end
     end
 
-    describe "#parse_json" do
+    # describe "#parse_json" do
+    pending "#parse_json" do
       before(:each) do
         @ajml = Ajw2::Ajml.new
       end
@@ -130,7 +149,8 @@ module Ajw2
       end
     end
 
-    describe "#parse_yaml" do
+    # describe "#parse_yaml" do
+    pending "#parse_yaml" do
       before(:each) do
         @ajml = Ajw2::Ajml.new
       end
@@ -148,7 +168,8 @@ module Ajw2
       end
     end
 
-    describe "#extract_application_section" do
+    # describe "#extract_application_section" do
+    pending "#extract_application_section" do
       before(:each) do
         @ajml = Ajw2::Ajml.new
       end

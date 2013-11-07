@@ -14,18 +14,24 @@ module Ajw2
     end
 
     def parse(path)
+      # TODO: refactor
       ext = File.extname(path)
 
       case ext
       when /^\.(x|aj)ml$/i
-        parse_xml(path)
+        app = parse_xml(path)
       when /^\.json$/i
-        parse_json(path)
+        app = parse_json(path)
       when /^\.ya?ml$/i
-        parse_yaml(path)
+        app = parse_yaml(path)
       else
         raise Exception
       end
+
+      @name = app["name"]
+      @interfaces = app["interfaces"]
+      @databases = app["databases"]
+      @events = app["events"]
     end
 
     def parse_xml(path)
