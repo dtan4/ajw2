@@ -207,6 +207,29 @@ module Ajw2
       end
     end
 
+    shared_context "with nil argument" do |method, msg|
+      before do
+        ajml = Ajw2::Ajml.new
+        @result, @msg = ajml.send(method, nil)
+      end
+
+      it "should return false" do
+        @result.should be_false
+      end
+
+      it "should return Array message" do
+        @msg.should be_instance_of Array
+      end
+
+      it "should return 1 message" do
+        @msg.should have(1).item
+      end
+
+      it "should return the specified message" do
+        @msg.should include(msg)
+      end
+    end
+
     describe "#validate" do
       before(:all) { @ajml = Ajw2::Ajml.new }
 
@@ -282,17 +305,13 @@ module Ajw2
     end
 
     describe "#validate_name" do
-      before(:all) { @ajml = Ajw2::Ajml.new }
-
       context "with non-nil argument" do
         include_context "with valid object", :validate_name do
           let(:obj) { AJML_HASH_APPLICATION["name"] }
         end
       end
 
-      context "with nil argument" do
-
-      end
+      include_context "with nil argument", :validate_name, "name is missing"
     end
 
     describe "#validate_interfaces" do
@@ -304,9 +323,7 @@ module Ajw2
         end
       end
 
-      context "with nil argument" do
-
-      end
+      include_context "with nil argument", :validate_interfaces, "interfaces is missing"
     end
 
     describe "#validate_databases" do
@@ -318,9 +335,7 @@ module Ajw2
         end
       end
 
-      context "with nil argument" do
-
-      end
+      include_context "with nil argument", :validate_databases, "databases is missing"
     end
 
     describe "#validate_events" do
@@ -330,9 +345,7 @@ module Ajw2
         end
       end
 
-      context "with nil argument" do
-
-      end
+      include_context "with nil argument", :validate_events, "events is missing"
     end
   end
 end

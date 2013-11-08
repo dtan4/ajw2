@@ -89,7 +89,7 @@ module Ajw2
     end
 
     def validate_databases(databases)
-      unless interfaces
+      unless databases
         return false, ["databases is missing"]
       end
 
@@ -100,7 +100,7 @@ module Ajw2
     end
 
     def validate_events(events)
-      unless interfaces
+      unless events
         return false, ["events is missing"]
       end
 
