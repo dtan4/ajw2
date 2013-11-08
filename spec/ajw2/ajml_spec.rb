@@ -34,14 +34,10 @@ module Ajw2
     end
 
     describe "#parse" do
-      shared_examples_for "parse_ajml_file" do
+      shared_context "with valid file" do |method|
         before(:all) do
           @ajml = Ajw2::Ajml.new
-          @result = @ajml.parse(@path)
-        end
-
-        it "should return true" do
-          @result.should be_true
+          @ajml.parse(path)
         end
 
         it "should set name" do
@@ -59,47 +55,58 @@ module Ajw2
         it "should set events" do
           @ajml.events.should eql FIXTURE_EVENTS
         end
+
+        # it "should call #{method}" do
+        #   Ajw2::Ajml.any_instance.should_receive(method).with(path)
+        #   @ajml.parse(path)
+        # end
       end
 
       context "with .ajml" do
-        before(:all) { @path = @ajml_path }
-        it_behaves_like "parse_ajml_file"
-
-        it "should call #parse_xml"
+        include_context "with valid file", :parse_xml do
+          let(:path) { @ajml_path }
+        end
       end
 
       context "with .xml" do
-        before(:all) { @path = @xml_path }
-        it_behaves_like "parse_ajml_file"
-
-        it "should call #parse_xml"
+        include_context "with valid file", :parse_xml do
+          let(:path) { @xml_path }
+          before(:all) { @path = @xml_path }
+        end
       end
 
       context "with .json" do
-        before(:all) { @path = @json_path }
-        it_behaves_like "parse_ajml_file"
-
-        it "should call #parse_json"
+        include_context "with valid file", :parse_json do
+          let(:path) { @json_path }
+          before(:all) { @path = @json_path }
+        end
       end
 
       context "with .yaml" do
-        before(:all) { @path = @yaml_path }
-        it_behaves_like "parse_ajml_file"
-
-        it "should call #parse_yaml"
+        include_context "with valid file", :parse_yaml do
+          let(:path) { @yaml_path }
+          before(:all) { @path = @yaml_path }
+        end
       end
 
       context "with .yml" do
-        before(:all) { @path = @yml_path }
-        it_behaves_like "parse_ajml_file"
-
-        it "should call #parse_yaml"
+        include_context "with valid file", :parse_yaml do
+          let(:path) { @yml_path }
+        end
       end
 
       context "with invalid file extension" do
         it "should raise Exception" do
           lambda {
             @ajml.parse(@invalid_path)
+          }.should raise_error
+        end
+      end
+
+      context "with file is nil" do
+        it "should raise Exception" do
+          lambda {
+            @ajml.parse(nil)
           }.should raise_error
         end
       end
@@ -113,60 +120,56 @@ module Ajw2
       end
     end
 
-    describe "#parse_xml" do
-      before(:each) { @ajml = Ajw2::Ajml.new }
+    shared_context "with valid data" do |method|
+      let(:ajml) { Ajw2::Ajml.new }
 
-      context "with valid xml" do
-        it "should return Hash" do
-          @ajml.parse_xml(@ajml_path).should be_instance_of Hash
-        end
-
-        it "should call #extract_application_section" do
-          Ajw2::Ajml.any_instance.should_receive(:extract_application_section)
-          @ajml.parse_xml(@ajml_path)
-        end
+      it "should return Hash" do
+        ajml.send(method, path).should be_instance_of Hash
       end
 
-      context "with invalid xml" do
-        it "should raise Exception"
+      it "should call #extract_application_section" do
+        Ajw2::Ajml.any_instance.should_receive(:extract_application_section)
+        ajml.send(method, path)
+      end
+    end
+
+    shared_context "with invalid data" do |method|
+      let(:ajml) { Ajw2::Ajml.new }
+
+      pending "should raise Exception" do
+        lambda {
+          ajml.send(method, path)
+        }.should raise_error
+      end
+    end
+
+    describe "#parse_xml" do
+      include_context "with valid data", :parse_xml do
+        let(:path) { @ajml_path }
+      end
+
+      include_context "with invalid data", :parse_xml do
+        let(:path) { @ajml_path }
       end
     end
 
     describe "#parse_json" do
-      before(:each) { @ajml = Ajw2::Ajml.new }
-
-      context "with valid json" do
-        it "should return Hash" do
-          @ajml.parse_json(@json_path).should be_instance_of Hash
-        end
-
-        it "should call #extract_application_section" do
-          Ajw2::Ajml.any_instance.should_receive(:extract_application_section)
-          @ajml.parse_json(@json_path)
-        end
+      include_context "with valid data", :parse_json do
+        let(:path) { @json_path }
       end
 
-      context "with invalid json" do
-        it "should raise Exception"
+      include_context "with invalid data", :parse_json do
+        let(:path) { @json_path }
       end
     end
 
     describe "#parse_yaml" do
-      before(:each) { @ajml = Ajw2::Ajml.new }
-
-      context "with valid yaml" do
-        it "should return Hash" do
-          @ajml.parse_yaml(@yaml_path).should be_instance_of Hash
-        end
-
-        it "should call #extract_application_section" do
-          Ajw2::Ajml.any_instance.should_receive(:extract_application_section)
-          @ajml.parse_yaml(@yaml_path)
-        end
+      include_context "with valid data", :parse_yaml do
+        let(:path) { @yaml_path }
       end
 
-      context "with invalid yaml" do
-        it "should raise Exception"
+      include_context "with invalid data", :parse_yaml do
+        let(:path) { @json_path }
       end
     end
 
@@ -207,26 +210,28 @@ module Ajw2
       end
     end
 
-    shared_context "with nil argument" do |method, msg|
+    shared_context "with invalid object" do |method, count, msg|
       before do
         ajml = Ajw2::Ajml.new
-        @result, @msg = ajml.send(method, nil)
+        @result, @msg = ajml.send(method, obj)
       end
 
-      it "should return false" do
-        @result.should be_false
-      end
+      pending do
+        it "should return false" do
+          @result.should be_false
+        end
 
-      it "should return Array message" do
-        @msg.should be_instance_of Array
-      end
+        it "should return Array message" do
+          @msg.should be_instance_of Array
+        end
 
-      it "should return 1 message" do
-        @msg.should have(1).item
-      end
+        it "should return specified numbers of message" do
+          @msg.should have(count).items
+        end
 
-      it "should return the specified message" do
-        @msg.should include(msg)
+        it "should return with specified message" do
+          @msg.should eql expected_msg
+        end
       end
     end
 
@@ -265,21 +270,7 @@ module Ajw2
 
       pending "with invalid Ajml" do
       # context "with invalid Ajml" do
-        shared_examples_for "validate_invalid_ajml" do
-          before(:all) { @result, @msg = @ajml.validate(ajml) }
-
-          it "should return false" do
-            @result.should be_false
-          end
-
-          it "should return Array message" do
-            @msg.should be_instance_of Array
-          end
-
-          it "should return with specified message" do
-            @msg.should eql expected_msg
-          end
-        end
+        include_context "with invalid object"
 
         context "that doesn't contain interfaces section" do
           it "should not call #validate_interfaces" do
@@ -304,9 +295,38 @@ module Ajw2
       end
     end
 
+    shared_context "with nil argument" do |method, msg|
+      before do
+        ajml = Ajw2::Ajml.new
+        @result, @msg = ajml.send(method, nil)
+      end
+
+      it "should return false" do
+        @result.should be_false
+      end
+
+      it "should return Array message" do
+        @msg.should be_instance_of Array
+      end
+
+      it "should return 1 message" do
+        @msg.should have(1).item
+      end
+
+      it "should return the specified message" do
+        @msg.should include(msg)
+      end
+    end
+
     describe "#validate_name" do
       context "with non-nil argument" do
         include_context "with valid object", :validate_name do
+          let(:obj) { AJML_HASH_APPLICATION["name"] }
+        end
+      end
+
+      context "with non-nil argument" do
+        include_context "with invalid object", :validate_name do
           let(:obj) { AJML_HASH_APPLICATION["name"] }
         end
       end
@@ -315,10 +335,12 @@ module Ajw2
     end
 
     describe "#validate_interfaces" do
-      before(:all) { @ajml = Ajw2::Ajml.new }
-
       context "with non-nil argument" do
         include_context "with valid object", :validate_interfaces do
+          let(:obj) { AJML_HASH_APPLICATION["interfaces"] }
+        end
+
+        include_context "with invalid object", :validate_interfaces do
           let(:obj) { AJML_HASH_APPLICATION["interfaces"] }
         end
       end
@@ -327,10 +349,12 @@ module Ajw2
     end
 
     describe "#validate_databases" do
-      before(:all) { @ajml = Ajw2::Ajml.new }
-
       context "with non-nil argument" do
         include_context "with valid object", :validate_databases do
+          let(:obj) { AJML_HASH_APPLICATION["databases"] }
+        end
+
+        include_context "with invalid object", :validate_databases do
           let(:obj) { AJML_HASH_APPLICATION["databases"] }
         end
       end
@@ -341,6 +365,10 @@ module Ajw2
     describe "#validate_events" do
       context "with non-nil argument" do
         include_context "with valid object", :validate_events do
+          let(:obj) { AJML_HASH_APPLICATION["events"] }
+        end
+
+        include_context "with invalid object", :validate_events do
           let(:obj) { AJML_HASH_APPLICATION["events"] }
         end
       end
