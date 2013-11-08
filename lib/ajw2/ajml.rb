@@ -97,6 +97,10 @@ module Ajw2
     end
 
     def validate_name(name)
+      unless name
+        return false, ["name is missing"]
+      end
+
       result = true
       msg = []
 

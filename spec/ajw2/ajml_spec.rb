@@ -188,25 +188,31 @@ module Ajw2
       end
     end
 
-    describe "#validate" do
-      before(:all) do
-        load File.expand_path("../fixtures/ajml.rb", __dir__)
-        @ajml = Ajw2::Ajml.new
+    shared_context "with valid object" do |method|
+      before do
+        ajml = Ajw2::Ajml.new
+        @result, @msg = ajml.send(method, obj)
       end
 
+      it "should return true" do
+        @result.should be_true
+      end
+
+      it "should return Array message" do
+        @msg.should be_instance_of Array
+      end
+
+      it "should return empty Array" do
+        @msg.should be_empty
+      end
+    end
+
+    describe "#validate" do
+      before(:all) { @ajml = Ajw2::Ajml.new }
+
       context "with valid Ajml" do
-        before(:all) { @result, @msg = @ajml.validate(AJML_HASH_APPLICATION) }
-
-        it "should return true" do
-          @result.should be_true
-        end
-
-        it "should return Array message" do
-          @msg.should be_instance_of Array
-        end
-
-        it "should return no message" do
-          @msg.should have(0).items
+        include_context "with valid object", :validate do
+          let(:obj) { AJML_HASH_APPLICATION }
         end
 
         it "should call #validate_name" do
@@ -275,15 +281,58 @@ module Ajw2
       end
     end
 
+    describe "#validate_name" do
+      before(:all) { @ajml = Ajw2::Ajml.new }
+
+      context "with non-nil argument" do
+        include_context "with valid object", :validate_name do
+          let(:obj) { AJML_HASH_APPLICATION["name"] }
+        end
+      end
+
+      context "with nil argument" do
+
+      end
+    end
+
     describe "#validate_interfaces" do
+      before(:all) { @ajml = Ajw2::Ajml.new }
+
+      context "with non-nil argument" do
+        include_context "with valid object", :validate_interfaces do
+          let(:obj) { AJML_HASH_APPLICATION["interfaces"] }
+        end
+      end
+
+      context "with nil argument" do
+
+      end
     end
 
     describe "#validate_databases" do
+      before(:all) { @ajml = Ajw2::Ajml.new }
 
+      context "with non-nil argument" do
+        include_context "with valid object", :validate_databases do
+          let(:obj) { AJML_HASH_APPLICATION["databases"] }
+        end
+      end
+
+      context "with nil argument" do
+
+      end
     end
 
     describe "#validate_events" do
+      context "with non-nil argument" do
+        include_context "with valid object", :validate_events do
+          let(:obj) { AJML_HASH_APPLICATION["events"] }
+        end
+      end
 
+      context "with nil argument" do
+
+      end
     end
   end
 end
