@@ -188,18 +188,16 @@ module Ajw2
       end
     end
 
-    # describe "#validate" do
-    pending "#validate" do
-      before(:each) do
+    describe "#validate" do
+      before(:all) do
+        load File.expand_path("../fixtures/ajml.rb", __dir__)
         @ajml = Ajw2::Ajml.new
       end
 
-      let(:invalid_ajml) { load File.expand_path("../fixtures/result_invalid.rb", __dir__) }
-
       context "with valid Ajml" do
-        let(:result, :msg) { @ajml.validate(AJML_HASH_APPLICATION) }
+        before(:all) { @result, @msg = @ajml.validate(AJML_HASH_APPLICATION) }
 
-        it "should return true"do
+        it "should return true" do
           @result.should be_true
         end
 
@@ -210,9 +208,34 @@ module Ajw2
         it "should return no message" do
           @msg.should have(0).items
         end
+
+        it "should call #validate_name" do
+          Ajw2::Ajml.any_instance.should_receive(:validate_name)
+            .with(AJML_HASH_APPLICATION["name"])
+          @ajml.validate(AJML_HASH_APPLICATION)
+        end
+
+        it "should call #validate_interfaces" do
+          Ajw2::Ajml.any_instance.should_receive(:validate_interfaces)
+            .with(AJML_HASH_APPLICATION["interfaces"])
+          @ajml.validate(AJML_HASH_APPLICATION)
+        end
+
+        it "should call #validate_databases" do
+          Ajw2::Ajml.any_instance.should_receive(:validate_databases)
+            .with(AJML_HASH_APPLICATION["databases"])
+          @ajml.validate(AJML_HASH_APPLICATION)
+        end
+
+        it "should call #validate_events" do
+          Ajw2::Ajml.any_instance.should_receive(:validate_events)
+            .with(AJML_HASH_APPLICATION["events"])
+          @ajml.validate(AJML_HASH_APPLICATION)
+        end
       end
 
-      context "with invalid Ajml" do
+      pending "with invalid Ajml" do
+      # context "with invalid Ajml" do
         shared_examples_for "validate_invalid_ajml" do
           before(:all) { @result, @msg = @ajml.validate(ajml) }
 
@@ -228,11 +251,31 @@ module Ajw2
             @msg.should eql expected_msg
           end
         end
+
+        context "that doesn't contain interfaces section" do
+          it "should not call #validate_interfaces" do
+            Ajw2::Ajml.any_instance.should_not_receive(:validate_interfaces)
+            @ajml.validate(AJML_HASH_APPLICATION)
+          end
+        end
+
+        context "that doesn't contain databases section" do
+          it "should not call #validate_databases" do
+            Ajw2::Ajml.any_instance.should_not_receive(:validate_databases)
+            @ajml.validate(AJML_HASH_APPLICATION)
+          end
+        end
+
+        context "that doesn't contain events section" do
+          it "should not call #validate_eventes" do
+            Ajw2::Ajml.any_instance.should_not_receive(:validate_events)
+            @ajml.validate(AJML_HASH_APPLICATION)
+          end
+        end
       end
     end
 
     describe "#validate_interfaces" do
-
     end
 
     describe "#validate_databases" do

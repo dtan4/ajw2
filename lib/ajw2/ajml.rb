@@ -57,22 +57,38 @@ module Ajw2
       result = true
       msg = []
 
-      unless ajml["name"]
+      if ajml["name"]
+        nm_result, nm_msg = validate_name(ajml["name"])
+        result &= nm_result
+        msg.concat(nm_msg) if nm_msg
+      else
         result = false
         msg << "name is missing"
       end
 
-      unless ajml["interfaces"]
+      if ajml["interfaces"]
+        if_result, if_msg = validate_interfaces(ajml["interfaces"])
+        result &= if_result
+        msg.concat(if_msg) if if_msg
+      else
         result = false
         msg << "interfaces section is missing"
       end
 
-      unless ajml["databases"]
+      if ajml["databases"]
+        db_result, db_msg = validate_databases(ajml["databases"])
+        result &= db_result
+        msg.concat(db_msg) if db_msg
+      else
         result = false
         msg << "databases section is missing"
       end
 
-      unless ajml["events"]
+      if ajml["events"]
+        ev_result, ev_msg = validate_events(ajml["events"])
+        result &= ev_result
+        msg.concat(ev_msg) if ev_msg
+      else
         result = false
         msg << "events section is missing"
       end
@@ -80,16 +96,32 @@ module Ajw2
       return result, msg
     end
 
+    def validate_name(name)
+      result = true
+      msg = []
+
+      return result, msg
+    end
+
     def validate_interfaces(interfaces)
-      true
+      result = true
+      msg = []
+
+      return result, msg
     end
 
     def validate_databases(databases)
-      true
+      result = true
+      msg = []
+
+      return result, msg
     end
 
     def validate_events(events)
-      true
+      result = true
+      msg = []
+
+      return result, msg
     end
   end
 end
