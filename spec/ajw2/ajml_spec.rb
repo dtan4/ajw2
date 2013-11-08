@@ -113,18 +113,18 @@ module Ajw2
       end
     end
 
-    # describe "#parse_xml" do
-    pending "#parse_xml" do
-      before(:each) do
-        @ajml = Ajw2::Ajml.new
-      end
+    describe "#parse_xml" do
+      before(:each) { @ajml = Ajw2::Ajml.new }
 
       context "with valid xml" do
         it "should return Hash" do
           @ajml.parse_xml(@ajml_path).should be_instance_of Hash
         end
 
-        it "should call #extract_application_section"
+        it "should call #extract_application_section" do
+          Ajw2::Ajml.any_instance.should_receive(:extract_application_section)
+          @ajml.parse_xml(@ajml_path)
+        end
       end
 
       context "with invalid xml" do
@@ -132,18 +132,18 @@ module Ajw2
       end
     end
 
-    # describe "#parse_json" do
-    pending "#parse_json" do
-      before(:each) do
-        @ajml = Ajw2::Ajml.new
-      end
+    describe "#parse_json" do
+      before(:each) { @ajml = Ajw2::Ajml.new }
 
       context "with valid json" do
         it "should return Hash" do
           @ajml.parse_json(@json_path).should be_instance_of Hash
         end
 
-        it "should call #extract_application_section"
+        it "should call #extract_application_section" do
+          Ajw2::Ajml.any_instance.should_receive(:extract_application_section)
+          @ajml.parse_json(@json_path)
+        end
       end
 
       context "with invalid json" do
@@ -151,30 +151,27 @@ module Ajw2
       end
     end
 
-    # describe "#parse_yaml" do
-    pending "#parse_yaml" do
-      before(:each) do
-        @ajml = Ajw2::Ajml.new
-      end
+    describe "#parse_yaml" do
+      before(:each) { @ajml = Ajw2::Ajml.new }
 
       context "with valid yaml" do
         it "should return Hash" do
           @ajml.parse_yaml(@yaml_path).should be_instance_of Hash
         end
 
-        it "should call #extract_application_section"
+        it "should call #extract_application_section" do
+          Ajw2::Ajml.any_instance.should_receive(:extract_application_section)
+          @ajml.parse_yaml(@yaml_path)
+        end
       end
 
-      context "with invalid json" do
+      context "with invalid yaml" do
         it "should raise Exception"
       end
     end
 
-    # describe "#extract_application_section" do
-    pending "#extract_application_section" do
-      before(:each) do
-        @ajml = Ajw2::Ajml.new
-      end
+    describe "#extract_application_section" do
+      before(:each) { @ajml = Ajw2::Ajml.new }
 
       context "with ajml that contains application section" do
         it "should extract application section" do
