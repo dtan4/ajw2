@@ -57,40 +57,10 @@ module Ajw2
       result = true
       msg = []
 
-      if ajml["name"]
-        nm_result, nm_msg = validate_name(ajml["name"])
-        result &= nm_result
-        msg.concat(nm_msg) if nm_msg
-      else
-        result = false
-        msg << "name is missing"
-      end
-
-      if ajml["interfaces"]
-        if_result, if_msg = validate_interfaces(ajml["interfaces"])
-        result &= if_result
-        msg.concat(if_msg) if if_msg
-      else
-        result = false
-        msg << "interfaces section is missing"
-      end
-
-      if ajml["databases"]
-        db_result, db_msg = validate_databases(ajml["databases"])
-        result &= db_result
-        msg.concat(db_msg) if db_msg
-      else
-        result = false
-        msg << "databases section is missing"
-      end
-
-      if ajml["events"]
-        ev_result, ev_msg = validate_events(ajml["events"])
-        result &= ev_result
-        msg.concat(ev_msg) if ev_msg
-      else
-        result = false
-        msg << "events section is missing"
+      %w{name interfaces databases events}.each do |el|
+        sub_result, sub_msg = self.send(:"validate_#{el}", ajml[el])
+        result &= sub_result
+        msg.concat(sub_msg) if sub_msg
       end
 
       return result, msg
@@ -108,6 +78,10 @@ module Ajw2
     end
 
     def validate_interfaces(interfaces)
+      unless interfaces
+        return false, ["interfaces is missing"]
+      end
+
       result = true
       msg = []
 
@@ -115,6 +89,10 @@ module Ajw2
     end
 
     def validate_databases(databases)
+      unless interfaces
+        return false, ["databases is missing"]
+      end
+
       result = true
       msg = []
 
@@ -122,6 +100,10 @@ module Ajw2
     end
 
     def validate_events(events)
+      unless interfaces
+        return false, ["events is missing"]
+      end
+
       result = true
       msg = []
 
