@@ -37,7 +37,7 @@ module Ajw2
       shared_examples_for "parse_ajml_file" do
         before(:all) do
           @ajml = Ajw2::Ajml.new
-          @result = @ajml.parse(path)
+          @result = @ajml.parse(@path)
         end
 
         it "should return true" do
@@ -62,33 +62,35 @@ module Ajw2
       end
 
       context "with .ajml" do
-        let(:path) { @ajml_path }
+        before(:all) { @path = @ajml_path }
         it_behaves_like "parse_ajml_file"
+
+        it "should call #parse_xml"
       end
 
       context "with .xml" do
-        let(:path) { @xml_path }
+        before(:all) { @path = @xml_path }
         it_behaves_like "parse_ajml_file"
 
         it "should call #parse_xml"
       end
 
       context "with .json" do
-        let(:path) { @json_path }
+        before(:all) { @path = @json_path }
         it_behaves_like "parse_ajml_file"
 
         it "should call #parse_json"
       end
 
       context "with .yaml" do
-        let(:path) { @yaml_path }
+        before(:all) { @path = @yaml_path }
         it_behaves_like "parse_ajml_file"
 
         it "should call #parse_yaml"
       end
 
       context "with .yml" do
-        let(:path) { @yml_path }
+        before(:all) { @path = @yml_path }
         it_behaves_like "parse_ajml_file"
 
         it "should call #parse_yaml"
