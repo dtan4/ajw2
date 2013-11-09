@@ -19,19 +19,23 @@ module Ajw2
 
       case ext
       when /^\.(x|aj)ml$/i
-        app = parse_xml(path)
+        ajml = parse_xml(path)
       when /^\.json$/i
-        app = parse_json(path)
+        ajml = parse_json(path)
       when /^\.ya?ml$/i
-        app = parse_yaml(path)
+        ajml = parse_yaml(path)
       else
         raise Exception
       end
 
-      @name = app["name"]
-      @interfaces = app["interfaces"]
-      @databases = app["databases"]
-      @events = app["events"]
+      if validate(ajml)
+        @name = ajml["name"]
+        @interfaces = ajml["interfaces"]
+        @databases = ajml["databases"]
+        @events = ajml["events"]
+      else
+        raise Exception
+      end
     end
 
     def parse_xml(path)
@@ -58,54 +62,11 @@ module Ajw2
       msg = []
 
       %w{name interfaces databases events}.each do |el|
-        sub_result, sub_msg = self.send(:"validate_#{el}", ajml[el])
-        result &= sub_result
-        msg.concat(sub_msg) if sub_msg
+        unless ajml[el]
+          result = false
+          msg << "#{el} is missing"
+        end
       end
-
-      return result, msg
-    end
-
-    def validate_name(name)
-      unless name
-        return false, ["name is missing"]
-      end
-
-      result = true
-      msg = []
-
-      return result, msg
-    end
-
-    def validate_interfaces(interfaces)
-      unless interfaces
-        return false, ["interfaces is missing"]
-      end
-
-      result = true
-      msg = []
-
-      return result, msg
-    end
-
-    def validate_databases(databases)
-      unless databases
-        return false, ["databases is missing"]
-      end
-
-      result = true
-      msg = []
-
-      return result, msg
-    end
-
-    def validate_events(events)
-      unless events
-        return false, ["events is missing"]
-      end
-
-      result = true
-      msg = []
 
       return result, msg
     end
