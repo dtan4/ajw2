@@ -5,177 +5,194 @@ ajml:
   application:
     name: chat
     interfaces:
-      panel:
+      - type: panel
         _isDisplay: true
         height: 500
         id: rootPanel
         left: 72
         top: 2
         width: 700
-        label:
-          content: Chat Application
-          id: label0
-          left: 27
-          top: 22
-        frame:
-          height: 450
-          id: rootFrame
-          left: 25
-          top: 45
-          width: 650
-          panel:
-          - _isDisplay: true
+        children:
+          - type: label
+            content: Chat Application
+            id: label0
+            left: 27
+            top: 22
+          - type: frame
+            height: 450
+            id: rootFrame
+            left: 25
+            top: 45
+            width: 650
+            children:
+          - type: panel
+            _isDisplay: true
             height: 450
             id: loginPanel
             left: 97
             top: 8
             width: 650
-            label:
-            - content: UserID
+            children:
+            - type: label
+              content: UserID
               id: label1
               left: 29
               top: 29
-            - content: Password
-              id: label2
-              left: 29
-              top: 59
-          label:
-            textbox:
+            - type: textbox
               id: userIdTextbox
               left: 132
               placeHolder: user name
               top: 29
               width: 100
-            button:
-              content: Login
-              id: button1
-              left: 32
-              top: 91
-            passwordbox:
+            - type: label
+              content: Password
+              id: label2
+              left: 29
+              top: 59
+            - type: passwordbox
               id: passwordbox
               left: 131
               top: 61
               width: 100
-          - _isDisplay: true
+            - type: button
+              content: Login
+              id: button1
+              left: 32
+              top: 91
+          - type: panel
+            _isDisplay: true
             height: 450
             id: roomSelectPanel
             left: 97
             top: 8
             width: 650
-            label:
+            children:
+            - type: label
               content: room select
               id: label3
               left: 0
               top: 0
-            button:
+            - type: button
               content: Selection
               id: selectButton
               left: 369
               top: 50
-            selectbox:
+            - type: selectbox
               data: room
               id: roomSelect
               label: name
               left: 100
               top: 50
-          - _isDisplay: true
+          - type: panel
+            _isDisplay: true
             height: 450
             id: chatRoomPanel
             left: 97
             top: 8
             width: 650
-            label:
+            children:
+            - type: label
               content: room name
               id: nowRoomLabel
               left: 60
               top: 0
-            frame:
+            - type: frame
               height: 100
               id: contentsFrame
               left: 25
               top: 80
               width: 450
-              panel:
-              - _isDisplay: true
-                height: 100
-                id: entrancePanel
-                left: 197
-                top: 183
-                width: 450
-                label:
-                  content: Name
-                  id: userNameLabel
-                  left: 25
-                  top: 12
-                textbox:
-                  id: userNameTextbox
-                  left: 100
-                  top: 10
-                  width: 100
-                button:
-                - content: Entering
-                  id: enterButton
-                  left: 99
-                  top: 49
-                - content: 'Back to Room Selection '
-                  id: backButton
-                  left: 262
-                  top: 50
-              - _isDisplay: true
+              children:
+                - type: panel
+                  _isDisplay: true
+                  height: 100
+                  id: entrancePanel
+                  left: 197
+                  top: 183
+                  width: 450
+                  children:
+                    - type: label
+                      content: Name
+                      id: userNameLabel
+                      left: 25
+                      top: 12
+                    - type: textbox
+                      id: userNameTextbox
+                      left: 100
+                      top: 10
+                      width: 100
+                    - type: button
+                      content: Entering
+                      id: enterButton
+                      left: 99
+                      top: 49
+                    - type: button
+                      content: 'Back to Room Selection '
+                      id: backButton
+                      left: 262
+                      top: 50
+              - type: panel
+                _isDisplay: true
                 height: 100
                 id: messagePanel
                 left: 197
                 top: 183
                 width: 450
-                label:
+                children:
+                - type: label
                   content: Message
                   id: messageLabel
                   left: 20
                   top: 10
-                textbox:
+                - type: textbox
                   id: messageTextbox
                   left: 150
                   top: 10
                   width: 100
-                button:
-                - content: Send
+                - type: button
+                  content: Send
                   id: messageSubmitButton
                   left: 96
                   top: 46
-                - content: Leave
+                - type: button
+                  content: Leave
                   id: exitButton
                   left: 347
                   top: 47
-            table:
+            - type: table
               data: message
               height: 225
               id: messageTable
               left: 25
               top: 200
               width: 600
-              th:
-              - _data: message
+              children:
+              - type: th
+                _data: message
                 field: user_name
                 id: th0
                 label: user_name
                 left: 203
                 top: 13
                 width: 100
-              - _data: message
+              - type: th
+                _data: message
                 field: message
                 id: th1
                 label: message
                 left: 343
                 top: 30
                 width: 100
-              - _data: message
+              - type: th
+                _data: message
                 field: posted
                 id: th2
                 label: posted
                 left: 354
                 top: 25
                 width: 350
-              - _data: message
+              - type: th
+                _data: message
                 field: room
                 id: th3
                 label: room
