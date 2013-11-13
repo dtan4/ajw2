@@ -5,200 +5,200 @@ ajml:
   application:
     name: chat
     interfaces:
-      - type: panel
-        _isDisplay: true
-        height: 500
-        id: rootPanel
-        left: 72
-        top: 2
-        width: 700
+    - type: panel
+      _isDisplay: true
+      height: 500
+      id: rootPanel
+      left: 72
+      top: 2
+      width: 700
+      children:
+      - type: label
+        value: Chat Application
+        id: label0
+        left: 27
+        top: 22
+      - type: frame
+        height: 450
+        id: rootFrame
+        left: 25
+        top: 45
+        width: 650
         children:
+        - type: panel
+          _isDisplay: true
+          height: 450
+          id: loginPanel
+          left: 97
+          top: 8
+          width: 650
+          children:
           - type: label
-            content: Chat Application
-            id: label0
-            left: 27
-            top: 22
+            value: UserID
+            id: label1
+            left: 29
+            top: 29
+          - type: textbox
+            id: userIdTextbox
+            left: 132
+            placeHolder: user name
+            top: 29
+            width: 100
+          - type: label
+            value: Password
+            id: label2
+            left: 29
+            top: 59
+          - type: passwordbox
+            id: passwordbox
+            left: 131
+            top: 61
+            width: 100
+          - type: button
+            value: Login
+            id: button1
+            left: 32
+            top: 91
+        - type: panel
+          _isDisplay: true
+          height: 450
+          id: roomSelectPanel
+          left: 97
+          top: 8
+          width: 650
+          children:
+          - type: label
+            value: room select
+            id: label3
+            left: 0
+            top: 0
+          - type: button
+            value: Selection
+            id: selectButton
+            left: 369
+            top: 50
+          - type: selectbox
+            data: room
+            id: roomSelect
+            label: name
+            left: 100
+            top: 50
+        - type: panel
+          _isDisplay: true
+          height: 450
+          id: chatRoomPanel
+          left: 97
+          top: 8
+          width: 650
+          children:
+          - type: label
+            value: room name
+            id: nowRoomLabel
+            left: 60
+            top: 0
           - type: frame
-            height: 450
-            id: rootFrame
+            height: 100
+            id: contentsFrame
             left: 25
-            top: 45
-            width: 650
+            top: 80
+            width: 450
             children:
-          - type: panel
-            _isDisplay: true
-            height: 450
-            id: loginPanel
-            left: 97
-            top: 8
-            width: 650
-            children:
-            - type: label
-              content: UserID
-              id: label1
-              left: 29
-              top: 29
-            - type: textbox
-              id: userIdTextbox
-              left: 132
-              placeHolder: user name
-              top: 29
-              width: 100
-            - type: label
-              content: Password
-              id: label2
-              left: 29
-              top: 59
-            - type: passwordbox
-              id: passwordbox
-              left: 131
-              top: 61
-              width: 100
-            - type: button
-              content: Login
-              id: button1
-              left: 32
-              top: 91
-          - type: panel
-            _isDisplay: true
-            height: 450
-            id: roomSelectPanel
-            left: 97
-            top: 8
-            width: 650
-            children:
-            - type: label
-              content: room select
-              id: label3
-              left: 0
-              top: 0
-            - type: button
-              content: Selection
-              id: selectButton
-              left: 369
-              top: 50
-            - type: selectbox
-              data: room
-              id: roomSelect
-              label: name
-              left: 100
-              top: 50
-          - type: panel
-            _isDisplay: true
-            height: 450
-            id: chatRoomPanel
-            left: 97
-            top: 8
-            width: 650
-            children:
-            - type: label
-              content: room name
-              id: nowRoomLabel
-              left: 60
-              top: 0
-            - type: frame
+            - type: panel
+              _isDisplay: true
               height: 100
-              id: contentsFrame
-              left: 25
-              top: 80
+              id: entrancePanel
+              left: 197
+              top: 183
               width: 450
               children:
-                - type: panel
-                  _isDisplay: true
-                  height: 100
-                  id: entrancePanel
-                  left: 197
-                  top: 183
-                  width: 450
-                  children:
-                    - type: label
-                      content: Name
-                      id: userNameLabel
-                      left: 25
-                      top: 12
-                    - type: textbox
-                      id: userNameTextbox
-                      left: 100
-                      top: 10
-                      width: 100
-                    - type: button
-                      content: Entering
-                      id: enterButton
-                      left: 99
-                      top: 49
-                    - type: button
-                      content: 'Back to Room Selection '
-                      id: backButton
-                      left: 262
-                      top: 50
-              - type: panel
-                _isDisplay: true
-                height: 100
-                id: messagePanel
-                left: 197
-                top: 183
-                width: 450
-                children:
-                - type: label
-                  content: Message
-                  id: messageLabel
-                  left: 20
-                  top: 10
-                - type: textbox
-                  id: messageTextbox
-                  left: 150
-                  top: 10
-                  width: 100
-                - type: button
-                  content: Send
-                  id: messageSubmitButton
-                  left: 96
-                  top: 46
-                - type: button
-                  content: Leave
-                  id: exitButton
-                  left: 347
-                  top: 47
-            - type: table
-              data: message
-              height: 225
-              id: messageTable
-              left: 25
-              top: 200
-              width: 600
+              - type: label
+                value: Name
+                id: userNameLabel
+                left: 25
+                top: 12
+              - type: textbox
+                id: userNameTextbox
+                left: 100
+                top: 10
+                width: 100
+              - type: button
+                value: Entering
+                id: enterButton
+                left: 99
+                top: 49
+              - type: button
+                value: 'Back to Room Selection '
+                id: backButton
+                left: 262
+                top: 50
+            - type: panel
+              _isDisplay: true
+              height: 100
+              id: messagePanel
+              left: 197
+              top: 183
+              width: 450
               children:
-              - type: th
-                _data: message
-                field: user_name
-                id: th0
-                label: user_name
-                left: 203
-                top: 13
+              - type: label
+                value: Message
+                id: messageLabel
+                left: 20
+                top: 10
+              - type: textbox
+                id: messageTextbox
+                left: 150
+                top: 10
                 width: 100
-              - type: th
-                _data: message
-                field: message
-                id: th1
-                label: message
-                left: 343
-                top: 30
-                width: 100
-              - type: th
-                _data: message
-                field: posted
-                id: th2
-                label: posted
-                left: 354
-                top: 25
-                width: 350
-              - type: th
-                _data: message
-                field: room
-                id: th3
-                label: room
-                left: 350
-                top: 37
-                width: 30
+              - type: button
+                value: Send
+                id: messageSubmitButton
+                left: 96
+                top: 46
+              - type: button
+                value: Leave
+                id: exitButton
+                left: 347
+                top: 47
+          - type: table
+            data: message
+            height: 225
+            id: messageTable
+            left: 25
+            top: 200
+            width: 600
+            children:
+            - type: th
+              _data: message
+              field: user_name
+              id: th0
+              label: user_name
+              left: 203
+              top: 13
+              width: 100
+            - type: th
+              _data: message
+              field: message
+              id: th1
+              label: message
+              left: 343
+              top: 30
+              width: 100
+            - type: th
+              _data: message
+              field: posted
+              id: th2
+              label: posted
+              left: 354
+              top: 25
+              width: 350
+            - type: th
+              _data: message
+              field: room
+              id: th3
+              label: room
+              left: 350
+              top: 37
+              width: 30
     databases:
       _isDisplay: true
       dbType: sqlite
@@ -243,16 +243,16 @@ ajml:
         condition:
         action:
           call:
-            - element: rootFrame
-              func: selectPanel
-              id: call0
-              param:
-                - id: param13
-                  name: panel
-                  type: element
-                  element:
-                    target: rootFrame
-                    type: child
+          - element: rootFrame
+            func: selectPanel
+            id: call0
+            param:
+            - id: param13
+              name: panel
+              type: element
+              element:
+                target: rootFrame
+                type: child
       - target: button1
         type: onClick
         action:
@@ -282,34 +282,34 @@ ajml:
             then:
               id: then1
               call:
-                - element: rootFrame
-                  func: selectPanel
-                  id: call2
-                  param:
-                    - id: param13
-                      name: panel
-                      type: element
-                      element:
-                        target: roomSelectPanel
-                        type: child
+              - element: rootFrame
+                func: selectPanel
+                id: call2
+                param:
+                - id: param13
+                  name: panel
+                  type: element
+                  element:
+                    target: roomSelectPanel
+                    type: child
             else:
               id: else1
       - target: roomSelectPanel
         type: onDisplay
         action:
           call:
-            - element: roomSelect
-              func: load
-              id: call2
-              param:
-                id: param13
-                name: items
-                type: objects
-                value:
-                  element: room
-                  func: select
-                  type: element
-                  elemType: database
+          - element: roomSelect
+            func: load
+            id: call2
+            param:
+              id: param13
+              name: items
+              type: objects
+              value:
+                element: room
+                func: select
+                type: element
+                elemType: database
       - target: selectButton
         type: onClick
         action:
@@ -318,64 +318,64 @@ ajml:
             func: selectPanel
             id: call3
             param:
-              - id: param14
-                name: panel
-                type: element
-                element:
-                  target: chatRoomPanel
-                  type: child
+            - id: param14
+              name: panel
+              type: element
+              element:
+                target: chatRoomPanel
+                type: child
           - element: nowRoomLabel
             func: setContent
             id: call4
             param:
-              - id: param15
-                name: content
-                type: string
-                value:
-                  element: roomSelect
-                  func: getSelectItemProperty
-                  type: element
-                  elemType: widget
-                  param:
-                    - id: param35
-                      name: property
-                      type: string
-                      stringSelect:
-                        target: room
-                        type: data
+            - id: param15
+              name: content
+              type: string
+              value:
+                element: roomSelect
+                func: getSelectItemProperty
+                type: element
+                elemType: widget
+                param:
+                - id: param35
+                  name: property
+                  type: string
+                  stringSelect:
+                    target: room
+                    type: data
           - element: messageTable
             func: load
             id: call5
             param:
-              - id: param17
-                name: items
-                type: object
-                value:
-                  element: message
-                  func: selectByCondition
-                  type: element
-                  elemType: database
-                  param:
-                    - id: param33
-                      name: condition
-                      type: condition
-                      paramCondition:
-                        operator: eq
-                        eq:
-                          value:
-                            - element: roomSelect
-                              func: getSelectItem
-                              elemType: widget
-                            - element: targetItem
-                              func: property
-                              elemType: targetItem
-                              param:
-                                - id: param34
-                                  name: property
-                                  type: string
-                                  stringSelect:
-                                    target: message
-                                    type: data
+            - id: param17
+              name: items
+              type: object
+              value:
+                element: message
+                func: selectByCondition
+                type: element
+                elemType: database
+                param:
+                - id: param33
+                  name: condition
+                  type: condition
+                  paramCondition:
+                    operator: eq
+                    eq:
+                      value:
+                      - element: roomSelect
+                        func: getSelectItem
+                        elemType: widget
+                      - element: targetItem
+                        func: property
+                        elemType: targetItem
+                        param:
+                        - id: param34
+                          name: property
+                          type: string
+                          stringSelect:
+                            target: message
+                            type: data
       - target: enterButton
         type: onClick
         action:
@@ -392,27 +392,27 @@ ajml:
                 type: string
                 elemType: data
                 param:
-                  - id: param36
-                    name: first
+                - id: param36
+                  name: first
+                  type: string
+                  value:
+                    element: userNameTextBox
+                    func: getValue
+                    type: element
+                    elemType: widget
+                - id: param37
+                  name: second
+                  type: string
+                  value:
+                    element: string
+                    func: direct
                     type: string
-                    value:
-                      element: userNameTextBox
-                      func: getValue
-                      type: element
-                      elemType: widget
-                  - id: param37
-                    name: second
-                    type: string
-                    value:
-                      element: string
-                      func: direct
+                    elemType: data
+                    param:
+                    - id: param38
+                      name: value
                       type: string
-                      elemType: data
-                      param:
-                        - id: param38
-                          name: value
-                          type: string
-                          string: が入室しました
+                      string: が入室しました
             - id: param12
               name: posted
               type: datetime
@@ -442,26 +442,26 @@ ajml:
               func: selectPanel
               id: call9
               param:
-                - id: param34
-                  name: panel
-                  type: element
-                  element:
-                    target: contentsFrame
-                    type: child
+              - id: param34
+                name: panel
+                type: element
+                element:
+                  target: contentsFrame
+                  type: child
       - target: backButton
         type: onClick
         action:
           call:
-            - element: rootFrame
-              func: selectPanel
-              id: call8
-              param:
-                - id: param32
-                  name: panel
-                  type: element
-                  element:
-                    target: rootFrame
-                    type: child
+          - element: rootFrame
+            func: selectPanel
+            id: call8
+            param:
+            - id: param32
+              name: panel
+              type: element
+              element:
+                target: rootFrame
+                type: child
       - target: messageSubmitButton
         type: onClick
         action:
@@ -512,30 +512,30 @@ ajml:
               type: message:receivedItem
               elemType: receivedItem
               param:
-                - id: param34
-                  name: property
-                  type: string
-                  stringSelect:
-                    target: message
-                    type: data
+              - id: param34
+                name: property
+                type: string
+                stringSelect:
+                  target: message
+                  type: data
             - element: roomSelect
               func: getSelectItem
               type: element
               elemType: widget
         action:
           call:
-            - element: messageTable
-              func: insert
-              id: call6
-              param:
-                - id: param22
-                  name: item
-                  type: object
-                  value:
-                    element: receivedItem
-                    func: self
-                    type: message:receivedItem
-                    elemType: receivedItem
+          - element: messageTable
+            func: insert
+            id: call6
+            param:
+            - id: param22
+              name: item
+              type: object
+              value:
+                element: receivedItem
+                func: self
+                type: message:receivedItem
+                elemType: receivedItem
       - target: exitButton
         type: onClick
         action:
@@ -552,27 +552,27 @@ ajml:
                 type: string
                 elemType: data
                 param:
-                  - id: param39
-                    name: first
+                - id: param39
+                  name: first
+                  type: string
+                  value:
+                    element: userNameTextbox
+                    func: getValue
+                    type: element
+                    elemType: widget
+                - id: param40
+                  name: second
+                  type: string
+                  value:
+                    element: string
+                    func: direct
                     type: string
-                    value:
-                      element: userNameTextbox
-                      func: getValue
-                      type: element
-                      elemType: widget
-                  - id: param40
-                    name: second
-                    type: string
-                    value:
-                      element: string
-                      func: direct
+                    elemType: data
+                    param:
+                    - id: param41
+                      name: value
                       type: string
-                      elemType: data
-                      param:
-                        - id: param41
-                          name: value
-                          type: string
-                          string: が退出しました
+                      string: が退出しました
             - id: param24
               name: posted
               type: datetime
@@ -598,11 +598,11 @@ ajml:
                 type: element
                 elemType: widget
           call:
-            - element: contentsFrame
-              func: selectPanel
-              id: call7
-              param:
-                - id: param35
-                  name: panel
-                  type: element
-                  element: entrancePanel
+          - element: contentsFrame
+            func: selectPanel
+            id: call7
+            param:
+            - id: param35
+              name: panel
+              type: element
+              element: entrancePanel
