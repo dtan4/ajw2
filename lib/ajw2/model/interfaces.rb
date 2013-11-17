@@ -1,5 +1,10 @@
 module Ajw2::Model
   class Interfaces
+    INPUT_TYPE = %i{
+      text password hidden search tel url email daetime date month week time
+      datetime-local number range color checkbox radio file submit image reset
+    }
+
     attr_reader :source
 
     def initialize(source)
@@ -12,6 +17,8 @@ module Ajw2::Model
 
     private
     def parse_element(element, depth)
+      raise ArgumentError unless element[:type] && element[:id]
+
       result = "  " * depth
       result << parse_type(element)
       result << parse_style(element) if element[:left] || element[:top] || element[:width]
@@ -26,7 +33,7 @@ module Ajw2::Model
     def parse_type(element)
       if element[:type] == :panel
         result = "\##{element[:id]}"
-      elsif %i{text password}.include? element[:type]
+      elsif INPUT_TYPE.include? element[:type]
         result = "input\##{element[:id]} type=\"#{element[:type]}\""
         result << " placeholder=\"#{element[:placeholder]}\"" if element[:placeholder]
       else
