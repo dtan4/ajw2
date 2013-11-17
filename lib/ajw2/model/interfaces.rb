@@ -13,24 +13,26 @@ module Ajw2::Model
     private
     def parse_element(element, depth)
       result = "  " * depth
-
-      if element[:type] == :panel
-        result << "\##{element[:id]}"
-      elsif %i{text password}.include? element[:type]
-        result << "input\##{element[:id]}"
-        result << " type=\"#{element[:type]}\""
-        result << " placeholder=\"#{element[:placeholder]}\"" if element[:placeholder]
-      else
-        result << "#{element[:type].to_s}\##{element[:id]}"
-      end
-
+      result << parse_type(element)
       result << parse_style(element) if element[:left] || element[:top] || element[:width]
-
       result << " #{element[:value]}" if element[:value]
       result << "\n"
       result << element[:children].inject("") do |result, el|
         result << parse_element(el, depth + 1)
       end if element[:children]
+      result
+    end
+
+    def parse_type(element)
+      if element[:type] == :panel
+        result = "\##{element[:id]}"
+      elsif %i{text password}.include? element[:type]
+        result = "input\##{element[:id]} type=\"#{element[:type]}\""
+        result << " placeholder=\"#{element[:placeholder]}\"" if element[:placeholder]
+      else
+        result = "#{element[:type].to_s}\##{element[:id]}"
+      end
+
       result
     end
 
