@@ -15,14 +15,22 @@ module Ajw2::Model
          children: [
                     {
                       type: :label,
-                      content: "Chat Application",
+                      value: "Chat Application",
                       id: "label0",
                       left: 27,
                       top: 22
                     },
                     {
+                      type: :text,
+                      id: "userIdTextbox",
+                      placeholder: "user name",
+                      left: 132,
+                      top: 29,
+                      width: 100
+                    },
+                    {
                       type: :button,
-                      content: "Selection",
+                      value: "Selection",
                       id: "selectButton",
                       left: 369,
                       top: 50
@@ -35,6 +43,23 @@ module Ajw2::Model
     describe "#initialize" do
       subject { Ajw2::Model::Interfaces.new(source) }
       its(:source) { should be_instance_of Array }
+    end
+
+    describe "#parse" do
+      before { @result = Ajw2::Model::Interfaces.new(source).parse }
+
+      it "should return String" do
+        expect(@result).to be_an_instance_of String
+      end
+
+      it "should return Slim template" do
+        expect(@result).to eq(<<-EOS)
+#rootPanel style="position:absolute; left:72; top:2; width:700px;"
+  label#label0 style="position:absolute; left:27; top:22;" Chat Application
+  input#userIdTextbox type="text" placeholder="user name" style="position:absolute; left:132; top:29; width:100px;"
+  button#selectButton style="position:absolute; left:369; top:50;" Selection
+EOS
+      end
     end
   end
 end

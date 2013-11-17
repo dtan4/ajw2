@@ -38,7 +38,7 @@ ajml:
             id: label1
             left: 29
             top: 29
-          - type: textbox
+          - type: text
             id: userIdTextbox
             left: 132
             placeHolder: user name
@@ -49,8 +49,8 @@ ajml:
             id: label2
             left: 29
             top: 59
-          - type: passwordbox
-            id: passwordbox
+          - type: password
+            id: password
             left: 131
             top: 61
             width: 100
@@ -116,7 +116,7 @@ ajml:
                 id: userNameLabel
                 left: 25
                 top: 12
-              - type: textbox
+              - type: text
                 id: userNameTextbox
                 left: 100
                 top: 10
@@ -144,7 +144,7 @@ ajml:
                 id: messageLabel
                 left: 20
                 top: 10
-              - type: textbox
+              - type: text
                 id: messageTextbox
                 left: 150
                 top: 10
@@ -271,7 +271,7 @@ ajml:
               name: password
               type: password
               value:
-                element: passwordbox
+                element: password
                 func: getValue
                 type: element
                 elemType: widget
