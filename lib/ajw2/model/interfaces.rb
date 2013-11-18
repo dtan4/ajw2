@@ -1,7 +1,7 @@
 module Ajw2::Model
   class Interfaces
     INPUT_TYPE = %i{
-      text password hidden search tel url email daetime date month week time
+      text password hidden search tel url email datetime date month week time
       datetime-local number range color checkbox radio file submit image reset
     }
 
