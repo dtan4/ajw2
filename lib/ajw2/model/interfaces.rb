@@ -24,9 +24,10 @@ module Ajw2::Model
       result << parse_style(element) if element[:left] || element[:top] || element[:width]
       result << " #{element[:value]}" if element[:value]
       result << "\n"
-      result << element[:children].inject("") do |result, el|
-        result << parse_element(el, depth + 1)
+      result << element[:children].inject("") do |res, el|
+        res << parse_element(el, depth + 1)
       end if element[:children]
+
       result
     end
 
