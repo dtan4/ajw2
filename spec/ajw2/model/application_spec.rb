@@ -8,8 +8,8 @@ module Ajw2::Model
       its(:name) { should == "sample" }
     end
 
-    describe "#html_header" do
-      before { @header = Ajw2::Model::Application.new("sample").html_header }
+    describe "#render_header" do
+      before { @header = Ajw2::Model::Application.new("sample").render_header }
 
       it "should return String" do
         expect(@header).to be_an_instance_of String

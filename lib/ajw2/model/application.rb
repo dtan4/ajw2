@@ -6,7 +6,7 @@ module Ajw2::Model
       @name = name
     end
 
-    def html_header
+    def render_header
       result = ["meta charset=\"utf-8\""]
       result << "title #{@name}"
       result.join("\n") << "\n"

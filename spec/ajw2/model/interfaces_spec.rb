@@ -45,9 +45,9 @@ module Ajw2::Model
       its(:source) { should be_instance_of Array }
     end
 
-    describe "#parse" do
+    describe "#render" do
       context "with valid source" do
-        before { @result = Ajw2::Model::Interfaces.new(source).parse }
+        before { @result = Ajw2::Model::Interfaces.new(source).render }
 
         it "should return String" do
           expect(@result).to be_an_instance_of String
@@ -72,7 +72,7 @@ EOS
         @invalid_sources.each do |src|
           it "should raise Exception" do
             expect {
-              puts Ajw2::Model::Interfaces.new(src).parse
+              puts Ajw2::Model::Interfaces.new(src).render
             }.to raise_error ArgumentError
           end
         end

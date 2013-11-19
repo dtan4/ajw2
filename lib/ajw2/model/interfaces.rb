@@ -11,27 +11,27 @@ module Ajw2::Model
       @source = source
     end
 
-    def parse
-      @source.inject("") { |result, el| result << parse_element(el, 0) }
+    def render
+      @source.inject("") { |result, el| result << render_element(el, 0) }
     end
 
     private
-    def parse_element(element, depth)
+    def render_element(element, depth)
       raise ArgumentError unless element[:type] && element[:id]
 
       result = "  " * depth
-      result << parse_type(element)
-      result << parse_style(element) if element[:left] || element[:top] || element[:width]
+      result << render_type(element)
+      result << render_style(element) if element[:left] || element[:top] || element[:width]
       result << " #{element[:value]}" if element[:value]
       result << "\n"
       result << element[:children].inject("") do |res, el|
-        res << parse_element(el, depth + 1)
+        res << render_element(el, depth + 1)
       end if element[:children]
 
       result
     end
 
-    def parse_type(element)
+    def render_type(element)
       if element[:type] == :panel
         result = "\##{element[:id]}"
       elsif INPUT_TYPE.include? element[:type]
@@ -44,7 +44,7 @@ module Ajw2::Model
       result
     end
 
-    def parse_style(element)
+    def render_style(element)
       result = " style=\"position:absolute;"
       result << " left:#{element[:left]};" if element[:left]
       result << " top:#{element[:top]};" if element[:top]
