@@ -1,9 +1,9 @@
 module Ajw2::Model
   class Interfaces
-    INPUT_TYPE = %i{
+    INPUT_TYPE = %w{
       text password hidden search tel url email datetime date month week time
       datetime-local number range color checkbox radio file submit image reset
-    }
+    }.map(&:to_sym)
 
     attr_reader :source
 
