@@ -76,7 +76,7 @@ end
         expect(@migration).to be_an_instance_of Array
       end
 
-      it "should have 2 itme" do
+      it "should have 2 item" do
         expect(@migration.length).to eq 2
       end
 
