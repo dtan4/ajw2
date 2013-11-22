@@ -68,5 +68,34 @@ end
                               EOS
       end
     end
+
+    describe "#render_migration" do
+      before { @migration = Ajw2::Model::Databases.new(source).render_migration }
+
+      it "should return Array" do
+        expect(@migration).to be_an_instance_of Array
+      end
+
+      it "should have 2 itme" do
+        expect(@migration.length).to eq 2
+      end
+
+      it "should render the setup migration" do
+        expect(@migration[0][:up]).to eq(<<-EOS)
+create_table :users do |t|
+  t.string :username, null: false
+  t.string :crypted_password
+  t.string :role
+  t.timestamps
+end
+                                         EOS
+      end
+
+      it "should render the teardown migration" do
+        expect(@migration[0][:down]).to eq(<<-EOS)
+drop_table :users
+                                         EOS
+      end
+    end
   end
 end
