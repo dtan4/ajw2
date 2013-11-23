@@ -1,3 +1,5 @@
+require "erb"
+
 module Ajw2::Model
   class Databases
     attr_reader :source
@@ -15,11 +17,23 @@ module Ajw2::Model
     end
 
     private
+    SCHEMA_ERB = <<-EOS
+create_table "<%= tablename %>", force: true do |t|
+<%= fields.join("\n") %>
+end
+    EOS
+
+    MIGRATION_UP_ERB = <<-EOS
+create_table :<%= tablename %> do |t|
+<%= fields.join("\n") %>
+end
+    EOS
+
     def render_table_schema(table)
-      schema = ["create_table \"#{table[:tablename]}\", force: true do |t|"]
-      schema.concat render_schema_fields(table)
-      schema << "end"
-      schema.join("\n") + "\n"
+      erb = ERB.new(SCHEMA_ERB)
+      tablename = table[:tablename]
+      fields = render_schema_fields(table)
+      erb.result(binding)
     end
 
     def render_schema_fields(table)
@@ -53,10 +67,10 @@ module Ajw2::Model
     end
 
     def render_up_migration(table)
-      migration = ["create_table :#{table[:tablename]} do |t|"]
-      migration.concat render_migration_fields(table)
-      migration << "end"
-      migration.join("\n") + "\n"
+      erb = ERB.new(MIGRATION_UP_ERB)
+      tablename = table[:tablename]
+      fields = render_migration_fields(table)
+      erb.result(binding)
     end
 
     def render_migration_fields(table)
