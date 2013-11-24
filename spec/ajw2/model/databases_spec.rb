@@ -12,7 +12,7 @@ module Ajw2::Model
            tablename: "users",
            type: :server,
            property: [
-                      { name: "username", type: :string, unique: true, null: false },
+                      { name: "username", type: :string, null: false },
                       { name: "password", type: :password },
                       { name: "role", type: :role  }
                      ]
@@ -21,8 +21,8 @@ module Ajw2::Model
            tablename: "messages",
            type: :server,
            property: [
-                      { name: "user_id", type: :integer, unique: false, null:false },
-                      { name: "content", type: :string, unique: false, null: false }
+                      { name: "user_id", type: :integer, null: false },
+                      { name: "content", type: :string, null: false }
                      ]
          }
         ]
@@ -48,7 +48,7 @@ module Ajw2::Model
       it "should render the setup migration" do
         expect(@migration[0][:up]).to eq(<<-EOS)
 create_table :users do |t|
-  t.string :username, null: false
+  t.string :username
   t.string :crypted_password
   t.string :role
   t.timestamps
