@@ -17,6 +17,10 @@ module Ajw2::Model
     end
 
     private
+    def add_encrypted_prefix(name)
+      "encrypted_#{name}"
+    end
+
     def render_migration_table(table)
       {
        tablename: table[:tablename],
@@ -42,7 +46,7 @@ end
     def render_migration_field(field)
       case field[:type]
       when :password
-        "  t.string :crypted_#{field[:name]}"
+        "  t.string :#{add_encrypted_prefix(field[:name])}"
       when :role # TODO role validation
         "  t.string :#{field[:name]}"
       else
@@ -64,18 +68,15 @@ end
 
     def render_definition_fields(fields)
       fields.inject([]) do |r_fields, field|
-        r_fields << render_definition_field(field)
+        r_fields.concat render_definition_field(field)
       end.delete_if { |field| field == "" }
     end
 
     def render_definition_field(field)
-      field[:name] = "crypted_#{field[:name]}" if field[:type] == :password
-
-      if !field[:null].nil? && !field[:null]
-        "  validates_presence_of :#{field[:name]}"
-      else
-        ""
-      end
+      field[:name] = add_encrypted_prefix(field[:name]) if field[:type] == :password
+      result = ["  attr_accessor :#{field[:name]}"]
+      result << "  validates_presence_of :#{field[:name]}" if !field[:null].nil? && !field[:null]
+      result
     end
   end
 end

@@ -49,7 +49,7 @@ module Ajw2::Model
         expect(@migration[0][:up]).to eq(<<-EOS)
 create_table :users do |t|
   t.string :username
-  t.string :crypted_password
+  t.string :encrypted_password
   t.string :role
   t.timestamps
 end
@@ -77,7 +77,10 @@ drop_table :users
       it "should render the definition" do
         expect(@definition[0]).to eq(<<-EOS)
 class User < ActiveRecord::Base
+  attr_accessor :username
   validates_presence_of :username
+  attr_accessor :encrypted_password
+  attr_accessor :role
 end
                                      EOS
       end
