@@ -1,3 +1,5 @@
+require "active_support/inflector"
+
 module Ajw2::Model
   class Databases
     attr_reader :source
@@ -11,7 +13,7 @@ module Ajw2::Model
     end
 
     def render_definition
-
+      @source[:database].inject([]) { |definition, table| definition << render_definition_table(table) }
     end
 
     private
@@ -50,6 +52,30 @@ end
 
     def render_down_migration(table)
       "drop_table :#{table[:tablename]}\n"
+    end
+
+    def render_definition_table(table)
+      <<-EOS
+class #{table[:tablename].singularize.capitalize} < ActiveRecord::Base
+#{render_definition_fields(table[:property]).join("\n")}
+end
+      EOS
+    end
+
+    def render_definition_fields(fields)
+      fields.inject([]) do |r_fields, field|
+        r_fields << render_definition_field(field)
+      end.delete_if { |field| field == "" }
+    end
+
+    def render_definition_field(field)
+      field[:name] = "crypted_#{field[:name]}" if field[:type] == :password
+
+      if !field[:null].nil? && !field[:null]
+        "  validates_presence_of :#{field[:name]}"
+      else
+        ""
+      end
     end
   end
 end

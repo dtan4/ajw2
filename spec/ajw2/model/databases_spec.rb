@@ -62,5 +62,25 @@ drop_table :users
                                          EOS
       end
     end
+
+    describe "#render_definition" do
+      before { @definition = Ajw2::Model::Databases.new(source).render_definition }
+
+      it "should return Array" do
+        expect(@definition).to be_an_instance_of Array
+      end
+
+      it "should have 2 item" do
+        expect(@definition.length).to eq 2
+      end
+
+      it "should render the definition" do
+        expect(@definition[0]).to eq(<<-EOS)
+class User < ActiveRecord::Base
+  validates_presence_of :username
+end
+                                     EOS
+      end
+    end
   end
 end
