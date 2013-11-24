@@ -8,42 +8,16 @@ module Ajw2::Model
       @source = source
     end
 
-    def render_schema
-      @source[:database].inject([]) { |schema, table| schema << render_table_schema(table) }
-    end
-
     def render_migration
       @source[:database].inject([]) { |migration, table| migration << render_table_migration(table) }
     end
 
     private
-    SCHEMA_ERB = <<-EOS
-create_table "<%= tablename %>", force: true do |t|
-<%= fields.join("\n") %>
-end
-    EOS
-
     MIGRATION_UP_ERB = <<-EOS
 create_table :<%= tablename %> do |t|
 <%= fields.join("\n") %>
 end
     EOS
-
-    def render_table_schema(table)
-      erb = ERB.new(SCHEMA_ERB)
-      tablename = table[:tablename]
-      fields = render_schema_fields(table)
-      erb.result(binding)
-    end
-
-    def render_schema_fields(table)
-      table[:property].inject([]) do |fields, field|
-        fields << render_field(field, false)
-      end.concat [
-                  "  t.datetime \"created_at\", null: false",
-                  "  t.datetime \"updated_at\", null: false"
-                 ]
-    end
 
     def render_field(field, symbol)
         line = case field[:type]
