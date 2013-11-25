@@ -6,8 +6,8 @@ require 'ajw2/version'
 Gem::Specification.new do |spec|
   spec.name          = "ajw2"
   spec.version       = Ajw2::VERSION
-  spec.authors       = ["dtan4"]
-  spec.email         = ["dtanshi45@gmail.com"]
+  spec.authors       = ["fujita"]
+  spec.email         = ["fujita@tt.cs.titech.ac.jp"]
   spec.summary       = %q{TODO: Write a short summary. Required.}
   spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ""
