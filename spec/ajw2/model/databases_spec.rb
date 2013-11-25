@@ -77,10 +77,7 @@ drop_table :users
       it "should render the definition" do
         expect(@definition[0]).to eq(<<-EOS)
 class User < ActiveRecord::Base
-  attr_accessor :username
   validates_presence_of :username
-  attr_accessor :encrypted_password
-  attr_accessor :role
 end
                                      EOS
       end

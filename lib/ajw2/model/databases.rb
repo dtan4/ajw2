@@ -68,15 +68,17 @@ end
 
     def render_definition_fields(fields)
       fields.inject([]) do |r_fields, field|
-        r_fields.concat render_definition_field(field)
+        r_fields << render_definition_field(field)
       end.delete_if { |field| field == "" }
     end
 
     def render_definition_field(field)
       field[:name] = add_encrypted_prefix(field[:name]) if field[:type] == :password
-      result = ["  attr_accessor :#{field[:name]}"]
-      result << "  validates_presence_of :#{field[:name]}" if !field[:null].nil? && !field[:null]
-      result
+      if !field[:null].nil? && !field[:null]
+        "  validates_presence_of :#{field[:name]}"
+      else
+        ""
+      end
     end
   end
 end
