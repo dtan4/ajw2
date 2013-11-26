@@ -82,5 +82,113 @@ end
                                      EOS
       end
     end
+
+    describe "#render_config" do
+      before do
+        @application = double("application", render_name: "sample")
+      end
+
+      shared_examples_for "valid dbType" do
+        it "should return Hash" do
+          expect(@config).to be_an_instance_of String
+        end
+      end
+
+      context "when dbType is mysql" do
+        before do
+          @config =
+            Ajw2::Model::Databases.new({ dbType: :mysql }).render_config(:development, @application)
+        end
+
+        it_behaves_like "valid dbType"
+
+        it "should call Application#render_name" do
+          expect(@application).to receive(:render_name)
+          Ajw2::Model::Databases.new({ dbType: :mysql }).render_config(:development, @application)
+        end
+
+        it "should render the config" do
+          expect(@config).to eq <<-EOS
+  adapter: mysql2
+  encoding: utf8
+  reconnect: true
+  database: sample_development
+  pool: 5
+  username: root
+  password:
+  host: localhost
+  sock: /tmp/mysql.sock
+            EOS
+        end
+      end
+
+      context "when dbType is postgres" do
+        before do
+          @config =
+            Ajw2::Model::Databases.new({ dbType: :postgres }).render_config(:development, @application)
+        end
+
+        it_behaves_like "valid dbType"
+
+        it "should call Application#render_name" do
+          expect(@application).to receive(:render_name)
+          Ajw2::Model::Databases.new({ dbType: :postgres }).render_config(:development, @application)
+        end
+
+        it "should render the config" do
+          expect(@config).to eq <<-EOS
+  adapter: postgresql
+  database: sample_development
+  username: root
+  password:
+  host: localhost
+  port: 5432
+            EOS
+        end
+      end
+
+      shared_examples_for "sqlite" do
+        it "should render the config" do
+          expect(@config).to eq <<-EOS
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 5
+  timeout: 5000
+            EOS
+        end
+      end
+
+      context "when dbType is sqlite" do
+        before do
+          @config =
+            Ajw2::Model::Databases.new({ dbType: :sqlite }).render_config(:development, @application)
+        end
+
+        it_behaves_like "valid dbType"
+
+        it "should not call Application#render_name" do
+          expect(@application).not_to receive(:render_name)
+          Ajw2::Model::Databases.new({ dbType: :sqlite }).render_config(:development, @application)
+        end
+
+        it_behaves_like "sqlite"
+      end
+
+      context "when dbType is unknown" do
+        before do
+          @config =
+            Ajw2::Model::Databases.new({ dbType: :hogehoge }).render_config(:development, @application)
+        end
+
+        it_behaves_like "valid dbType"
+
+        it "should not call Application#render_name" do
+          expect(@application).not_to receive(:render_name)
+          Ajw2::Model::Databases.new({ dbType: :hogehoge }).render_config(:development, @application)
+        end
+
+        it_behaves_like "sqlite"
+      end
+    end
   end
 end
