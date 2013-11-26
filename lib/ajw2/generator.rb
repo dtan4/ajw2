@@ -57,7 +57,7 @@ module Ajw2
     end
 
     def generate_from_erb(file, dir)
-      erb = ERB.new(template_path(file + ".erb"))
+      erb = ERB.new(open(template_path(file + ".erb")).read)
       open(destination_path(file, dir), "w") { |f| f.puts erb.result(binding) }
     end
   end

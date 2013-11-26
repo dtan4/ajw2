@@ -10,13 +10,19 @@ module Ajw2
 
     describe "#generate" do
       before do
-        @application = double("application", render_header: <<-EOS
-meta charset="utf-8"
-title hoge
-EOS
-                             )
-        @interfaces = double("interfaces", render: "h1 hogehoge")
+        @application = double("application",
+                              render_header: "title sample",
+                              render_name: "sample")
+
+        @interfaces = double("interfaces",
+                             render: "h1 sample")
+
         @databases = double("databases")
+
+        [:development, :test, :production].each do |env|
+          @databases.stub(:render_config).with(env, @application).and_return("  database: sample_#{env}")
+        end
+
         @events = double("events")
         @outdir = File.expand_path("../tmp", __FILE__)
         @generator =
@@ -41,13 +47,26 @@ EOS
          "Gemfile",
          # "views/layout.slim",
          # "views/index.slim",
-         # "config/database.yml",
+         "config/database.yml",
          "public/js/jquery.min.js",
          # "public/js/app.js"
         ].each do |path|
           it "should create #{path}" do
             expect(File.exists?(File.expand_path(path, @outdir))).to be_true
           end
+        end
+
+        it "should generate config/database.yml" do
+          expect(open(File.expand_path("config/database.yml", @outdir)).read).to eq <<-EOS
+development:
+  database: sample_development
+
+test:
+  database: sample_test
+
+production:
+  database: sample_production
+          EOS
         end
       end
 

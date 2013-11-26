@@ -1,0 +1,8 @@
+development:
+<%= @databases.render_config(:development, @application) %>
+
+test:
+<%= @databases.render_config(:test, @application) %>
+
+production:
+<%= @databases.render_config(:production, @application) %>
