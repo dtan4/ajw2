@@ -85,7 +85,7 @@ end
 
     describe "#render_config" do
       before do
-        @application = double("application", render_name: "sample")
+        @application = double("application", name: "sample")
       end
 
       shared_examples_for "valid dbType" do
@@ -102,8 +102,8 @@ end
 
         it_behaves_like "valid dbType"
 
-        it "should call Application#render_name" do
-          expect(@application).to receive(:render_name)
+        it "should call Application#name" do
+          expect(@application).to receive(:name)
           Ajw2::Model::Databases.new({ dbType: :mysql }).render_config(:development, @application)
         end
 
@@ -130,8 +130,8 @@ end
 
         it_behaves_like "valid dbType"
 
-        it "should call Application#render_name" do
-          expect(@application).to receive(:render_name)
+        it "should call Application#name" do
+          expect(@application).to receive(:name)
           Ajw2::Model::Databases.new({ dbType: :postgres }).render_config(:development, @application)
         end
 
@@ -166,8 +166,8 @@ end
 
         it_behaves_like "valid dbType"
 
-        it "should not call Application#render_name" do
-          expect(@application).not_to receive(:render_name)
+        it "should not call Application#name" do
+          expect(@application).not_to receive(:name)
           Ajw2::Model::Databases.new({ dbType: :sqlite }).render_config(:development, @application)
         end
 
@@ -182,8 +182,8 @@ end
 
         it_behaves_like "valid dbType"
 
-        it "should not call Application#render_name" do
-          expect(@application).not_to receive(:render_name)
+        it "should not call Application#name" do
+          expect(@application).not_to receive(:name)
           Ajw2::Model::Databases.new({ dbType: :hogehoge }).render_config(:development, @application)
         end
 

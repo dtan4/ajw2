@@ -12,7 +12,7 @@ module Ajw2
       before do
         @application = double("application",
                               render_header: "title sample",
-                              render_name: "sample")
+                              name: "sample")
 
         @interfaces = double("interfaces",
                              render: "h1 sample")

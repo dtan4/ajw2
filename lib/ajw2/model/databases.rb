@@ -23,7 +23,7 @@ module Ajw2::Model
   adapter: mysql2
   encoding: utf8
   reconnect: true
-  database: #{application.render_name}_#{env}
+  database: #{application.name}_#{env}
   pool: 5
   username: root
   password:
@@ -33,7 +33,7 @@ module Ajw2::Model
       when :postgres
         <<-EOS
   adapter: postgresql
-  database: #{application.render_name}_#{env}
+  database: #{application.name}_#{env}
   username: root
   password:
   host: localhost
