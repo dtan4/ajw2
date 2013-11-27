@@ -14,22 +14,6 @@ module Ajw2
       load File.expand_path("../fixtures/ajml_sections.rb", __dir__)
     end
 
-    describe "#initialize" do
-      subject { Ajw2::Ajml.new}
-      it { should respond_to(:name) }
-      it { should respond_to(:interfaces) }
-      it { should respond_to(:databases) }
-      it { should respond_to(:events) }
-      its(:name) { should be_instance_of String }
-      its(:name) { should == "" }
-      its(:interfaces) { should be_instance_of Hash }
-      its(:interfaces) { should be_empty }
-      its(:databases) { should be_instance_of Hash }
-      its(:databases) { should be_empty }
-      its(:events) { should be_instance_of Hash }
-      its(:events) { should be_empty }
-    end
-
     describe "#parse" do
       shared_context "with valid file" do
         before do
@@ -37,20 +21,20 @@ module Ajw2
           @ajml.parse(path)
         end
 
-        it "should set name" do
-          expect(@ajml.name).to eq "chat"
+        it "should set application" do
+          expect(@ajml.application).to be_an_instance_of Ajw2::Model::Application
         end
 
         it "should set interfaces" do
-          expect(@ajml.interfaces).to eql FIXTURE_INTERFACES
+          expect(@ajml.interfaces).to be_an_instance_of Ajw2::Model::Interfaces
         end
 
         it "should set databases" do
-          expect(@ajml.databases).to eql FIXTURE_DATABASES
+          expect(@ajml.databases).to be_an_instance_of Ajw2::Model::Databases
         end
 
         it "should set events" do
-          expect(@ajml.events).to eql FIXTURE_EVENTS
+          expect(@ajml.events).to be_an_instance_of Ajw2::Model::Events
         end
       end
 
