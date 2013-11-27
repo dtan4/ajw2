@@ -45,7 +45,7 @@ module Ajw2
          "config.ru",
          "Rakefile",
          "Gemfile",
-         # "views/layout.slim",
+         "views/layout.slim",
          # "views/index.slim",
          "config/database.yml",
          "public/js/jquery.min.js",
@@ -54,6 +54,18 @@ module Ajw2
           it "should create #{path}" do
             expect(File.exists?(File.expand_path(path, @outdir))).to be_true
           end
+        end
+
+        it "should generate views/layout.slim" do
+          expect(open(File.expand_path("views/layout.slim", @outdir)).read).to eq <<-EOS
+doctype html
+html
+  head
+    title sample
+  html
+    == yield
+    script src="/js/jquery.min.js"
+          EOS
         end
 
         it "should generate config/database.yml" do
