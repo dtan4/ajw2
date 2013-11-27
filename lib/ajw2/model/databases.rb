@@ -20,31 +20,31 @@ module Ajw2::Model
       case @source[:dbType]
       when :mysql
         <<-EOS
-  adapter: mysql2
-  encoding: utf8
-  reconnect: true
-  database: #{application.name}_#{env}
-  pool: 5
-  username: root
-  password:
-  host: localhost
-  sock: /tmp/mysql.sock
+adapter: mysql2
+encoding: utf8
+reconnect: true
+database: #{application.name}_#{env}
+pool: 5
+username: root
+password:
+host: localhost
+sock: /tmp/mysql.sock
         EOS
       when :postgres
         <<-EOS
-  adapter: postgresql
-  database: #{application.name}_#{env}
-  username: root
-  password:
-  host: localhost
-  port: 5432
+adapter: postgresql
+database: #{application.name}_#{env}
+username: root
+password:
+host: localhost
+port: 5432
         EOS
       else
         <<-EOS
-  adapter: sqlite3
-  database: db/#{env}.sqlite3
-  pool: 5
-  timeout: 5000
+adapter: sqlite3
+database: db/#{env}.sqlite3
+pool: 5
+timeout: 5000
         EOS
       end
     end

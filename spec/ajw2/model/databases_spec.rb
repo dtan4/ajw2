@@ -109,15 +109,15 @@ end
 
         it "should render the config" do
           expect(@config).to eq <<-EOS
-  adapter: mysql2
-  encoding: utf8
-  reconnect: true
-  database: sample_development
-  pool: 5
-  username: root
-  password:
-  host: localhost
-  sock: /tmp/mysql.sock
+adapter: mysql2
+encoding: utf8
+reconnect: true
+database: sample_development
+pool: 5
+username: root
+password:
+host: localhost
+sock: /tmp/mysql.sock
             EOS
         end
       end
@@ -137,12 +137,12 @@ end
 
         it "should render the config" do
           expect(@config).to eq <<-EOS
-  adapter: postgresql
-  database: sample_development
-  username: root
-  password:
-  host: localhost
-  port: 5432
+adapter: postgresql
+database: sample_development
+username: root
+password:
+host: localhost
+port: 5432
             EOS
         end
       end
@@ -150,10 +150,10 @@ end
       shared_examples_for "sqlite" do
         it "should render the config" do
           expect(@config).to eq <<-EOS
-  adapter: sqlite3
-  database: db/development.sqlite3
-  pool: 5
-  timeout: 5000
+adapter: sqlite3
+database: db/development.sqlite3
+pool: 5
+timeout: 5000
             EOS
         end
       end

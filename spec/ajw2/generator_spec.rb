@@ -20,7 +20,7 @@ module Ajw2
         @databases = double("databases")
 
         [:development, :test, :production].each do |env|
-          @databases.stub(:render_config).with(env, @application).and_return("  database: sample_#{env}")
+          @databases.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
         end
 
         @events = double("events")

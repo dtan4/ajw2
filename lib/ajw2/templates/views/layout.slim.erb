@@ -1,7 +1,7 @@
 doctype html
 html
   head
-<%= padding(@application.render_header, 2) %>
+<%= indent(@application.render_header, 2) %>
   html
     == yield
     script src="/js/jquery.min.js"
