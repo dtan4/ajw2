@@ -46,7 +46,7 @@ module Ajw2
          "Rakefile",
          "Gemfile",
          "views/layout.slim",
-         # "views/index.slim",
+         "views/index.slim",
          "config/database.yml",
          "public/js/jquery.min.js",
          # "public/js/app.js"
@@ -65,6 +65,12 @@ html
   html
     == yield
     script src="/js/jquery.min.js"
+          EOS
+        end
+
+        it "should generate views/index.slim" do
+          expect(open(File.expand_path("views/index.slim", @outdir)).read).to eq <<-EOS
+h1 sample
           EOS
         end
 
