@@ -38,6 +38,7 @@ module Ajw2
       end
     end
 
+    private
     def parse_xml(path)
       xml = open(path).read
       extract_application_section(Hash.from_xml(xml))

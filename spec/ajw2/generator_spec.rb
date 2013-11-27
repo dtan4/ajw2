@@ -1,5 +1,4 @@
 require "spec_helper"
-require "fakefs/safe"
 require "fileutils"
 
 module Ajw2
@@ -63,7 +62,6 @@ EOS
         @outdir = File.expand_path("../tmp", __FILE__)
         @generator =
           Ajw2::Generator.new(@application, @interfaces, @databases, @events)
-        # FakeFS.activate!
       end
 
       context "with non-existed outdir" do
@@ -212,8 +210,7 @@ end
         end
       end
 
-      after(:all) do
-        # FakeFS.deactivate!
+      after do
         FileUtils.rm_r(@outdir) if Dir.exists? @outdir
       end
     end
