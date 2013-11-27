@@ -33,6 +33,7 @@ module Ajw2
     end
 
     private
+
     def indent(text, indent)
       text.each_line.map { |line| ("  " * indent) + line }.join("").chomp
     end

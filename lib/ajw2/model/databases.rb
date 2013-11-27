@@ -50,6 +50,7 @@ timeout: 5000
     end
 
     private
+
     def add_encrypted_prefix(name)
       "encrypted_#{name}"
     end

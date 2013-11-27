@@ -9,9 +9,6 @@ module Ajw2
       @yaml_path = File.expand_path("../fixtures/chat.yaml", __dir__)
       @yml_path = File.expand_path("../fixtures/chat.yml", __dir__)
       @invalid_path = File.expand_path("../fixtures/chat.txt", __dir__)
-
-      # load Hash fixtures
-      load File.expand_path("../fixtures/ajml_sections.rb", __dir__)
     end
 
     describe "#parse" do

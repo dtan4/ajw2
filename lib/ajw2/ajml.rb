@@ -11,15 +11,16 @@ module Ajw2
       ext = File.extname(path)
 
       case ext
-      when /^\.(x|aj)ml$/i then ajml = parse_xml(path)
-      when /^\.json$/i then ajml = parse_json(path)
-      when /^\.ya?ml$/i then ajml = parse_yaml(path)
+      when /^\.(x|aj)ml$/i then parse_xml(path)
+      when /^\.json$/i then parse_json(path)
+      when /^\.ya?ml$/i then parse_yaml(path)
       else
         raise Exception
       end
     end
 
     private
+
     def symbolize_keys(hash)
       hash.inject({}) do |result, (key, value)|
         result[key.to_sym] = (value.class == Hash) ? symbolize_keys(value) : value

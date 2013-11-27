@@ -16,6 +16,7 @@ module Ajw2::Model
     end
 
     private
+
     def render_element(element, depth)
       raise ArgumentError unless element[:type] && element[:id]
 
