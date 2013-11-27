@@ -1,0 +1,19 @@
+<%- @databases.render_definition.each do |definition| -%>
+<%= definition %>
+<%- end -%>
+class App < Sinatra::Base
+  configure do
+    register Sinatra::ActiveRecordExtension
+    set :sockets, []
+    use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    Slim::Engine.default_options[:pretty] = true
+  end
+
+  get "/" do
+    if !request.websocket?
+      slim :index
+    else
+
+    end
+  end
+end

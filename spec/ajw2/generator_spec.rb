@@ -39,7 +39,21 @@ end
                                                 EOS
                                                 down: "drop_table :messages"
                                                }
-                                              ])
+                                              ],
+                            render_definition: [
+                                                (<<-EOS),
+class User < ActiveRecord::Base
+  validates_presence_of :name
+  validates_presence_of :password
+end
+EOS
+                                                (<<-EOS),
+class Message < ActiveRecord::Base
+  validates_presence_of :user_id
+  validates_presence_of :message
+end
+EOS
+                                               ])
 
         [:development, :test, :production].each do |env|
           @databases.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
@@ -63,7 +77,7 @@ end
         end
 
         [
-         # "app.rb",
+         "app.rb",
          "config.ru",
          "Rakefile",
          "Gemfile",
@@ -78,6 +92,49 @@ end
           it "should create #{path}" do
             expect(File.exists?(File.expand_path(path, @outdir))).to be_true
           end
+        end
+
+        it "should generate app.rb" do
+          expect(open(File.expand_path("app.rb", @outdir)).read).to eq <<-EOS
+class User < ActiveRecord::Base
+  validates_presence_of :name
+  validates_presence_of :password
+end
+
+class Message < ActiveRecord::Base
+  validates_presence_of :user_id
+  validates_presence_of :message
+end
+
+class App < Sinatra::Base
+  configure do
+    register Sinatra::ActiveRecordExtension
+    set :sockets, []
+    use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    Slim::Engine.default_options[:pretty] = true
+  end
+
+  get "/" do
+    if !request.websocket?
+      slim :index
+    else
+
+    end
+  end
+end
+          EOS
+        end
+
+        it "should generate views/layout.slim" do
+          expect(open(File.expand_path("views/layout.slim", @outdir)).read).to eq <<-EOS
+doctype html
+html
+  head
+    title sample
+  html
+    == yield
+    script src="/js/jquery.min.js"
+          EOS
         end
 
         it "should generate views/layout.slim" do
