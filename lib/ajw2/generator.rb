@@ -28,6 +28,8 @@ module Ajw2
        "public/js/jquery.min.js",
        "public/js/app.js"
       ].each { |file| generate_file(file, out_dir) }
+
+      generate_migration_files(out_dir)
     end
 
     private
@@ -59,6 +61,16 @@ module Ajw2
     def generate_from_erb(file, dir)
       erb = ERB.new(open(template_path(file + ".erb")).read)
       open(destination_path(file, dir), "w") { |f| f.puts erb.result(binding) }
+    end
+
+    def generate_migration_files(dir)
+      FileUtils.mkdir_p(File.expand_path("db/migrate", dir))
+
+      @databases.render_migration.each_with_index do |migration, idx|
+        erb = ERB.new(open(template_path("db/migrate/migration.rb.erb")).read)
+        file = "db/migrate/" << "%.3d" % (idx + 1) << "_create_#{migration[:tablename]}.rb"
+        open(destination_path(file, dir), "w") { |f| f.puts erb.result(binding) }
+      end
     end
   end
 end

@@ -17,7 +17,29 @@ module Ajw2
         @interfaces = double("interfaces",
                              render: "h1 sample")
 
-        @databases = double("databases")
+        @databases = double("databases",
+                            render_migration: [
+                                               {
+                                                tablename: "users",
+                                                up: (<<-EOS),
+create_table :users do |t|
+  t.string :name
+  t.string :password
+end
+                                                EOS
+                                                down: "drop_table :users"
+                                               },
+                                               {
+                                                tablename: "messages",
+                                                up: (<<-EOS),
+create_table :messages do |t|
+  t.integer :user_id
+  t.string :message
+end
+                                                EOS
+                                                down: "drop_table :messages"
+                                               }
+                                              ])
 
         [:development, :test, :production].each do |env|
           @databases.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
@@ -48,8 +70,10 @@ module Ajw2
          "views/layout.slim",
          "views/index.slim",
          "config/database.yml",
+         "db/migrate/001_create_users.rb",
+         "db/migrate/002_create_messages.rb",
          "public/js/jquery.min.js",
-         # "public/js/app.js"
+         # "public/js/app.js",
         ].each do |path|
           it "should create #{path}" do
             expect(File.exists?(File.expand_path(path, @outdir))).to be_true
@@ -84,6 +108,40 @@ test:
 
 production:
   database: sample_production
+          EOS
+        end
+
+        it "should generate db/migrate/001_create_users.rb" do
+          expect(open(File.expand_path("db/migrate/001_create_users.rb", @outdir)).read).to eq <<-EOS
+class CreateUsers < ActiveRecord::Migration
+  def up
+    create_table :users do |t|
+      t.string :name
+      t.string :password
+    end
+  end
+
+  def down
+    drop_table :users
+  end
+end
+          EOS
+        end
+
+        it "should generate db/migrate/002_create_messages.rb" do
+          expect(open(File.expand_path("db/migrate/002_create_messages.rb", @outdir)).read).to eq <<-EOS
+class CreateMessages < ActiveRecord::Migration
+  def up
+    create_table :messages do |t|
+      t.integer :user_id
+      t.string :message
+    end
+  end
+
+  def down
+    drop_table :messages
+  end
+end
           EOS
         end
       end
