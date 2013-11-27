@@ -1,0 +1,9 @@
+class Create<%= migration[:tablename].capitalize %> < ActiveRecord::Migration
+  def up
+<%= indent(migration[:up], 2) %>
+  end
+
+  def down
+<%= indent(migration[:down], 2) %>
+  end
+end
