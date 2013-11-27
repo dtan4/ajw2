@@ -18,7 +18,7 @@ module Ajw2::Model
 
     def render_config(env, application)
       case @source[:dbType]
-      when :mysql
+      when "mysql"
         <<-EOS
 adapter: mysql2
 encoding: utf8
@@ -30,7 +30,7 @@ password:
 host: localhost
 sock: /tmp/mysql.sock
         EOS
-      when :postgres
+      when "postgres"
         <<-EOS
 adapter: postgresql
 database: #{application.name}_#{env}
@@ -78,9 +78,9 @@ end
 
     def render_migration_field(field)
       case field[:type]
-      when :password
+      when "password"
         "  t.string :#{add_encrypted_prefix(field[:name])}"
-      when :role # TODO role validation
+      when "role" # TODO role validation
         "  t.string :#{field[:name]}"
       else
         "  t.#{field[:type]} :#{field[:name]}"
@@ -106,8 +106,8 @@ end
     end
 
     def render_definition_field(field)
-      field[:name] = add_encrypted_prefix(field[:name]) if field[:type] == :password
-      if !field[:null].nil? && !field[:null]
+      field[:name] = add_encrypted_prefix(field[:name]) if field[:type] == "password"
+      if !field[:null]
         "  validates_presence_of :#{field[:name]}"
       else
         ""

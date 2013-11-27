@@ -5,24 +5,24 @@ module Ajw2::Model
     let(:source) {
       {
         _isDisplay: true,
-        dbType: :sqlite,
+        dbType: "sqlite",
         database:
         [
          {
            tablename: "users",
-           type: :server,
+           type: "server",
            property: [
-                      { name: "username", type: :string, null: false },
-                      { name: "password", type: :password },
-                      { name: "role", type: :role  }
+                      { name: "username", type: "string", null: false },
+                      { name: "password", type: "password", null: true },
+                      { name: "role", type: "role", null: true }
                      ]
          },
          {
            tablename: "messages",
-           type: :server,
+           type: "server",
            property: [
-                      { name: "user_id", type: :integer, null: false },
-                      { name: "content", type: :string, null: false }
+                      { name: "user_id", type: "integer", null: false },
+                      { name: "content", type: "string", null: false }
                      ]
          }
         ]
@@ -97,14 +97,14 @@ end
       context "when dbType is mysql" do
         before do
           @config =
-            Ajw2::Model::Databases.new({ dbType: :mysql }).render_config(:development, @application)
+            Ajw2::Model::Databases.new({ dbType: "mysql" }).render_config(:development, @application)
         end
 
         it_behaves_like "valid dbType"
 
         it "should call Application#name" do
           expect(@application).to receive(:name)
-          Ajw2::Model::Databases.new({ dbType: :mysql }).render_config(:development, @application)
+          Ajw2::Model::Databases.new({ dbType: "mysql" }).render_config(:development, @application)
         end
 
         it "should render the config" do
@@ -125,14 +125,14 @@ sock: /tmp/mysql.sock
       context "when dbType is postgres" do
         before do
           @config =
-            Ajw2::Model::Databases.new({ dbType: :postgres }).render_config(:development, @application)
+            Ajw2::Model::Databases.new({ dbType: "postgres" }).render_config(:development, @application)
         end
 
         it_behaves_like "valid dbType"
 
         it "should call Application#name" do
           expect(@application).to receive(:name)
-          Ajw2::Model::Databases.new({ dbType: :postgres }).render_config(:development, @application)
+          Ajw2::Model::Databases.new({ dbType: "postgres" }).render_config(:development, @application)
         end
 
         it "should render the config" do
@@ -161,14 +161,14 @@ timeout: 5000
       context "when dbType is sqlite" do
         before do
           @config =
-            Ajw2::Model::Databases.new({ dbType: :sqlite }).render_config(:development, @application)
+            Ajw2::Model::Databases.new({ dbType: "sqlite" }).render_config(:development, @application)
         end
 
         it_behaves_like "valid dbType"
 
         it "should not call Application#name" do
           expect(@application).not_to receive(:name)
-          Ajw2::Model::Databases.new({ dbType: :sqlite }).render_config(:development, @application)
+          Ajw2::Model::Databases.new({ dbType: "sqlite" }).render_config(:development, @application)
         end
 
         it_behaves_like "sqlite"
@@ -177,14 +177,14 @@ timeout: 5000
       context "when dbType is unknown" do
         before do
           @config =
-            Ajw2::Model::Databases.new({ dbType: :hogehoge }).render_config(:development, @application)
+            Ajw2::Model::Databases.new({ dbType: "hogehoge" }).render_config(:development, @application)
         end
 
         it_behaves_like "valid dbType"
 
         it "should not call Application#name" do
           expect(@application).not_to receive(:name)
-          Ajw2::Model::Databases.new({ dbType: :hogehoge }).render_config(:development, @application)
+          Ajw2::Model::Databases.new({ dbType: "hogehoge" }).render_config(:development, @application)
         end
 
         it_behaves_like "sqlite"

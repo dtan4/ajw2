@@ -3,7 +3,7 @@ module Ajw2::Model
     INPUT_TYPE = %w{
       text password hidden search tel url email datetime date month week time
       datetime-local number range color checkbox radio file submit image reset
-    }.map(&:to_sym)
+    }
 
     attr_reader :source
 
@@ -32,7 +32,7 @@ module Ajw2::Model
     end
 
     def render_type(element)
-      if element[:type] == :panel
+      if element[:type] == "panel"
         result = "\##{element[:id]}"
       elsif INPUT_TYPE.include? element[:type]
         result = "input\##{element[:id]} type=\"#{element[:type]}\""

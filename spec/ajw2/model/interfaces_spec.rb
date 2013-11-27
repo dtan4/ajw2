@@ -5,7 +5,7 @@ module Ajw2::Model
     let(:source) {
       [
        {
-         type: :panel,
+         type: "panel",
          _isDisplay: true,
          height: 500,
          id: "rootPanel",
@@ -14,14 +14,14 @@ module Ajw2::Model
          width: 700,
          children: [
                     {
-                      type: :label,
+                      type: "label",
                       value: "Chat Application",
                       id: "label0",
                       left: 27,
                       top: 22
                     },
                     {
-                      type: :text,
+                      type: "text",
                       id: "userIdTextbox",
                       placeholder: "user name",
                       left: 132,
@@ -29,7 +29,7 @@ module Ajw2::Model
                       width: 100
                     },
                     {
-                      type: :button,
+                      type: "button",
                       value: "Selection",
                       id: "selectButton",
                       left: 369,
@@ -65,7 +65,7 @@ EOS
 
       context "with invalid source" do
         @invalid_sources = [
-                            [{ type: :panel }],
+                            [{ type: "panel" }],
                             [{ id: "hoge" }]
                            ]
 
