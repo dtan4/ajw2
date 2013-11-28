@@ -60,14 +60,11 @@ module Ajw2::Model
 
     describe "#render" do
       context "with valid source" do
-        before { @result = Ajw2::Model::Interfaces.new(source).render }
-
-        it "should return String" do
-          expect(@result).to be_an_instance_of String
-        end
+        subject { Ajw2::Model::Interfaces.new(source).render }
+        it { should be_an_instance_of String }
 
         it "should return Slim template" do
-          expect(@result).to eq(<<-EOS)
+          expect(subject).to eq(<<-EOS)
 #rootPanel style="position:absolute; left:72; top:2; width:700px;"
   label#label0 style="position:absolute; left:27; top:22;" Chat Application
   input#userIdTextbox type="text" placeholder="user name" style="position:absolute; left:132; top:29; width:100px;"
