@@ -3,8 +3,12 @@ require "spec_helper"
 module Ajw2::Model
   describe Interfaces do
     let(:source) {
-      [
-       {
+      {
+       type: "slim",
+       pretty: true,
+       elements:
+       [
+        {
          type: "panel",
          _isDisplay: true,
          height: 500,
@@ -14,39 +18,40 @@ module Ajw2::Model
          width: 700,
          children: [
                     {
-                      type: "label",
-                      value: "Chat Application",
-                      id: "label0",
-                      left: 27,
-                      top: 22
+                     type: "label",
+                     value: "Chat Application",
+                     id: "label0",
+                     left: 27,
+                     top: 22
                     },
                     {
-                      type: "text",
-                      id: "userIdTextbox",
-                      placeholder: "user name",
-                      left: 132,
-                      top: 29,
-                      width: 100
+                     type: "text",
+                     id: "userIdTextbox",
+                     placeholder: "user name",
+                     left: 132,
+                     top: 29,
+                     width: 100
                     },
                     {
-                      type: "button",
-                      value: "Selection",
-                      id: "selectButton",
-                      left: 369,
-                      top: 50
+                     type: "button",
+                     value: "Selection",
+                     id: "selectButton",
+                     left: 369,
+                     top: 50
                     }
                    ]
-       }
-      ]
+        }
+       ]
+      }
     }
 
     describe "#initialize" do
-      context "with Array" do
+      context "with Hash" do
         subject { Ajw2::Model::Interfaces.new(source) }
-        its(:source) { should be_instance_of Array }
+        its(:source) { should be_instance_of Hash }
       end
 
-      context "with non-Array" do
+      context "with non-Hash" do
         it "should raise Exception" do
           expect { Ajw2::Model::Interfaces.new("hoge") }.to raise_error
         end
@@ -73,8 +78,12 @@ EOS
 
       context "with invalid source" do
         @invalid_sources = [
-                            [{ type: "panel" }],
-                            [{ id: "hoge" }]
+                            {
+                             elements: [{ type: "panel" }]
+                            },
+                            {
+                             elements: [{ id: "hoge" }]
+                            }
                            ]
 
         @invalid_sources.each do |src|

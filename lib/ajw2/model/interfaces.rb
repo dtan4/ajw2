@@ -8,12 +8,12 @@ module Ajw2::Model
     attr_reader :source
 
     def initialize(source)
-      raise Exception unless source.class == Array
+      raise Exception unless source.class == Hash
       @source = source
     end
 
     def render
-      @source.inject("") { |result, el| result << render_element(el, 0) }
+      @source[:elements].inject("") { |result, el| result << render_element(el, 0) }
     end
 
     private
