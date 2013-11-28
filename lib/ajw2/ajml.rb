@@ -18,10 +18,16 @@ module Ajw2
 
     private
 
-    def symbolize_keys(hash)
-      hash.inject({}) do |result, (key, value)|
-        result[key.to_sym] = (value.class == Hash) ? symbolize_keys(value) : value
-        result
+    def symbolize_keys(argument)
+      if argument.class == Hash
+        argument.inject({}) do |result, (key, value)|
+          result[key.to_sym] = symbolize_keys(value)
+          result
+        end
+      elsif argument.class == Array
+        argument.map { |arg| symbolize_keys(arg) }
+      else
+        argument
       end
     end
 
