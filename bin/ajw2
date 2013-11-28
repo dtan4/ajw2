@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require "ajw2"
+
+USAGE = "USAGE: ajw2 <source file> <output directory>"
+
+unless ARGV.length == 2
+  $stderr.puts USAGE
+  exit 1
+end
+
+Ajw2::Cli.execute(ARGV)
