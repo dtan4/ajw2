@@ -7,10 +7,7 @@ module Ajw2
     attr_reader :application, :interfaces, :databases, :events
 
     def parse(path)
-      # TODO: refactor
-      ext = File.extname(path)
-
-      case ext
+      case File.extname(path)
       when /^\.(x|aj)ml$/i then parse_xml(path)
       when /^\.json$/i then parse_json(path)
       when /^\.ya?ml$/i then parse_yaml(path)

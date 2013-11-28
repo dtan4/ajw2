@@ -35,13 +35,13 @@ module Ajw2
         end
       end
 
-      context "with .ajml" do
+      pending "with .ajml" do
         include_context "with valid file" do
           let(:path) { @ajml_path }
         end
       end
 
-      context "with .xml" do
+      pending "with .xml" do
         include_context "with valid file" do
           let(:path) { @xml_path }
         end

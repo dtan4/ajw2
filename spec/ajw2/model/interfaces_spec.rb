@@ -41,8 +41,16 @@ module Ajw2::Model
     }
 
     describe "#initialize" do
-      subject { Ajw2::Model::Interfaces.new(source) }
-      its(:source) { should be_instance_of Array }
+      context "with Array" do
+        subject { Ajw2::Model::Interfaces.new(source) }
+        its(:source) { should be_instance_of Array }
+      end
+
+      context "with non-Array" do
+        it "should raise Exception" do
+          expect { Ajw2::Model::Interfaces.new("hoge") }.to raise_error
+        end
+      end
     end
 
     describe "#render" do

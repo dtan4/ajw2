@@ -30,8 +30,16 @@ module Ajw2::Model
     }
 
     describe "#initialize" do
-      subject { Ajw2::Model::Databases.new(source) }
-      its(:source) { should be_instance_of Hash }
+      context "with Hash" do
+        subject { Ajw2::Model::Databases.new(source) }
+        its(:source) { should be_instance_of Hash }
+      end
+
+      context "with non-Hash" do
+        it "should to raise Exception" do
+          expect { Ajw2::Model::Databases.new("a") }.to raise_error
+        end
+      end
     end
 
     describe "#render_migration" do

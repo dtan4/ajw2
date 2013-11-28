@@ -3,9 +3,17 @@ require "spec_helper"
 module Ajw2::Model
   describe Application do
     describe "#initialize" do
-      subject { Ajw2::Model::Application.new("sample") }
-      its(:name) { should be_instance_of String }
-      its(:name) { should == "sample" }
+      context "with String" do
+        subject { Ajw2::Model::Application.new("sample") }
+        its(:name) { should be_instance_of String }
+        its(:name) { should == "sample" }
+      end
+
+      context "with non-String" do
+        it "should raise Exception" do
+          expect { Ajw2::Model::Application.new({ a: "a" }) }.to raise_error
+        end
+      end
     end
 
     describe "#render_header" do

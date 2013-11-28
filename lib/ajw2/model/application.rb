@@ -3,6 +3,7 @@ module Ajw2::Model
     attr_reader :name
 
     def initialize(name)
+      raise Exception unless name.class == String
       @name = name
     end
 
