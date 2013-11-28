@@ -43,39 +43,55 @@ module Ajw2::Model
     end
 
     describe "#render_migration" do
-      subject { Ajw2::Model::Databases.new(source).render_migration }
-      it { should be_an_instance_of Array }
-      it { should have(2).items }
+      context "with valid source" do
+        subject { Ajw2::Model::Databases.new(source).render_migration }
+        it { should be_an_instance_of Array }
+        it { should have(2).items }
 
-      it "should render the setup migration" do
-        expect(subject[0][:up]).to eq(<<-EOS)
+        it "should render the setup migration" do
+          expect(subject[0][:up]).to eq(<<-EOS)
 create_table :users do |t|
   t.string :username
   t.string :encrypted_password
   t.string :role
   t.timestamps
 end
-                                         EOS
+                                           EOS
+        end
+
+        it "should render the teardown migration" do
+          expect(subject[0][:down]).to eq(<<-EOS)
+drop_table :users
+                                             EOS
+        end
       end
 
-      it "should render the teardown migration" do
-        expect(subject[0][:down]).to eq(<<-EOS)
-drop_table :users
-                                         EOS
+      context "with invalid source" do
+        it "should raise Exception" do
+          expect { Ajw2::Model::Databases.new({}).render_migration }.to raise_error
+        end
       end
     end
 
     describe "#render_definition" do
-      subject { Ajw2::Model::Databases.new(source).render_definition }
-      it { should be_an_instance_of Array }
-      it { should have(2).items }
+      context "with valid source" do
+        subject { Ajw2::Model::Databases.new(source).render_definition }
+        it { should be_an_instance_of Array }
+        it { should have(2).items }
 
-      it "should render the definition" do
-        expect(subject[0]).to eq(<<-EOS)
+        it "should render the definition" do
+          expect(subject[0]).to eq(<<-EOS)
 class User < ActiveRecord::Base
   validates_presence_of :username
 end
-                                     EOS
+                                      EOS
+        end
+      end
+
+      context "with invalid source" do
+        it "should raise Exception" do
+          expect { Ajw2::Model::Databases.new({}).render_definition }.to raise_error
+        end
       end
     end
 

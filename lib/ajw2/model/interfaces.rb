@@ -13,6 +13,8 @@ module Ajw2::Model
     end
 
     def render
+      raise Exception unless @source[:elements]
+
       @source[:elements].inject("") { |result, el| result << render_element(el, 0) }
     end
 

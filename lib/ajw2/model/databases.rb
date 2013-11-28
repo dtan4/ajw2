@@ -10,10 +10,14 @@ module Ajw2::Model
     end
 
     def render_migration
+      raise Exception unless @source[:database]
+
       @source[:database].inject([]) { |migration, table| migration << render_migration_table(table) }
     end
 
     def render_definition
+      raise Exception unless @source[:database]
+
       @source[:database].inject([]) { |definition, table| definition << render_definition_table(table) }
     end
 
