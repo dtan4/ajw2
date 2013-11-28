@@ -3,12 +3,12 @@ require "spec_helper"
 module Ajw2
   describe Ajml do
     before(:all) do
-      @ajml_path = File.expand_path("../fixtures/chat.ajml", __dir__)
-      @xml_path = File.expand_path("../fixtures/chat.xml", __dir__)
-      @json_path = File.expand_path("../fixtures/chat.json", __dir__)
-      @yaml_path = File.expand_path("../fixtures/chat.yaml", __dir__)
-      @yml_path = File.expand_path("../fixtures/chat.yml", __dir__)
-      @invalid_path = File.expand_path("../fixtures/chat.txt", __dir__)
+      @ajml_path = fixture_path("chat.ajml")
+      @xml_path = fixture_path("chat.xml")
+      @json_path = fixture_path("chat.json")
+      @yaml_path = fixture_path("chat.yaml")
+      @yml_path = fixture_path("chat.yml")
+      @invalid_path = fixture_path("chat.txt")
     end
 
     describe "#parse" do
