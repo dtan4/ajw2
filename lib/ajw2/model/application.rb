@@ -1,15 +1,17 @@
+require "erb"
+
 module Ajw2::Model
   class Application
-    attr_reader :name
+    attr_reader :source
 
-    def initialize(name)
-      raise ArgumentError, "Application section must be a String" unless name.class == String
-      @name = name
+    def initialize(source)
+      raise ArgumentError, "Application section must be a Hash" unless source.class == Hash
+      @source = source
     end
 
     def render_header
       result = ["meta charset=\"utf-8\""]
-      result << "title #{@name}"
+      result << "title #{ERB::Util.html_escape(@source[:name])}"
       result.join("\n") << "\n"
     end
   end

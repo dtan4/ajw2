@@ -1,5 +1,6 @@
 ---
-:name: sample
+:application:
+  :name: sample
 :interfaces:
   :type: slim
   :pretty: true
