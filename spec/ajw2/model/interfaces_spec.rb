@@ -40,8 +40,9 @@ module Ajw2::Model
       end
 
       context "with non-Hash" do
-        it "should raise Exception" do
-          expect { Ajw2::Model::Interfaces.new("hoge") }.to raise_error
+        it "should raise ArgumentError" do
+          expect { Ajw2::Model::Interfaces.new("hoge") }.to raise_error ArgumentError,
+            "Interfaces section must be a Hash"
         end
       end
     end
@@ -101,7 +102,7 @@ EOS
           it "should raise Exception" do
             expect {
               puts Ajw2::Model::Interfaces.new(src).render
-            }.to raise_error ArgumentError
+            }.to raise_error Exception
           end
         end
       end

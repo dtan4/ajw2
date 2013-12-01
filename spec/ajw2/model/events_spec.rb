@@ -62,7 +62,8 @@ module Ajw2::Model
 
       context "with non-Hash" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Events.new("a") }.to raise_error
+          expect { Ajw2::Model::Events.new("a") }.to raise_error ArgumentError,
+            "Events section must be a Hash"
         end
       end
     end

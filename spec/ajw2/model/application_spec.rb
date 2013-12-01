@@ -10,8 +10,9 @@ module Ajw2::Model
       end
 
       context "with non-String" do
-        it "should raise Exception" do
-          expect { Ajw2::Model::Application.new({ a: "a" }) }.to raise_error
+        it "should raise ArgumentError" do
+          expect { Ajw2::Model::Application.new({ a: "a" }) }.to raise_error ArgumentError,
+            "Application section must be a String"
         end
       end
     end

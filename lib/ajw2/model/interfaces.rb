@@ -10,7 +10,7 @@ module Ajw2::Model
     attr_reader :source
 
     def initialize(source)
-      raise Exception unless source.class == Hash
+      raise ArgumentError, "Interfaces section must be a Hash" unless source.class == Hash
       @source = source
     end
 

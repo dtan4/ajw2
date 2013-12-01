@@ -36,8 +36,9 @@ module Ajw2::Model
       end
 
       context "with non-Hash" do
-        it "should to raise Exception" do
-          expect { Ajw2::Model::Databases.new("a") }.to raise_error
+        it "should to raise ArgumentError" do
+          expect { Ajw2::Model::Databases.new("a") }.to raise_error ArgumentError,
+            "Databases section must be a Hash"
         end
       end
     end
