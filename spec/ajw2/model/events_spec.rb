@@ -8,39 +8,39 @@ module Ajw2::Model
        [
         {
          target: "button1",
-         type: :onClick,
+         type: "onClick",
          action: {
                   login: {
                           id: "login0",
                           param: [
                                   { id: "param1",
                                    name: "user_id",
-                                   type: :string,
+                                   type: "string",
                                    value: {
                                            element: "userIdTextbox",
-                                           func: :getValue,
-                                           type: :element,
-                                           elemType: :widget
+                                           func: "getValue",
+                                           type: "element",
+                                           elemType: "widget"
                                           }
                                   }
                                  ]
                          },
-                  branch: { id: "branch1", condition: { operator: :success }  },
+                  branch: { id: "branch1", condition: { operator: "success" }  },
                   then: {
                          id: "then1",
                          call: [
                                 {
                                  element: "rootFrame",
-                                 func: :selectPanel,
+                                 func: "selectPanel",
                                  id: "call2",
                                  param: [
                                          {
                                           id: "param13",
                                           name: "panel",
-                                          type: :element,
+                                          type: "element",
                                           element: {
                                                     target: "roomSelectPanel",
-                                                    type: :child
+                                                    type: "child"
                                                    }
                                          }
                                         ]
