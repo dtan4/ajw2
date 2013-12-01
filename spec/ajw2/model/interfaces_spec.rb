@@ -59,16 +59,42 @@ module Ajw2::Model
     end
 
     describe "#render" do
-      context "with valid source" do
+      context "with clean source" do
         subject { Ajw2::Model::Interfaces.new(source).render }
         it { should be_an_instance_of String }
 
         it "should return Slim template" do
           expect(subject).to eq(<<-EOS)
 #rootPanel style="position:absolute; left:72; top:2; width:700px;"
-  label#label0 style="position:absolute; left:27; top:22;" Chat Application
+  label#label0 style="position:absolute; left:27; top:22;"
+    | Chat Application
   input#userIdTextbox type="text" placeholder="user name" style="position:absolute; left:132; top:29; width:100px;"
-  button#selectButton style="position:absolute; left:369; top:50;" Selection
+  button#selectButton style="position:absolute; left:369; top:50;"
+    | Selection
+EOS
+        end
+      end
+
+      context "with dirty source (include XSS)" do
+        before do
+          @dirty_source = source
+          @dirty_source[:elements][0][:children][0][:value] =
+            "<script>alert('xss');</script>"
+          @dirty_source[:elements][0][:children][1][:placeholder] =
+            '<script>alert("xss");</script>'
+        end
+
+        subject { Ajw2::Model::Interfaces.new(source).render }
+        it { should be_an_instance_of String }
+
+        it "should return escaped Slim template" do
+          expect(subject).to eq(<<-EOS)
+#rootPanel style="position:absolute; left:72; top:2; width:700px;"
+  label#label0 style="position:absolute; left:27; top:22;"
+    | &lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;
+  input#userIdTextbox type="text" placeholder="&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;" style="position:absolute; left:132; top:29; width:100px;"
+  button#selectButton style="position:absolute; left:369; top:50;"
+    | Selection
 EOS
         end
       end
