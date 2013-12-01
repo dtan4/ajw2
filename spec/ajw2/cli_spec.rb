@@ -2,7 +2,7 @@ require "spec_helper"
 require "fileutils"
 
 module Ajw2
-  class Cli
+  describe Cli do
     describe "#execute" do
       context "with valid argument" do
         before do
