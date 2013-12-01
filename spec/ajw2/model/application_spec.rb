@@ -9,7 +9,7 @@ module Ajw2::Model
     }
 
     describe "#initialize" do
-      context "with String" do
+      context "with Hash" do
         subject { Ajw2::Model::Application.new(source) }
         its(:source) { should be_instance_of Hash }
       end
@@ -23,17 +23,35 @@ module Ajw2::Model
     end
 
     describe "#render_header" do
-      before { @header = Ajw2::Model::Application.new(source).render_header }
+      context "with clean source" do
+        subject { Ajw2::Model::Application.new(source).render_header }
+        it { should be_an_instance_of String }
 
-      it "should return String" do
-        expect(@header).to be_an_instance_of String
+        it "should return Slim template" do
+          expect(subject).to eq(<<-EOS)
+meta charset="utf-8"
+title
+  | sample
+EOS
+        end
       end
 
-      it "should return Slim template" do
-        expect(@header).to eq(<<-EOS)
+      context "with dirty source (include XSS)" do
+        before do
+          @dirty_source = source
+          @dirty_source[:name] = "<script>alert('xss');</script>"
+        end
+
+        subject { Ajw2::Model::Application.new(source).render_header }
+        it { should be_an_instance_of String }
+
+        it "should return Slim template" do
+          expect(subject).to eq(<<-EOS)
 meta charset="utf-8"
-title sample
+title
+  | &lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;
 EOS
+        end
       end
     end
   end
