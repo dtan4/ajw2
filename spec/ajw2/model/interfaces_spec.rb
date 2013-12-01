@@ -65,11 +65,11 @@ module Ajw2::Model
 
         it "should return Slim template" do
           expect(subject).to eq(<<-EOS)
-#rootPanel style="position:absolute; left:72; top:2; width:700px;"
-  label#label0 style="position:absolute; left:27; top:22;"
+#rootPanel
+  label#label0
     | Chat Application
-  input#userIdTextbox type="text" placeholder="user name" style="position:absolute; left:132; top:29; width:100px;"
-  button#selectButton style="position:absolute; left:369; top:50;"
+  input#userIdTextbox type="text" placeholder="user name"
+  button#selectButton
     | Selection
 EOS
         end
@@ -89,11 +89,11 @@ EOS
 
         it "should return escaped Slim template" do
           expect(subject).to eq(<<-EOS)
-#rootPanel style="position:absolute; left:72; top:2; width:700px;"
-  label#label0 style="position:absolute; left:27; top:22;"
+#rootPanel
+  label#label0
     | &lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;
-  input#userIdTextbox type="text" placeholder="&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;" style="position:absolute; left:132; top:29; width:100px;"
-  button#selectButton style="position:absolute; left:369; top:50;"
+  input#userIdTextbox type="text" placeholder="&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;"
+  button#selectButton
     | Selection
 EOS
         end

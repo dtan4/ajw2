@@ -31,7 +31,6 @@ module Ajw2::Model
 
       result = "  " * depth
       result << render_type(element)
-      result << render_style(element) if element[:left] || element[:top] || element[:width]
 
       if element[:value]
         result << "\n"
@@ -56,15 +55,6 @@ module Ajw2::Model
         result = "#{element[:type].to_s}\##{element[:id]}"
       end
 
-      result
-    end
-
-    def render_style(element)
-      result = " style=\"position:absolute;"
-      result << " left:#{element[:left]};" if element[:left]
-      result << " top:#{element[:top]};" if element[:top]
-      result << " width:#{element[:width]}px;" if element[:width]
-      result << "\""
       result
     end
   end
