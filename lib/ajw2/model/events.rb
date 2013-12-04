@@ -179,7 +179,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
     params: { #{js_params_json(event[:params])} },
     success: function(_xhr_msg) {
       var _xhr_json = JSON.parse(_xhr_msg);
-#{js_success_func(event[:action][:interfaces][0])}
+#{js_ajax_action(event[:action])}
     },
     error: function(_xhr, _xhr_msg) {
       alert(_xhr_msg);
@@ -193,8 +193,19 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
       ""
     end
 
-    def js_success_func(interface)
-      result = ["      var #{interface[:id]} = _xhr_json['#{interface[:id]}'];"]
+    def js_ajax_action(action)
+      action[:interfaces].inject([]) do |result, interface|
+        result << (action[:type] == "conditional" ? js_ajax_conditional(interface) : js_ajax_always(interface))
+        result
+      end.join("\n").chomp
+    end
+
+    def js_ajax_conditional(interface)
+
+    end
+
+    def js_ajax_always(interface)
+      result = "      var #{interface[:id]} = _xhr_json['#{interface[:id]}'];\n"
 
       case interface[:type]
       when "element"
@@ -203,7 +214,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
         raise "Undefined interface action target type!"
       end
 
-      result.join("\n")
+      result
     end
 
     def js_set_element_value(interface)
@@ -211,7 +222,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
 
       case interface[:func]
       when "setValue"
-        "      $('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);"
+        "      $('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);\n"
       else
         ""
       end
