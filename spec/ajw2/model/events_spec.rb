@@ -7,98 +7,36 @@ module Ajw2::Model
        events:
        [
         {
-         id: "event01",
-         target: "submitBtn",
-         type: "onClick",
-         realtime: false,
+         id: "event01", target: "submitBtn", type: "onClick", realtime: false,
          params: [
                   {
                    name: "message", type: "string",
                    value: {
                            element: "messageTextBox",
-                           func: "getValue",
-                           type: "element"
+                           func: "getValue", type: "element"
                           }
                   }
                  ],
-         interfaces: [
-                      {
-                       id: "if01",
-                       element: "messageLabel",
-                       func: "setValue", type: "element",
-                       params: [
-                                {
-                                 name: "message",
-                                 type: "string"
-                                }
-                               ]
-
-                      }
-                     ],
-         databases: [
-                     {
-                      id: "db01",
-                      database: "messages",
-                      func: "create",
-                      params: [
-                               {
-                                name: "message",
-                                type: "string"
-                               }
-                              ]
-                     }
-                    ]
-        }
-       ]
-      }
-    }
-
-    let(:complex_source) {
-      {
-       events:
-       [
-        {
-         target: "button1",
-         type: "onClick",
          action: {
-                  login: {
-                          id: "login0",
-                          param: [
-                                  { id: "param1",
-                                   name: "user_id",
-                                   type: "string",
-                                   value: {
-                                           element: "userIdTextbox",
-                                           func: "getValue",
-                                           type: "element",
-                                           elemType: "widget"
-                                          }
-                                  }
-                                 ]
-                         },
-                  branch: { id: "branch1", condition: { operator: "success" }  },
-                  then: {
-                         id: "then1",
-                         call: [
-                                {
-                                 element: "rootFrame",
-                                 func: "selectPanel",
-                                 id: "call2",
-                                 param: [
-                                         {
-                                          id: "param13",
-                                          name: "panel",
-                                          type: "element",
-                                          element: {
-                                                    target: "roomSelectPanel",
-                                                    type: "child"
-                                                   }
-                                         }
+                  type: "always",
+                  interfaces: [
+                               {
+                                id: "if01", element: "messageLabel",
+                                func: "setValue", type: "element",
+                                params: [
+                                         { name: "message", type: "string" }
                                         ]
-                                }
-                               ]
-                        },
-                  else: { id: "else1" }
+
+                               }
+                              ],
+                  databases: [
+                              {
+                               id: "db01", database: "messages", func: "create",
+                               params: [
+                                        { name: "message", type: "string" }
+                                       ]
+                              }
+                             ]
                  }
         }
        ]

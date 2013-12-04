@@ -23,8 +23,7 @@ post "/#{event[:id]}" do
   content_type :json
   response = {}
 #{render_rb_params(event[:params], :ruby, 1)}
-#{render_rb_databases(event[:databases])}
-#{render_rb_interfaces(event[:interfaces])}
+#{render_action(event[:action])}
   response.to_json
 end
       EOS
@@ -41,6 +40,22 @@ end
                                     "#{param[:name]} = params[:#{param[:name]}]"
                                   end
       end.join("\n")
+    end
+
+    def render_action(action)
+      action[:type] == "conditional" ?
+        render_conditional_action(action) : render_always_action(action)
+    end
+
+    def render_conditional_action(action)
+
+    end
+
+    def render_always_action(action)
+      <<-EOS.chomp
+#{render_rb_databases(action[:databases])}
+#{render_rb_interfaces(action[:interfaces])}
+EOS
     end
 
     def render_rb_databases(databases)
