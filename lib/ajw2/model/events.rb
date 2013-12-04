@@ -69,7 +69,15 @@ end
     end
 
     def rb_ajax_conditional(action)
-
+      <<-EOS.chomp
+  if (#{rb_condition(action[:condition])})
+#{rb_ajax_then(action[:then])}
+    response[:result] = true
+  else
+#{rb_ajax_else(action[:else])}
+    response[:result] = false
+  end
+      EOS
     end
 
     def rb_ajax_always(action)
@@ -78,6 +86,39 @@ end
 #{rb_interfaces(action[:interfaces])}
 EOS
     end
+
+    def rb_condition(condition)
+      "#{rb_condition_left(condition[:left])} #{rb_condition_operand(condition[:operand])} #{rb_condition_right(condition[:right])}"
+    end
+
+    def rb_condition_hand(hand)
+      case hand[:type]
+      when "param" then hand[:value][:name]
+      when "literal" then "\"#{hand[:value][:value]}\""
+      else
+        raise "Undefined hand type!"
+      end
+    end
+
+    alias rb_condition_left rb_condition_hand
+    alias rb_condition_right rb_condition_hand
+
+    def rb_condition_operand(operand)
+      case operand
+      when "eq" then "=="
+      when "neq" then "!="
+      when "lt" then "<"
+      when "gt" then ">"
+      else
+        raise "Undefined operand!"
+      end
+    end
+
+    def rb_ajax_then(action)
+      rb_ajax_always(action).each_line.map { |line| "  " + line }.join("").rstrip
+    end
+
+    alias rb_ajax_else rb_ajax_then
 
     def rb_databases(databases)
       databases.inject([]) do |result, database|

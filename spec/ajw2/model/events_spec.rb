@@ -40,6 +40,38 @@ end
                                    EOS
         end
       end
+
+      context "with conditional-execute source" do
+        subject { Ajw2::Model::Events.new(AJAX_CONDITIONAL_SOURCE).render_rb_ajax }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+
+        it "should render Ruby code" do
+          expect(subject[0]).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = {}
+  message = params[:message]
+  if (message == "hoge")
+    db01 = Message.new(
+      message: message
+    )
+    db01.save
+    response[:message] = message
+    response[:result] = true
+  else
+
+    response[:result] = false
+  end
+  response.to_json
+end
+                                   EOS
+        end
+      end
+
+      context "with invalid source" do
+
+      end
     end
 
     pending "#render_rb_realtime" do
