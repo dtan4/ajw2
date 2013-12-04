@@ -18,7 +18,19 @@ module Ajw2::Model
     def render_rb_realtime
       raise Exception unless @source[:events]
 
-      @source[:events].inject([]) { |result, event| result << rb_realtime_event(event) } unless @source[:realtime]
+      @source[:events].inject([]) { |result, event| result << rb_realtime_event(event) } if @source[:realtime]
+    end
+
+    def render_js_ajax
+      raise Exception unless @source[:events]
+
+      @source[:events].inject([]) { |result, event| result << js_ajax_event(event) } unless @source[:realtime]
+    end
+
+    def render_js_realtime
+      raise Exception unless @source[:events]
+
+      @source[:events].inject([]) { |result, event| result << js_realtime_event(event) } if @source[:realtime]
     end
 
     private
@@ -121,6 +133,87 @@ EOS
       when "signin"
       when "setValue"
         rb_params(interface[:params], :response, 1)
+      end
+    end
+
+    def js_get_element_value(value)
+      case value[:func]
+      when "getValue"
+        "$('\##{value[:element]}').val();"
+      else ""
+      end
+    end
+
+    def js_params_js(params)
+      params.inject([]) do |result, param|
+        case param[:value][:type]
+        when "element"
+          result << "  var #{param[:name]} = #{js_get_element_value(param[:value])}"
+        else
+          raise "Undefined event value type!"
+        end
+
+      end.join("\n")
+    end
+
+    def js_params_json(params)
+      params.inject([]) do |result, param|
+        result << "'#{param[:name]}': #{param[:name]}"
+      end.join(" ")
+    end
+
+    def js_trigger_function(type)
+      case type
+      when "onClick" then "click"
+      else raise "Undefined trigger function!"
+      end
+    end
+
+    def js_ajax_event(event)
+      <<-EOS
+$('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
+#{js_params_js(event[:params])}
+  $.ajax({
+    type: 'POST',
+    url: '/#{event[:id]}',
+    params: { #{js_params_json(event[:params])} },
+    success: function(_xhr_msg) {
+      var _xhr_json = JSON.parse(_xhr_msg);
+#{js_success_func(event[:action][:interfaces][0])}
+    },
+    error: function(_xhr, _xhr_msg) {
+      alert(_xhr_msg);
+    }
+  });
+});
+      EOS
+    end
+
+    def js_realtime_event(event)
+      ""
+    end
+
+    def js_success_func(interface)
+      result = ["      var #{interface[:id]} = _xhr_json['#{interface[:id]}'];"]
+
+      case interface[:type]
+      when "element"
+        result << js_set_element_value(interface)
+      else
+        raise "Undefined interface action target type!"
+      end
+
+      result.join("\n")
+    end
+
+    def js_set_element_value(interface)
+      raise "Too many parameters!" unless interface[:params].length == 1
+
+      case interface[:func]
+      when "setValue"
+        "      $('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);"
+      else
+        ""
       end
     end
   end
