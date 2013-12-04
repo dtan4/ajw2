@@ -2,50 +2,11 @@ require "spec_helper"
 
 module Ajw2::Model
   describe Events do
-    let(:simple_source) {
-      {
-       events:
-       [
-        {
-         id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-         params: [
-                  {
-                   name: "message", type: "string",
-                   value: {
-                           element: "messageTextBox",
-                           func: "getValue", type: "element"
-                          }
-                  }
-                 ],
-         action: {
-                  type: "always",
-                  interfaces: [
-                               {
-                                id: "if01", element: "messageLabel",
-                                func: "setValue", type: "element",
-                                params: [
-                                         { name: "message", type: "string" }
-                                        ]
-
-                               }
-                              ],
-                  databases: [
-                              {
-                               id: "db01", database: "messages", func: "create",
-                               params: [
-                                        { name: "message", type: "string" }
-                                       ]
-                              }
-                             ]
-                 }
-        }
-       ]
-      }
-    }
+    before(:all) { load File.expand_path("../../../fixtures/events_fixtures.rb", __FILE__) }
 
     describe "#initialize" do
       context "with Hash" do
-        subject { Ajw2::Model::Events.new(simple_source) }
+        subject { Ajw2::Model::Events.new(AJAX_ALWAYS_SOURCE) }
         its(:source) { should be_instance_of Hash }
       end
 
@@ -57,9 +18,9 @@ module Ajw2::Model
       end
     end
 
-    describe "#render_rb_realtime" do
-      context "with valid source" do
-        subject { Ajw2::Model::Events.new(simple_source).render_rb_ajax }
+    describe "#render_rb_ajax" do
+      context "with always-execute source" do
+        subject { Ajw2::Model::Events.new(AJAX_ALWAYS_SOURCE).render_rb_ajax }
         it { should be_an_instance_of Array }
         it { should have(1).item }
 
@@ -86,8 +47,8 @@ end
     end
 
     describe "#render_js_ajax" do
-      context "with valid source" do
-        subject { Ajw2::Model::Events.new(simple_source).render_js_ajax }
+      context "with always-execute source" do
+        subject { Ajw2::Model::Events.new(AJAX_ALWAYS_SOURCE).render_js_ajax }
         it { should be_an_instance_of Array }
         it { should have(1).item }
 
@@ -111,6 +72,10 @@ $('#submitBtn').click(function() {
 });
                                    EOS
         end
+      end
+
+      context "with conditional-execute source" do
+
       end
 
       context "with invalid source" do
