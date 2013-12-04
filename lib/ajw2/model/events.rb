@@ -9,27 +9,36 @@ module Ajw2::Model
       @source = source
     end
 
-    def render_rb
+    def render_rb_ajax
       raise Exception unless @source[:events]
 
-      @source[:events].inject([]) { |result, event| result << render_rb_event(event) }
+      @source[:events].inject([]) { |result, event| result << rb_ajax_event(event) } unless @source[:realtime]
+    end
+
+    def render_rb_realtime
+      raise Exception unless @source[:events]
+
+      @source[:events].inject([]) { |result, event| result << rb_realtime_event(event) } unless @source[:realtime]
     end
 
     private
 
-    def render_rb_event(event)
+    def rb_ajax_event(event)
       <<-EOS
 post "/#{event[:id]}" do
   content_type :json
   response = {}
-#{render_rb_params(event[:params], :ruby, 1)}
-#{render_action(event[:action])}
+#{rb_params(event[:params], :ruby, 1)}
+#{rb_ajax_action(event[:action])}
   response.to_json
 end
       EOS
     end
 
-    def render_rb_params(params, type, indent)
+    def rb_realtime_event(event)
+    end
+
+    def rb_params(params, type, indent)
       params.inject([]) do |result, param|
         result << "  " * indent + case type
                                   when :hash
@@ -42,76 +51,76 @@ end
       end.join("\n")
     end
 
-    def render_action(action)
+    def rb_ajax_action(action)
       action[:type] == "conditional" ?
-        render_conditional_action(action) : render_always_action(action)
+        rb_ajax_conditional(action) : rb_ajax_always(action)
     end
 
-    def render_conditional_action(action)
+    def rb_ajax_conditional(action)
 
     end
 
-    def render_always_action(action)
+    def rb_ajax_always(action)
       <<-EOS.chomp
-#{render_rb_databases(action[:databases])}
-#{render_rb_interfaces(action[:interfaces])}
+#{rb_databases(action[:databases])}
+#{rb_interfaces(action[:interfaces])}
 EOS
     end
 
-    def render_rb_databases(databases)
+    def rb_databases(databases)
       databases.inject([]) do |result, database|
-        result << render_rb_database(database)
+        result << rb_database(database)
       end.join("\n")
     end
 
-    def render_rb_database(database)
+    def rb_database(database)
       case database[:func]
-      when "create" then render_rb_create(database)
-      when "read" then render_rb_read(database)
-      when "update" then render_rb_update(database)
-      when "delete" then render_rb_delete(database)
+      when "create" then rb_create(database)
+      when "read" then rb_read(database)
+      when "update" then rb_update(database)
+      when "delete" then rb_delete(database)
       else
         raise Exception
       end
     end
 
-    def render_rb_create(database)
+    def rb_create(database)
       <<-EOS.chomp
   #{database[:id]} = #{database[:database].singularize.capitalize}.new(
-#{render_rb_params(database[:params], :hash, 2)}
+#{rb_params(database[:params], :hash, 2)}
   )
   #{database[:id]}.save
       EOS
     end
 
-    def render_rb_read(database)
+    def rb_read(database)
 
     end
 
-    def render_rb_update(database)
+    def rb_update(database)
 
     end
 
-    def render_rb_delete(database)
+    def rb_delete(database)
 
     end
 
-    def render_rb_hash(params)
+    def rb_hash(params)
 
     end
 
-    def render_rb_interfaces(interfaces)
+    def rb_interfaces(interfaces)
       interfaces.inject([]) do |result, interface|
-        result << render_rb_interface(interface)
+        result << rb_interface(interface)
       end.join("\n")
     end
 
-    def render_rb_interface(interface)
+    def rb_interface(interface)
       case interface[:func]
       when "signup"
       when "signin"
       when "setValue"
-        render_rb_params(interface[:params], :response, 1)
+        rb_params(interface[:params], :response, 1)
       end
     end
   end

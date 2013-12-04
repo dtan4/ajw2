@@ -57,9 +57,9 @@ module Ajw2::Model
       end
     end
 
-    describe "#render_rb" do
+    describe "#render_rb_realtime" do
       context "with valid source" do
-        subject { Ajw2::Model::Events.new(simple_source).render_rb }
+        subject { Ajw2::Model::Events.new(simple_source).render_rb_ajax }
         it { should be_an_instance_of Array }
         it { should have(1).item }
 
@@ -79,6 +79,10 @@ end
                                    EOS
         end
       end
+    end
+
+    pending "#render_rb_realtime" do
+
     end
 
     describe "#render_js" do
