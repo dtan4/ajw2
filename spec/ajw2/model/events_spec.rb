@@ -75,7 +75,21 @@ end
     end
 
     pending "#render_rb_realtime" do
+      context "with always-execute source" do
+        subject { Ajw2::Model::Events.new(REALTIME_ALWAYS_SOURCE).render_rb_realtime }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+      end
 
+      context "with conditional-execute source" do
+        subject { Ajw2::Model::Events.new(REALTIME_CONDITIONAL_SOURCE).render_rb_realtime }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+      end
+
+      context "with invalid source" do
+
+      end
     end
 
     describe "#render_js_ajax" do
@@ -106,8 +120,10 @@ $('#submitBtn').click(function() {
         end
       end
 
-      context "with conditional-execute source" do
-
+      pending "with conditional-execute source" do
+        subject { Ajw2::Model::Events.new(AJAX_CONDITIONAL_SOURCE).render_js_ajax }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
       end
 
       context "with invalid source" do
@@ -116,7 +132,21 @@ $('#submitBtn').click(function() {
     end
 
     pending "#render_js_realtime" do
+      context "with always-execute source" do
+        subject { Ajw2::Model::Events.new(REALTIME_ALWAYS_SOURCE).render_js_realtime }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+      end
 
+      context "with conditional-execute source" do
+        subject { Ajw2::Model::Events.new(REALTIME_CONDITIONAL_SOURCE).render_js_realtime }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+      end
+
+      context "with invalid source" do
+
+      end
     end
   end
 end
