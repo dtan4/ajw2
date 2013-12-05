@@ -2,6 +2,8 @@ require "active_support/inflector"
 
 module Ajw2::Model
   class Databases
+    include Ajw2::Model
+
     attr_reader :source
 
     def initialize(source)
@@ -71,7 +73,7 @@ timeout: 5000
     def render_up_migration(table)
       <<-EOS
 create_table :#{table[:tablename]} do |t|
-#{render_migration_fields(table[:property]).join("\n")}
+#{indent(render_migration_fields(table[:property]), 1)}
 end
          EOS
     end
@@ -79,17 +81,17 @@ end
     def render_migration_fields(fields)
       fields.inject([]) do |r_fields, field|
         r_fields << render_migration_field(field)
-      end.concat ["  t.timestamps"]
+      end.concat(["t.timestamps"]).join("\n")
     end
 
     def render_migration_field(field)
       case field[:type]
       when "password"
-        "  t.string :#{add_encrypted_prefix(field[:name])}"
+        "t.string :#{add_encrypted_prefix(field[:name])}"
       when "role" # TODO role validation
-        "  t.string :#{field[:name]}"
+        "t.string :#{field[:name]}"
       else
-        "  t.#{field[:type]} :#{field[:name]}"
+        "t.#{field[:type]} :#{field[:name]}"
       end
     end
 
@@ -100,7 +102,7 @@ end
     def render_definition_table(table)
       <<-EOS
 class #{table[:tablename].singularize.capitalize} < ActiveRecord::Base
-#{render_definition_fields(table[:property]).join("\n")}
+#{indent(render_definition_fields(table[:property]), 1)}
 end
       EOS
     end
@@ -108,13 +110,13 @@ end
     def render_definition_fields(fields)
       fields.inject([]) do |r_fields, field|
         r_fields << render_definition_field(field)
-      end.delete_if { |field| field == "" }
+      end.delete_if { |field| field == "" }.join("\n")
     end
 
     def render_definition_field(field)
       field[:name] = add_encrypted_prefix(field[:name]) if field[:type] == "password"
       if !field[:null]
-        "  validates_presence_of :#{field[:name]}"
+        "validates_presence_of :#{field[:name]}"
       else
         ""
       end

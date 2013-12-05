@@ -2,6 +2,8 @@ require "erb"
 
 module Ajw2::Model
   class Interfaces
+    include Ajw2::Model
+
     INPUT_TYPE = %w{
       text password hidden search tel url email datetime date month week time
       datetime-local number range color checkbox radio file submit image reset
@@ -17,7 +19,7 @@ module Ajw2::Model
     def render
       raise Exception unless @source[:elements]
 
-      @source[:elements].inject("") { |result, el| result << render_element(el, 0) }
+      @source[:elements].inject("") { |result, el| result << indent(render_element(el), 0) }
     end
 
     private
@@ -26,20 +28,18 @@ module Ajw2::Model
       ERB::Util.html_escape(text)
     end
 
-    def render_element(element, depth)
+    def render_element(element)
       raise ArgumentError unless element[:type] && element[:id]
-
-      result = "  " * depth
-      result << render_type(element)
+      result = render_type(element)
 
       if element[:value]
         result << "\n"
-        result << "  " * depth << "  | #{escape(element[:value])}"
+        result << "  | #{escape(element[:value])}"
       end
 
       result << "\n"
       result << element[:children].inject("") do |res, el|
-        res << render_element(el, depth + 1)
+        res << indent(render_element(el), 1)
       end if element[:children]
 
       result

@@ -60,7 +60,6 @@ post "/event01" do
     response[:message] = message
     response[:result] = true
   else
-
     response[:result] = false
   end
   response.to_json

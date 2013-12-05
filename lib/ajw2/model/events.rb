@@ -2,6 +2,7 @@ require "active_support/inflector"
 
 module Ajw2::Model
   class Events
+    include Ajw2::Model
     attr_reader :source
 
     def initialize(source)
@@ -40,8 +41,8 @@ module Ajw2::Model
 post "/#{event[:id]}" do
   content_type :json
   response = {}
-#{rb_params(event[:params], :ruby, 1)}
-#{rb_ajax_action(event[:action])}
+#{indent(rb_params(event[:params], :ruby, 1), 1)}
+#{indent(rb_ajax_action(event[:action]), 1)}
   response.to_json
 end
       EOS
@@ -52,14 +53,14 @@ end
 
     def rb_params(params, type, indent)
       params.inject([]) do |result, param|
-        result << "  " * indent + case type
-                                  when :hash
-                                    "#{param[:name]}: #{param[:name]}"
-                                  when :response
-                                    "response[:#{param[:name]}] = #{param[:name]}"
-                                  else
-                                    "#{param[:name]} = params[:#{param[:name]}]"
-                                  end
+        result << case type
+                  when :hash
+                    "#{param[:name]}: #{param[:name]}"
+                  when :response
+                    "response[:#{param[:name]}] = #{param[:name]}"
+                  else
+                    "#{param[:name]} = params[:#{param[:name]}]"
+                  end
       end.join("\n")
     end
 
@@ -69,19 +70,19 @@ end
     end
 
     def rb_ajax_conditional(action)
-      <<-EOS.chomp
-  if (#{rb_condition(action[:condition])})
-#{rb_ajax_then(action[:then])}
-    response[:result] = true
-  else
-#{rb_ajax_else(action[:else])}
-    response[:result] = false
-  end
+      <<-EOS.strip
+if (#{rb_condition(action[:condition])})
+#{indent(rb_ajax_then(action[:then]), 1)}
+  response[:result] = true
+else
+#{indent(rb_ajax_else(action[:else]), 1)}
+  response[:result] = false
+end
       EOS
     end
 
     def rb_ajax_always(action)
-      <<-EOS.chomp
+      <<-EOS.strip
 #{rb_databases(action[:databases])}
 #{rb_interfaces(action[:interfaces])}
 EOS
@@ -114,11 +115,8 @@ EOS
       end
     end
 
-    def rb_ajax_then(action)
-      rb_ajax_always(action).each_line.map { |line| "  " + line }.join("").rstrip
-    end
-
-    alias rb_ajax_else rb_ajax_then
+    alias rb_ajax_then rb_ajax_always
+    alias rb_ajax_else rb_ajax_always
 
     def rb_databases(databases)
       databases.inject([]) do |result, database|
@@ -139,10 +137,10 @@ EOS
 
     def rb_create(database)
       <<-EOS.chomp
-  #{database[:id]} = #{database[:database].singularize.capitalize}.new(
-#{rb_params(database[:params], :hash, 2)}
-  )
-  #{database[:id]}.save
+#{database[:id]} = #{database[:database].singularize.capitalize}.new(
+#{indent(rb_params(database[:params], :hash, 2), 1)}
+)
+#{database[:id]}.save
       EOS
     end
 
