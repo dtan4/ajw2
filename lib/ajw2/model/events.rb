@@ -238,8 +238,14 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
         js_ajax_conditional(action) : js_ajax_always(action[:interfaces])
     end
 
-    def js_ajax_conditional(interface)
-
+    def js_ajax_conditional(action)
+      <<-EOS
+if (_xhr_json['result']) {
+#{indent(js_ajax_then(action[:then][:interfaces]), 1)}
+} else {
+#{indent(js_ajax_then(action[:else][:interfaces]), 1)}
+}
+      EOS
     end
 
     def js_ajax_always(interfaces)
@@ -247,6 +253,9 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
         result << js_interface(interface)
       end.join("\n")
     end
+
+    alias js_ajax_then js_ajax_always
+    alias js_ajax_else js_ajax_always
 
     def js_interface(interface)
       result = ["var #{interface[:id]} = _xhr_json['#{interface[:id]}'];"]
