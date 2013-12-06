@@ -188,7 +188,7 @@ EOS
       params.inject([]) do |result, param|
         case param[:value][:type]
         when "element"
-          result << "  var #{param[:name]} = #{js_get_element_value(param[:value])}"
+          result << "var #{param[:name]} = #{js_get_element_value(param[:value])}"
         else
           raise "Undefined event value type!"
         end
@@ -212,14 +212,14 @@ EOS
     def js_ajax_event(event)
       <<-EOS
 $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
-#{js_params_js(event[:params])}
+#{indent(js_params_js(event[:params]), 1)}
   $.ajax({
     type: 'POST',
     url: '/#{event[:id]}',
     params: { #{js_params_json(event[:params])} },
     success: function(_xhr_msg) {
       var _xhr_json = JSON.parse(_xhr_msg);
-#{js_ajax_action(event[:action])}
+#{indent(js_ajax_action(event[:action]), 3)}
     },
     error: function(_xhr, _xhr_msg) {
       alert(_xhr_msg);
@@ -234,18 +234,22 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
     end
 
     def js_ajax_action(action)
-      action[:interfaces].inject([]) do |result, interface|
-        result << (action[:type] == "conditional" ? js_ajax_conditional(interface) : js_ajax_always(interface))
-        result
-      end.join("\n").chomp
+      action[:type] == "conditional" ?
+        js_ajax_conditional(action) : js_ajax_always(action[:interfaces])
     end
 
     def js_ajax_conditional(interface)
 
     end
 
-    def js_ajax_always(interface)
-      result = "      var #{interface[:id]} = _xhr_json['#{interface[:id]}'];\n"
+    def js_ajax_always(interfaces)
+      interfaces.inject([]) do |result, interface|
+        result << js_interface(interface)
+      end.join("\n")
+    end
+
+    def js_interface(interface)
+      result = ["var #{interface[:id]} = _xhr_json['#{interface[:id]}'];"]
 
       case interface[:type]
       when "element"
@@ -254,7 +258,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
         raise "Undefined interface action target type!"
       end
 
-      result
+      result.join("\n")
     end
 
     def js_set_element_value(interface)
@@ -262,7 +266,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
 
       case interface[:func]
       when "setValue"
-        "      $('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);\n"
+        "$('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);"
       else
         ""
       end
