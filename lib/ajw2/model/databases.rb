@@ -2,7 +2,7 @@ require "active_support/inflector"
 
 module Ajw2::Model
   class Databases
-    include Ajw2::Model
+    include Ajw2
 
     attr_reader :source
 

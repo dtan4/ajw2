@@ -3,6 +3,8 @@ require "fileutils"
 
 module Ajw2
   class Generator
+    include Ajw2
+
     attr_reader :application, :interfaces, :databases, :events
 
     TEMPLATE_DIR = File.expand_path("../templates", __FILE__)
@@ -33,10 +35,6 @@ module Ajw2
     end
 
     private
-
-    def indent(text, indent)
-      text.each_line.map { |line| ("  " * indent) + line }.join("").chomp
-    end
 
     def template_path(file)
       File.expand_path(file, TEMPLATE_DIR)

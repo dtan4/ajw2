@@ -2,7 +2,7 @@ require "erb"
 
 module Ajw2::Model
   class Interfaces
-    include Ajw2::Model
+    include Ajw2
 
     INPUT_TYPE = %w{
       text password hidden search tel url email datetime date month week time
@@ -19,7 +19,7 @@ module Ajw2::Model
     def render
       raise Exception unless @source[:elements]
 
-      @source[:elements].inject("") { |result, el| result << indent(render_element(el), 0) }
+      @source[:elements].inject([]) { |result, el| result << indent(render_element(el), 0) }.join("\n") + "\n"
     end
 
     private
@@ -38,9 +38,9 @@ module Ajw2::Model
       end
 
       result << "\n"
-      result << element[:children].inject("") do |res, el|
+      result << element[:children].inject([]) do |res, el|
         res << indent(render_element(el), 1)
-      end if element[:children]
+      end.join("\n") if element[:children]
 
       result
     end
