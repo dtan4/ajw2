@@ -14,25 +14,37 @@ module Ajw2::Model
     def render_rb_ajax
       raise Exception unless @source[:events]
 
-      @source[:events].inject([]) { |result, event| result << rb_ajax_event(event) } unless @source[:realtime]
+      @source[:events].inject([]) do |result, event|
+        result << rb_ajax_event(event) unless event[:realtime]
+        result
+      end
     end
 
     def render_rb_realtime
       raise Exception unless @source[:events]
 
-      @source[:events].inject([]) { |result, event| result << rb_realtime_event(event) } if @source[:realtime]
+      @source[:events].inject([]) do |result, event|
+        result << rb_realtime_event(event) if event[:realtime]
+        result
+      end
     end
 
     def render_js_ajax
       raise Exception unless @source[:events]
 
-      @source[:events].inject([]) { |result, event| result << js_ajax_event(event) } unless @source[:realtime]
+      @source[:events].inject([]) do |result, event|
+        result << js_ajax_event(event) unless event[:realtime]
+        result
+      end
     end
 
     def render_js_realtime
       raise Exception unless @source[:events]
 
-      @source[:events].inject([]) { |result, event| result << js_realtime_event(event) } if @source[:realtime]
+      @source[:events].inject([]) do |result, event|
+        result << js_realtime_event(event) if event[:realtime]
+        result
+      end
     end
 
     private
@@ -50,6 +62,14 @@ end
     end
 
     def rb_realtime_event(event)
+      <<-EOS
+when "#{event[:id]}"
+#{indent(rb_params(event[:params], :ruby, 1), 1)}
+#{indent(rb_ajax_action(event[:action]), 1)}
+  EventMachine.next_tick do
+    settings.sockets.each { |s| s.send(response.to_json) }
+  end
+      EOS
     end
 
     def rb_params(params, type, indent)
