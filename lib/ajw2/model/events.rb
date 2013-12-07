@@ -248,7 +248,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
     params: { #{js_params_json(event[:params])} },
     success: function(_xhr_msg) {
       var _response = JSON.parse(_xhr_msg);
-#{indent(js_ajax_action(event[:action]), 3)}
+#{indent(js_action(event[:action]), 3)}
     },
     error: function(_xhr, _xhr_msg) {
       alert(_xhr_msg);
@@ -273,34 +273,34 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
       <<-EOS
 case '#{event[:id]}' {
   var _response = _ws_json['msg'];
-#{indent(js_ajax_action(event[:action]), 1)}
+#{indent(js_action(event[:action]), 1)}
 }
       EOS
     end
 
-    def js_ajax_action(action)
+    def js_action(action)
       action[:type] == "conditional" ?
-        js_ajax_conditional(action) : js_ajax_always(action[:interfaces])
+        js_conditional(action) : js_always(action[:interfaces])
     end
 
-    def js_ajax_conditional(action)
+    def js_conditional(action)
       <<-EOS
 if (_response['result']) {
-#{indent(js_ajax_then(action[:then][:interfaces]), 1)}
+#{indent(js_then(action[:then][:interfaces]), 1)}
 } else {
-#{indent(js_ajax_then(action[:else][:interfaces]), 1)}
+#{indent(js_then(action[:else][:interfaces]), 1)}
 }
       EOS
     end
 
-    def js_ajax_always(interfaces)
+    def js_always(interfaces)
       interfaces.inject([]) do |result, interface|
         result << js_interface(interface)
       end.join("\n")
     end
 
-    alias js_ajax_then js_ajax_always
-    alias js_ajax_else js_ajax_always
+    alias js_then js_always
+    alias js_else js_always
 
     def js_interface(interface)
       result = ["var #{interface[:id]} = _response['#{interface[:id]}'];"]
