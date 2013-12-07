@@ -95,10 +95,30 @@ when "event01"
         end
       end
 
-      pending "with conditional-execute source" do
+      describe "with conditional-execute source" do
         subject { Ajw2::Model::Events.new(REALTIME_CONDITIONAL_SOURCE).render_rb_realtime }
         it { should be_an_instance_of Array }
         it { should have(1).item }
+
+        it "should render Ruby code" do
+          expect(subject[0]).to eq <<-EOS
+when "event01"
+  message = params[:message]
+  if (message == "hoge")
+    db01 = Message.new(
+      message: message
+    )
+    db01.save
+    response[:message] = message
+    response[:result] = true
+  else
+    response[:result] = false
+  end
+  EventMachine.next_tick do
+    settings.sockets.each { |s| s.send(response.to_json) }
+  end
+                                   EOS
+        end
       end
 
       context "with invalid source" do

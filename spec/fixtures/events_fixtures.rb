@@ -139,56 +139,63 @@ REALTIME_ALWAYS_SOURCE = {
                          }
 
 REALTIME_CONDITIONAL_SOURCE = {
-                               events:
-                               [
-                                {
-                                 id: "event01", target: "submitBtn", type: "onClick", realtime: true,
-                                 params: [
-                                          {
-                                           name: "message", type: "string",
-                                           value: {
-                                                   element: "messageTextBox",
-                                                   func: "getValue", type: "element"
-                                                  }
-                                          }
-                                         ],
-                                 action: {
-                                          type: "conditional",
-                                          condition: {
-                                                      operand: "eq",
-                                                      left: {
-                                                             name: "message",
-                                                             type: "string"
-                                                            },
-                                                      right: {
+                           events:
+                           [
+                            {
+                             id: "event01", target: "submitBtn", type: "onClick", realtime: true,
+                             params: [
+                                      {
+                                       name: "message", type: "string",
+                                       value: {
+                                               element: "messageTextBox",
+                                               func: "getValue", type: "element"
+                                              }
+                                      }
+                                     ],
+                             action: {
+                                      type: "conditional",
+                                      condition: {
+                                                  operand: "eq",
+                                                  left: {
+                                                         type: "param",
+                                                         value: {
+                                                                 name: "message",
+                                                                 type: "string"
+                                                                }
+                                                        },
+                                                  right: {
+                                                         type: "literal",
+                                                         value: {
+                                                                 value: "hoge",
+                                                                 type: "string"
+                                                                }
+                                                         }
+                                                 },
+                                      then: {
+                                             interfaces: [
+                                                          {
+                                                           id: "if01", element: "messageLabel",
+                                                           func: "setValue", type: "element",
+                                                           params: [
+                                                                    { name: "message", type: "string" }
+                                                                   ]
 
-                                                             }
-                                                     },
-                                          then: {
-                                                 interfaces: [
-                                                              {
-                                                               id: "if01", element: "messageLabel",
-                                                               func: "setValue", type: "element",
-                                                               params: [
-                                                                        { name: "message", type: "string" }
-                                                                       ]
-
-                                                              }
-                                                             ],
-                                                 databases: [
-                                                             {
-                                                              id: "db01", database: "messages", func: "create",
-                                                              params: [
-                                                                       { name: "message", type: "string" }
-                                                                      ]
-                                                             }
-                                                            ]
-                                                },
-                                          else: {
-                                                 interfaces: [],
-                                                 databases: []
-                                                }
-                                         }
-                                }
-                               ]
-                              }
+                                                          }
+                                                         ],
+                                             databases: [
+                                                         {
+                                                          id: "db01", database: "messages", func: "create",
+                                                          params: [
+                                                                   { name: "message", type: "string" }
+                                                                  ]
+                                                         }
+                                                        ]
+                                            },
+                                      else: {
+                                             interfaces: [],
+                                             databases: []
+                                            }
+                                     }
+                            }
+                           ]
+                          }
