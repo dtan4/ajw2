@@ -55,7 +55,7 @@ post "/#{event[:id]}" do
   content_type :json
   response = {}
 #{indent(rb_params(event[:params], :ruby, 1), 1)}
-#{indent(rb_ajax_action(event[:action]), 1)}
+#{indent(rb_action(event[:action]), 1)}
   response.to_json
 end
       EOS
@@ -65,7 +65,7 @@ end
       <<-EOS
 when "#{event[:id]}"
 #{indent(rb_params(event[:params], :ruby, 1), 1)}
-#{indent(rb_ajax_action(event[:action]), 1)}
+#{indent(rb_action(event[:action]), 1)}
   EventMachine.next_tick do
     settings.sockets.each { |s| s.send(response.to_json) }
   end
@@ -85,24 +85,24 @@ when "#{event[:id]}"
       end.join("\n")
     end
 
-    def rb_ajax_action(action)
+    def rb_action(action)
       action[:type] == "conditional" ?
-        rb_ajax_conditional(action) : rb_ajax_always(action)
+        rb_conditional(action) : rb_always(action)
     end
 
-    def rb_ajax_conditional(action)
+    def rb_conditional(action)
       <<-EOS.strip
 if (#{rb_condition(action[:condition])})
-#{indent(rb_ajax_then(action[:then]), 1)}
+#{indent(rb_then(action[:then]), 1)}
   response[:result] = true
 else
-#{indent(rb_ajax_else(action[:else]), 1)}
+#{indent(rb_else(action[:else]), 1)}
   response[:result] = false
 end
       EOS
     end
 
-    def rb_ajax_always(action)
+    def rb_always(action)
       <<-EOS.strip
 #{rb_databases(action[:databases])}
 #{rb_interfaces(action[:interfaces])}
@@ -136,8 +136,8 @@ EOS
       end
     end
 
-    alias rb_ajax_then rb_ajax_always
-    alias rb_ajax_else rb_ajax_always
+    alias rb_then rb_always
+    alias rb_else rb_always
 
     def rb_databases(databases)
       databases.inject([]) do |result, database|
