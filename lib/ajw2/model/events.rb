@@ -250,7 +250,14 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
     end
 
     def js_realtime_event(event)
-      ""
+      <<-EOS
+$('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
+#{indent(js_params_js(event[:params]), 1)}
+  var params = { #{js_params_json(event[:params])} };
+  var request = { 'func': '#{event[:id]}', 'params': params };
+  ws.send(JSON.stringfy(request));
+});
+      EOS
     end
 
     def js_ajax_action(action)

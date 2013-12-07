@@ -189,17 +189,31 @@ $('#submitBtn').click(function() {
       end
     end
 
-    pending "#render_js_realtime" do
-      context "with always-execute source" do
-        subject { Ajw2::Model::Events.new(REALTIME_ALWAYS_SOURCE).render_js_realtime }
+    describe "#render_js_realtime" do
+      shared_examples_for "with valid source" do
         it { should be_an_instance_of Array }
         it { should have(1).item }
+
+        it "should render JavaScript code" do
+          expect(subject[0]).to eq(<<-EOS)
+$('#submitBtn').click(function() {
+  var message = $('#messageTextBox').val();
+  var params = { 'message': message };
+  var request = { 'func': 'event01', 'params': params };
+  ws.send(JSON.stringfy(request));
+});
+                                   EOS
+        end
+      end
+
+      context "with always-execute source" do
+        subject { Ajw2::Model::Events.new(REALTIME_ALWAYS_SOURCE).render_js_realtime }
+        it_behaves_like "with valid source"
       end
 
       context "with conditional-execute source" do
         subject { Ajw2::Model::Events.new(REALTIME_CONDITIONAL_SOURCE).render_js_realtime }
-        it { should be_an_instance_of Array }
-        it { should have(1).item }
+        it_behaves_like "with valid source"
       end
 
       context "with invalid source" do
