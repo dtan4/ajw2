@@ -271,10 +271,10 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
 
     def js_onmessage(event)
       <<-EOS
-case '#{event[:id]}' {
+case '#{event[:id]}':
   var _response = _ws_json['msg'];
 #{indent(js_action(event[:action]), 1)}
-}
+  break;
       EOS
     end
 

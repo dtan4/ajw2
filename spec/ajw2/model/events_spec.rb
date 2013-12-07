@@ -229,11 +229,11 @@ p      end
 
         it "should render JavaScript code" do
           expect(subject[0]).to eq(<<-EOS)
-case 'event01' {
+case 'event01':
   var _response = _ws_json['msg'];
   var if01 = _response['if01'];
   $('#messageLabel').val(if01['message']);
-}
+  break;
                                    EOS
         end
       end
@@ -245,14 +245,14 @@ case 'event01' {
 
         it "should render JavaScript code" do
           expect(subject[0]).to eq(<<-EOS)
-case 'event01' {
+case 'event01':
   var _response = _ws_json['msg'];
   if (_response['result']) {
     var if01 = _response['if01'];
     $('#messageLabel').val(if01['message']);
   } else {
   }
-}
+  break;
                                    EOS
         end
       end
