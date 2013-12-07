@@ -3,7 +3,7 @@ require "fileutils"
 
 module Ajw2
   describe Cli do
-    describe "#execute" do
+    pending "#execute" do
       context "with valid argument" do
         before do
           @source = fixture_path("chat.json")
