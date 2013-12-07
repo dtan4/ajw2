@@ -58,7 +58,75 @@ EOS
           @databases.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
         end
 
-        @events = double("events")
+        @events = double("events",
+                         render_rb_ajax: [
+                                          (<<-EOS)
+post "/event01" do
+  content_type :json
+  response = {}
+  message = params[:message]
+  db01 = Message.new(
+    message: message
+  )
+  db01.save
+  response[:message] = message
+  response.to_json
+end
+EOS
+                                         ],
+                         render_rb_realtime: [
+                                          (<<-EOS)
+when "event01"
+  message = params[:message]
+  db01 = Message.new(
+    message: message
+  )
+  db01.save
+  response[:message] = message
+  EventMachine.next_tick do
+    settings.sockets.each { |s| s.send(response.to_json) }
+  end
+EOS
+                                             ],
+                         render_js_ajax: [
+                                          (<<-EOS)
+$('#submitBtn').click(function() {
+  var message = $('#messageTextBox').val();
+  $.ajax({
+    type: 'POST',
+    url: '/event01',
+    params: { 'message': message },
+    success: function(_xhr_msg) {
+      var _response = JSON.parse(_xhr_msg);
+      var if01 = _response['if01'];
+      $('#messageLabel').val(if01['message']);
+    },
+    error: function(_xhr, _xhr_msg) {
+      alert(_xhr_msg);
+    }
+  });
+});
+EOS
+                                         ],
+                         render_js_realtime: [
+                                              (<<-EOS)
+$('#submitBtn').click(function() {
+  var message = $('#messageTextBox').val();
+  var params = { 'message': message };
+  var request = { 'func': 'event01', 'params': params };
+  ws.send(JSON.stringfy(request));
+});
+EOS
+                                             ],
+                         render_js_onmessage: [
+                                               (<<-EOS)
+case 'event01':
+  var _response = _ws_json['msg'];
+  var if01 = _response['if01'];
+  $('#messageLabel').val(if01['message']);
+  break;
+EOS
+                                              ])
         @outdir = File.expand_path("../tmp", __FILE__)
         @generator =
           Ajw2::Generator.new(@application, @interfaces, @databases, @events)
@@ -116,8 +184,46 @@ class App < Sinatra::Base
     if !request.websocket?
       slim :index
     else
+      request.websocket do |ws|
+        ws.onopen do
+          settings.sockets << ws
+        end
 
+        ws.onmessage do |msg|
+          _ws_json = JSON.parse(msg)
+          response = {}
+          case _ws_json["func"]
+          when "event01"
+            message = params[:message]
+            db01 = Message.new(
+              message: message
+            )
+            db01.save
+            response[:message] = message
+            EventMachine.next_tick do
+              settings.sockets.each { |s| s.send(response.to_json) }
+            end
+          else
+          end
+        end
+
+        ws.onclose do
+          settings.sockets.delete(ws)
+        end
+      end
     end
+  end
+
+  post "/event01" do
+    content_type :json
+    response = {}
+    message = params[:message]
+    db01 = Message.new(
+      message: message
+    )
+    db01.save
+    response[:message] = message
+    response.to_json
   end
 end
           EOS

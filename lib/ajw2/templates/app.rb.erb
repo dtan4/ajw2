@@ -13,7 +13,30 @@ class App < Sinatra::Base
     if !request.websocket?
       slim :index
     else
+      request.websocket do |ws|
+        ws.onopen do
+          settings.sockets << ws
+        end
 
+        ws.onmessage do |msg|
+          _ws_json = JSON.parse(msg)
+          response = {}
+          case _ws_json["func"]
+<%- @events.render_rb_realtime.each do |rb| -%>
+<%= indent(rb, 5) %>
+<%- end -%>
+          else
+          end
+        end
+
+        ws.onclose do
+          settings.sockets.delete(ws)
+        end
+      end
     end
   end
+
+<%- @events.render_rb_ajax.each do |rb| -%>
+<%= indent(rb, 1) %>
+<%- end -%>
 end
