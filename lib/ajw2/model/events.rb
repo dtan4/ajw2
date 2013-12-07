@@ -47,6 +47,15 @@ module Ajw2::Model
       end
     end
 
+    def render_js_onmessage
+      raise Exception unless @source[:events]
+
+      @source[:events].inject([]) do |result, event|
+        result << js_onmessage(event) if event[:realtime]
+        result
+      end
+    end
+
     private
 
     def rb_ajax_event(event)
@@ -238,7 +247,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
     url: '/#{event[:id]}',
     params: { #{js_params_json(event[:params])} },
     success: function(_xhr_msg) {
-      var _xhr_json = JSON.parse(_xhr_msg);
+      var _response = JSON.parse(_xhr_msg);
 #{indent(js_ajax_action(event[:action]), 3)}
     },
     error: function(_xhr, _xhr_msg) {
@@ -260,6 +269,15 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
       EOS
     end
 
+    def js_onmessage(event)
+      <<-EOS
+case '#{event[:id]}' {
+  var _response = _ws_json['msg'];
+#{indent(js_ajax_action(event[:action]), 1)}
+}
+      EOS
+    end
+
     def js_ajax_action(action)
       action[:type] == "conditional" ?
         js_ajax_conditional(action) : js_ajax_always(action[:interfaces])
@@ -267,7 +285,7 @@ $('\##{event[:target]}').#{js_trigger_function(event[:type])}(function() {
 
     def js_ajax_conditional(action)
       <<-EOS
-if (_xhr_json['result']) {
+if (_response['result']) {
 #{indent(js_ajax_then(action[:then][:interfaces]), 1)}
 } else {
 #{indent(js_ajax_then(action[:else][:interfaces]), 1)}
@@ -285,7 +303,7 @@ if (_xhr_json['result']) {
     alias js_ajax_else js_ajax_always
 
     def js_interface(interface)
-      result = ["var #{interface[:id]} = _xhr_json['#{interface[:id]}'];"]
+      result = ["var #{interface[:id]} = _response['#{interface[:id]}'];"]
 
       case interface[:type]
       when "element"

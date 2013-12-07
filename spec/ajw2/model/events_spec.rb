@@ -141,8 +141,8 @@ $('#submitBtn').click(function() {
     url: '/event01',
     params: { 'message': message },
     success: function(_xhr_msg) {
-      var _xhr_json = JSON.parse(_xhr_msg);
-      var if01 = _xhr_json['if01'];
+      var _response = JSON.parse(_xhr_msg);
+      var if01 = _response['if01'];
       $('#messageLabel').val(if01['message']);
     },
     error: function(_xhr, _xhr_msg) {
@@ -168,9 +168,9 @@ $('#submitBtn').click(function() {
     url: '/event01',
     params: { 'message': message },
     success: function(_xhr_msg) {
-      var _xhr_json = JSON.parse(_xhr_msg);
-      if (_xhr_json['result']) {
-        var if01 = _xhr_json['if01'];
+      var _response = JSON.parse(_xhr_msg);
+      if (_response['result']) {
+        var if01 = _response['if01'];
         $('#messageLabel').val(if01['message']);
       } else {
       }
@@ -204,7 +204,7 @@ $('#submitBtn').click(function() {
 });
                                    EOS
         end
-      end
+p      end
 
       context "with always-execute source" do
         subject { Ajw2::Model::Events.new(REALTIME_ALWAYS_SOURCE).render_js_realtime }
@@ -214,6 +214,47 @@ $('#submitBtn').click(function() {
       context "with conditional-execute source" do
         subject { Ajw2::Model::Events.new(REALTIME_CONDITIONAL_SOURCE).render_js_realtime }
         it_behaves_like "with valid source"
+      end
+
+      context "with invalid source" do
+
+      end
+    end
+
+    describe "#render_js_onmessage" do
+      context "with always-execute source" do
+        subject { Ajw2::Model::Events.new(REALTIME_ALWAYS_SOURCE).render_js_onmessage }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+
+        it "should render JavaScript code" do
+          expect(subject[0]).to eq(<<-EOS)
+case 'event01' {
+  var _response = _ws_json['msg'];
+  var if01 = _response['if01'];
+  $('#messageLabel').val(if01['message']);
+}
+                                   EOS
+        end
+      end
+
+      describe "with conditional-execute source" do
+        subject { Ajw2::Model::Events.new(REALTIME_CONDITIONAL_SOURCE).render_js_onmessage }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+
+        it "should render JavaScript code" do
+          expect(subject[0]).to eq(<<-EOS)
+case 'event01' {
+  var _response = _ws_json['msg'];
+  if (_response['result']) {
+    var if01 = _response['if01'];
+    $('#messageLabel').val(if01['message']);
+  } else {
+  }
+}
+                                   EOS
+        end
       end
 
       context "with invalid source" do
