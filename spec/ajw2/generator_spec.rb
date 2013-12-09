@@ -60,7 +60,7 @@ module Ajw2
          "db/migrate/001_create_users.rb",
          "db/migrate/002_create_messages.rb",
          "public/js/jquery.min.js",
-         # "public/js/app.js",
+         "public/js/app.js"
         ].each do |path|
           it "should create #{path}" do
             expect(File.exists?(File.expand_path(path, @outdir))).to be_true
@@ -89,6 +89,10 @@ module Ajw2
 
         it "should generate db/migrate/002_create_messages.rb" do
           expect(open(File.expand_path("db/migrate/002_create_messages.rb", @outdir)).read).to eq CREATE_MESSAGES_RB
+        end
+
+        it "should generate public/js/app.js" do
+          expect(open(File.expand_path("public/js/app.js", @outdir)).read).to eq APP_JS
         end
       end
 

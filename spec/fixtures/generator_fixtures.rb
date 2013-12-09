@@ -230,3 +230,42 @@ class CreateMessages < ActiveRecord::Migration
   end
 end
           EOS
+
+APP_JS = <<-EOS
+var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+
+$('#submitBtn').click(function() {
+  var message = $('#messageTextBox').val();
+  $.ajax({
+    type: 'POST',
+    url: '/event01',
+    params: { 'message': message },
+    success: function(_xhr_msg) {
+      var _response = JSON.parse(_xhr_msg);
+      var if01 = _response['if01'];
+      $('#messageLabel').val(if01['message']);
+    },
+    error: function(_xhr, _xhr_msg) {
+      alert(_xhr_msg);
+    }
+  });
+});
+
+$('#submitBtn').click(function() {
+  var message = $('#messageTextBox').val();
+  var params = { 'message': message };
+  var request = { 'func': 'event01', 'params': params };
+  ws.send(JSON.stringfy(request));
+});
+
+ws.onmessaege = function(msg) {
+  var _ws_json = JSON.parse(msg);
+  switch (_ws_json['result']) {
+  case 'event01':
+    var _response = _ws_json['msg'];
+    var if01 = _response['if01'];
+    $('#messageLabel').val(if01['message']);
+    break;
+  }
+}
+         EOS

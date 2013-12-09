@@ -1,0 +1,16 @@
+var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+
+<%- @events.render_js_ajax.each do |js| -%>
+<%= js %>
+<%- end -%>
+<%- @events.render_js_realtime.each do |js| -%>
+<%= js %>
+<%- end -%>
+ws.onmessaege = function(msg) {
+  var _ws_json = JSON.parse(msg);
+  switch (_ws_json['result']) {
+<%- @events.render_js_onmessage.each do |js| -%>
+<%= indent(js, 1) %>
+<%- end -%>
+  }
+}
