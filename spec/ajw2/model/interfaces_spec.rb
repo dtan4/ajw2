@@ -89,21 +89,10 @@ EOS
       end
 
       context "with invalid source" do
-        @invalid_sources = [
-                            {
-                             elements: [{ type: "panel" }]
-                            },
-                            {
-                             elements: [{ id: "hoge" }]
-                            }
-                           ]
-
-        @invalid_sources.each do |src|
-          it "should raise Exception" do
-            expect {
-              puts Ajw2::Model::Interfaces.new(src).render
-            }.to raise_error Exception
-          end
+        it "should raise Exception" do
+          expect {
+            puts Ajw2::Model::Interfaces.new({}).render
+          }.to raise_error RuntimeError, "/interfaces/elements is not found"
         end
       end
     end

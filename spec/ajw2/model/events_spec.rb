@@ -69,7 +69,9 @@ end
       end
 
       context "with invalid source" do
-
+        it "should raise Exception" do
+          expect { Ajw2::Model::Events.new({}).render_rb_ajax }.to raise_error RuntimeError, "/events/events is not found"
+        end
       end
     end
 
@@ -122,7 +124,9 @@ when "event01"
       end
 
       context "with invalid source" do
-
+        it "should raise Exception" do
+          expect { Ajw2::Model::Events.new({}).render_rb_realtime }.to raise_error RuntimeError, "/events/events is not found"
+        end
       end
     end
 
@@ -185,7 +189,9 @@ $('#submitBtn').click(function() {
       end
 
       context "with invalid source" do
-
+        it "should raise Exception" do
+          expect { Ajw2::Model::Events.new({}).render_js_ajax }.to raise_error RuntimeError, "/events/events is not found"
+        end
       end
     end
 
@@ -217,7 +223,9 @@ p      end
       end
 
       context "with invalid source" do
-
+        it "should raise Exception" do
+          expect { Ajw2::Model::Events.new({}).render_js_realtime }.to raise_error RuntimeError, "/events/events is not found"
+        end
       end
     end
 
@@ -258,7 +266,9 @@ case 'event01':
       end
 
       context "with invalid source" do
-
+        it "should raise Exception" do
+          expect { Ajw2::Model::Events.new({}).render_js_onmessage }.to raise_error RuntimeError, "/events/events is not found"
+        end
       end
     end
   end

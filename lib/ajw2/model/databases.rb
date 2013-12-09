@@ -12,18 +12,20 @@ module Ajw2::Model
     end
 
     def render_migration
-      raise Exception unless @source[:database]
+      raise "/databases/database is not found" unless @source[:database]
 
       @source[:database].inject([]) { |migration, table| migration << render_migration_table(table) }
     end
 
     def render_definition
-      raise Exception unless @source[:database]
+      raise "/databases/database is not found" unless @source[:database]
 
       @source[:database].inject([]) { |definition, table| definition << render_definition_table(table) }
     end
 
     def render_config(env, application)
+      raise "/databases/dbType is not found" unless @source[:dbType]
+
       case @source[:dbType]
       when "mysql"
         <<-EOS

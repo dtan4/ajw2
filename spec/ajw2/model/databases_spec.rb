@@ -69,7 +69,7 @@ drop_table :users
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Databases.new({}).render_migration }.to raise_error
+          expect { Ajw2::Model::Databases.new({}).render_migration }.to raise_error RuntimeError, "/databases/database is not found"
         end
       end
     end
@@ -91,7 +91,7 @@ end
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Databases.new({}).render_definition }.to raise_error
+          expect { Ajw2::Model::Databases.new({}).render_definition }.to raise_error RuntimeError, "/databases/database is not found"
         end
       end
     end
@@ -181,6 +181,12 @@ database: db/development.sqlite3
 pool: 5
 timeout: 5000
             EOS
+        end
+      end
+
+      context "with invalid source" do
+        it "should raise Exception" do
+          expect { Ajw2::Model::Databases.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/databases/dbType is not found"
         end
       end
     end

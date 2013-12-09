@@ -17,7 +17,7 @@ module Ajw2::Model
     end
 
     def render
-      raise Exception unless @source[:elements]
+      raise "/interfaces/elements is not found" unless @source[:elements]
 
       @source[:elements].inject([]) { |result, el| result << indent(render_element(el), 0) }.join("\n") + "\n"
     end
