@@ -28,23 +28,10 @@ module Ajw2
           @databases.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
         end
 
-        @events = double("events",
-                         render_rb_ajax: RENDER_RB_AJAX,
-                         render_rb_realtime: RENDER_RB_REALTIME,
-                         render_js_ajax: RENDER_JS_AJAX,
-                         render_js_realtime: RENDER_JS_REALTIME,
-                         render_js_onmessage: RENDER_JS_ONMESSAGE)
         @outdir = File.expand_path("../tmp", __FILE__)
-        @generator =
-          Ajw2::Generator.new(@application, @interfaces, @databases, @events)
       end
 
-      context "with non-existed outdir" do
-        before do
-          FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
-          @generator.generate(@outdir)
-        end
-
+      shared_examples_for "generates successfully" do
         it "should create outdir" do
           expect(Dir.exists?(@outdir)).to be_true
         end
@@ -67,10 +54,6 @@ module Ajw2
           end
         end
 
-        it "should generate app.rb" do
-          expect(open(File.expand_path("app.rb", @outdir)).read).to eq APP_RB
-        end
-
         it "should generate views/layout.slim" do
           expect(open(File.expand_path("views/layout.slim", @outdir)).read).to eq LAYOUT_SLIM
         end
@@ -90,9 +73,57 @@ module Ajw2
         it "should generate db/migrate/002_create_messages.rb" do
           expect(open(File.expand_path("db/migrate/002_create_messages.rb", @outdir)).read).to eq CREATE_MESSAGES_RB
         end
+      end
+
+      context "with non-existed outdir" do
+        before do
+          FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+
+          @events = double("events",
+                         render_rb_ajax: RENDER_RB_AJAX,
+                         render_rb_realtime: RENDER_RB_REALTIME,
+                         render_js_ajax: RENDER_JS_AJAX,
+                         render_js_realtime: RENDER_JS_REALTIME,
+                         render_js_onmessage: RENDER_JS_ONMESSAGE)
+          @generator =
+            Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+          @generator.generate(@outdir)
+        end
+
+        it_behaves_like "generates successfully"
+
+        it "should generate app.rb" do
+          expect(open(File.expand_path("app.rb", @outdir)).read).to eq APP_RB
+        end
 
         it "should generate public/js/app.js" do
           expect(open(File.expand_path("public/js/app.js", @outdir)).read).to eq APP_JS
+        end
+      end
+
+      context "with Ajax-only events" do
+        before do
+          FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+
+          @events = double("events",
+                         render_rb_ajax: RENDER_RB_AJAX,
+                         render_rb_realtime: [],
+                         render_js_ajax: RENDER_JS_AJAX,
+                         render_js_realtime: [],
+                         render_js_onmessage: [])
+          @generator =
+            Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+          @generator.generate(@outdir)
+        end
+
+        it_behaves_like "generates successfully"
+
+        it "should generate app.rb" do
+          expect(open(File.expand_path("app.rb", @outdir)).read).to eq APP_RB_AJAX_ONLY
+        end
+
+        it "should generate public/js/app.js" do
+          expect(open(File.expand_path("public/js/app.js", @outdir)).read).to eq APP_JS_AJAX_ONLY
         end
       end
 

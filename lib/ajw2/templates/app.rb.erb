@@ -21,12 +21,14 @@ class App < Sinatra::Base
         ws.onmessage do |msg|
           _ws_json = JSON.parse(msg)
           response = {}
+<%- if @events.render_rb_realtime.length > 0 -%>
           case _ws_json["func"]
 <%- @events.render_rb_realtime.each do |rb| -%>
 <%= indent(rb, 5) %>
 <%- end -%>
           else
           end
+<%- end -%>
         end
 
         ws.onclose do

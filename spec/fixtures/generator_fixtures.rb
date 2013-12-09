@@ -176,6 +176,60 @@ class App < Sinatra::Base
 end
           EOS
 
+APP_RB_AJAX_ONLY = <<-EOS
+class User < ActiveRecord::Base
+  validates_presence_of :name
+  validates_presence_of :password
+end
+
+class Message < ActiveRecord::Base
+  validates_presence_of :user_id
+  validates_presence_of :message
+end
+
+class App < Sinatra::Base
+  configure do
+    register Sinatra::ActiveRecordExtension
+    set :sockets, []
+    use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    Slim::Engine.default_options[:pretty] = true
+  end
+
+  get "/" do
+    if !request.websocket?
+      slim :index
+    else
+      request.websocket do |ws|
+        ws.onopen do
+          settings.sockets << ws
+        end
+
+        ws.onmessage do |msg|
+          _ws_json = JSON.parse(msg)
+          response = {}
+        end
+
+        ws.onclose do
+          settings.sockets.delete(ws)
+        end
+      end
+    end
+  end
+
+  post "/event01" do
+    content_type :json
+    response = {}
+    message = params[:message]
+    db01 = Message.new(
+      message: message
+    )
+    db01.save
+    response[:message] = message
+    response.to_json
+  end
+end
+          EOS
+
 LAYOUT_SLIM = <<-EOS
 doctype html
 html
@@ -258,7 +312,7 @@ $('#submitBtn').click(function() {
   ws.send(JSON.stringfy(request));
 });
 
-ws.onmessaege = function(msg) {
+ws.onmessage = function(msg) {
   var _ws_json = JSON.parse(msg);
   switch (_ws_json['result']) {
   case 'event01':
@@ -267,5 +321,30 @@ ws.onmessaege = function(msg) {
     $('#messageLabel').val(if01['message']);
     break;
   }
+}
+         EOS
+
+APP_JS_AJAX_ONLY = <<-EOS
+var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+
+$('#submitBtn').click(function() {
+  var message = $('#messageTextBox').val();
+  $.ajax({
+    type: 'POST',
+    url: '/event01',
+    params: { 'message': message },
+    success: function(_xhr_msg) {
+      var _response = JSON.parse(_xhr_msg);
+      var if01 = _response['if01'];
+      $('#messageLabel').val(if01['message']);
+    },
+    error: function(_xhr, _xhr_msg) {
+      alert(_xhr_msg);
+    }
+  });
+});
+
+ws.onmessage = function(msg) {
+  var _ws_json = JSON.parse(msg);
 }
          EOS
