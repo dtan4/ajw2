@@ -7,6 +7,8 @@ require "ajw2/model/application"
 require "ajw2/model/interfaces"
 require "ajw2/model/databases"
 require "ajw2/model/events"
+require "ajw2/model/event/javascript"
+require "ajw2/model/event/ruby"
 
 module Ajw2
 
