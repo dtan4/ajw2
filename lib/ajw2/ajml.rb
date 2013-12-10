@@ -11,7 +11,6 @@ module Ajw2
 
     def parse(path)
       case File.extname(path)
-      when /^\.(x|aj)ml$/i then parse_xml(path)
       when /^\.json$/i then parse_json(path)
       when /^\.ya?ml$/i then parse_yaml(path)
       else
@@ -20,11 +19,6 @@ module Ajw2
     end
 
     private
-
-    def parse_xml(path)
-      xml = open(path).read
-      create_models(symbolize_keys(Hash.from_xml(xml)))
-    end
 
     def parse_json(path)
       json = open(path).read

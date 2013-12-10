@@ -35,18 +35,6 @@ module Ajw2
         end
       end
 
-      pending "with .ajml" do
-        include_context "with valid file" do
-          let(:path) { @ajml_path }
-        end
-      end
-
-      pending "with .xml" do
-        include_context "with valid file" do
-          let(:path) { @xml_path }
-        end
-      end
-
       context "with .json" do
         include_context "with valid file" do
           let(:path) { @json_path }
