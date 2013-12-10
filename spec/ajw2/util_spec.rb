@@ -12,14 +12,20 @@ describe Ajw2::Util do
 
   describe "#indent" do
     context "with 0" do
-      it "should add no indentation" do
-        expect(@dummy.indent("hoge", 0)).to eq "hoge"
+      subject { @dummy.indent("hoge", 0) }
+      it { should be_kind_of String }
+
+      it "should add no indent" do
+        expect(subject).to eq "hoge"
       end
     end
 
     context "with positive number" do
-      it "should add indentation" do
-        expect(@dummy.indent("hoge", 2)).to eq "    hoge"
+      subject { @dummy.indent("hoge", 2) }
+      it { should be_kind_of String }
+
+      it "should add indent" do
+        expect(subject).to eq "    hoge"
       end
     end
 
@@ -30,47 +36,45 @@ describe Ajw2::Util do
     end
   end
 
-  describe "#valid_value?" do
+  describe "#valid_hash?" do
     context "with valid Hash contains only ascii-char" do
-      it "should return true" do
-        expect(@dummy.valid_hash?({ hoge: "fuga", foo: "bar" })).to be_true
-      end
+      subject { @dummy.valid_hash?({ hoge: "fuga", foo: "bar" }) }
+      it { should be_true }
     end
 
     context "with valid Hash contains breakline" do
-      it "should return true" do
-        expect(@dummy.valid_hash?({ hoge: "fuga\npiyo", foo: "bar" })).to be_true
-      end
+      subject { @dummy.valid_hash?({ hoge: "fuga\npiyo", foo: "bar" }) }
+      it { should be_true }
     end
 
     context "with valid Hash contains Unicode char" do
-      it "should return true" do
-        expect(@dummy.valid_hash?({ hoge: "ふが", foo: "ばー" })).to be_true
-      end
+      subject { @dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }) }
+      it { should be_true }
+    end
+
+    context "with valid Hash contains Array" do
+      subject { @dummy.valid_hash?({ hoge: "fuga", foo: [{ foo: "bar" }, { baz: "moo" }] }) }
+      it { should be_true }
     end
 
     context "with valid deep Hash" do
-      it "should return true" do
-        expect(@dummy.valid_hash?({ hoge: "fuga", foo: { bar: "baz" } })).to be_true
-      end
+      subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "baz" } }) }
+      it { should be_true }
     end
 
     context "with invalid hash" do
-      it "should return false" do
-        expect(@dummy.valid_hash?({ hoge: "fu'ga", foo: "bar" })).to be_false
-      end
+      subject { @dummy.valid_hash?({ hoge: "fu'ga", foo: "bar" }) }
+      it { should be_false }
     end
 
     context "with invalid deep hash" do
-      it "should return false" do
-        expect(@dummy.valid_hash?({ hoge: "fuga", foo: { bar: "ba'z" } })).to be_false
-      end
+      subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "ba'z" } }) }
+      it { should be_false }
     end
 
     context "with regexp" do
-      it "should validate with given regexp" do
-        expect(@dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }, /^[a-zA-Z0-9]+$/)).to be_false
-      end
+      subject { @dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }, /^[a-zA-Z0-9]+$/) }
+      it { should be_false }
     end
 
     context "with non-Hash" do
@@ -82,14 +86,18 @@ describe Ajw2::Util do
 
   describe "#symbolize_keys" do
     context "with flat Hash" do
-      it "should return Hash with symbolized keys" do
-        expect(@dummy.symbolize_keys({ "hoge" => "fuga", "foo" => "bar" })).to eq({ hoge: "fuga", foo: "bar" })
+      subject { @dummy.symbolize_keys({ "hoge" => "fuga", "foo" => "bar" }) }
+
+      it "shuold return Hash with symbolized keys" do
+        expect(subject).to eq({ hoge: "fuga", foo: "bar" })
       end
     end
 
     context "with deep Hash" do
+      subject { @dummy.symbolize_keys({ "hoge" => "fuga", "foo" => { "bar" => "baz" } }) }
+
       it "should return Hash with symbolized keys" do
-        expect(@dummy.symbolize_keys({ "hoge" => "fuga", "foo" => { "bar" => "baz" } })).to eq({ hoge: "fuga", foo: { bar: "baz" } })
+        expect(subject).to eq({ hoge: "fuga", foo: { bar: "baz" } })
       end
     end
   end
