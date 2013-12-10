@@ -1,6 +1,8 @@
 {
     "application": {
-        "name": "sample"
+        "name": "sample",
+        "css": [""],
+        "js": [""]
     },
     "interfaces": {
         "type": "slim",

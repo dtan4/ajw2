@@ -15,6 +15,8 @@ module Ajw2
       before do
         @application = double("application",
                               render_header: "title sample",
+                              render_css_include: RENDER_CSS_INCLUDE,
+                              render_js_include: RENDER_JS_INCLUDE,
                               name: "sample")
 
         @interfaces = double("interfaces",

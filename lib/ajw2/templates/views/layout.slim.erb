@@ -1,8 +1,11 @@
 doctype html
 html
   head
+    meta charset="utf-8"
 <%= indent(@application.render_header, 2) %>
+<%= indent(@application.render_css_include, 2) %>
   html
     == yield
     script src="/js/jquery.min.js"
     script src="/js/app.js"
+<%= indent(@application.render_js_include, 2) %>

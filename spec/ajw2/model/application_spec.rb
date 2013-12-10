@@ -4,7 +4,9 @@ module Ajw2::Model
   describe Application do
     let(:source) {
       {
-       name: "sample"
+       name: "sample",
+       css: ["application.css", "main.css"],
+       js: ["application.js", "main.js"]
       }
     }
 
@@ -52,6 +54,26 @@ title
   | &lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;
 EOS
         end
+      end
+    end
+
+    describe "#render_css_include" do
+      subject { Ajw2::Model::Application.new(source).render_css_include }
+      it "should render Slim template" do
+        expect(subject).to eq(<<-EOS)
+link rel="stylesheet" type="text/css" href="/css/ext/application.css"
+link rel="stylesheet" type="text/css" href="/css/ext/main.css"
+                              EOS
+      end
+    end
+
+    describe "#render_js_include" do
+      subject { Ajw2::Model::Application.new(source).render_js_include }
+      it "should render Slim template" do
+        expect(subject).to eq(<<-EOS)
+script src="/js/ext/application.js"
+script src="/js/ext/main.js"
+                              EOS
       end
     end
   end

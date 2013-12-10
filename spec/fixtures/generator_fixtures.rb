@@ -1,3 +1,11 @@
+RENDER_CSS_INCLUDE = <<-EOS
+link rel="stylesheet" type="text/css" href="/css/ext/application.css"
+EOS
+
+RENDER_JS_INCLUDE = <<-EOS
+script src="/js/ext/application.js"
+EOS
+
 RENDER_MIGRATION = [
                     {
                      tablename: "users",
@@ -234,11 +242,14 @@ LAYOUT_SLIM = <<-EOS
 doctype html
 html
   head
+    meta charset="utf-8"
     title sample
+    link rel="stylesheet" type="text/css" href="/css/ext/application.css"
   html
     == yield
     script src="/js/jquery.min.js"
     script src="/js/app.js"
+    script src="/js/ext/application.js"
           EOS
 
 INDEX_SLIM = <<-EOS
