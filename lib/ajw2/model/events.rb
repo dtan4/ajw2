@@ -17,7 +17,7 @@ module Ajw2::Model
       raise "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
-        result << @rb.ajax_event(event) unless event[:realtime]
+        result << @rb.render_ajax(event) unless event[:realtime]
         result
       end
     end
@@ -26,7 +26,7 @@ module Ajw2::Model
       raise "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
-        result << @rb.realtime_event(event) if event[:realtime]
+        result << @rb.render_realtime(event) if event[:realtime]
         result
       end
     end
@@ -35,7 +35,7 @@ module Ajw2::Model
       raise "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
-        result << @js.ajax_event(event) unless event[:realtime]
+        result << @js.render_ajax(event) unless event[:realtime]
         result
       end
     end
@@ -44,7 +44,7 @@ module Ajw2::Model
       raise "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
-        result << @js.realtime_event(event) if event[:realtime]
+        result << @js.render_realtime(event) if event[:realtime]
         result
       end
     end
@@ -53,7 +53,7 @@ module Ajw2::Model
       raise "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
-        result << @js.onmessage(event) if event[:realtime]
+        result << @js.render_onmessage(event) if event[:realtime]
         result
       end
     end

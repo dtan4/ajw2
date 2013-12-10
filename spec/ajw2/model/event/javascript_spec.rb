@@ -4,9 +4,9 @@ module Ajw2::Model::Event
   describe JavaScript do
     before(:all) { load File.expand_path("../../../../fixtures/events_fixtures.rb", __FILE__) }
 
-    describe "#ajax_event" do
+    describe "#render_ajax" do
       context "with always-execute source which set values" do
-        subject { Ajw2::Model::Event::JavaScript.new.ajax_event(AJAX_ALWAYS_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render JavaScript code" do
@@ -32,7 +32,7 @@ $('#submitBtn').click(function() {
       end
 
       context "with always-execute source which append elements" do
-        subject { Ajw2::Model::Event::JavaScript.new.ajax_event(AJAX_ALWAYS_SOURCE_APPEND[:events].first) }
+        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE_APPEND[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render JavaScript code" do
@@ -58,7 +58,7 @@ $('#submitBtn').click(function() {
       end
 
       context "with conditional-execute source" do
-        subject { Ajw2::Model::Event::JavaScript.new.ajax_event(AJAX_CONDITIONAL_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_CONDITIONAL_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render JavaScript code" do
@@ -87,7 +87,7 @@ $('#submitBtn').click(function() {
       end
     end
 
-    describe "#realtime_event" do
+    describe "#render_realtime" do
       shared_examples_for "with valid source" do
         it { should be_an_instance_of String }
 
@@ -104,19 +104,19 @@ $('#submitBtn').click(function() {
       end
 
       context "with always-execute source" do
-        subject { Ajw2::Model::Event::JavaScript.new.realtime_event(REALTIME_ALWAYS_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::JavaScript.new.render_realtime(REALTIME_ALWAYS_SOURCE[:events].first) }
         it_behaves_like "with valid source"
       end
 
       context "with conditional-execute source" do
-        subject { Ajw2::Model::Event::JavaScript.new.realtime_event(REALTIME_CONDITIONAL_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::JavaScript.new.render_realtime(REALTIME_CONDITIONAL_SOURCE[:events].first) }
         it_behaves_like "with valid source"
       end
     end
 
-    describe "#onmessage" do
+    describe "#render_onmessage" do
       context "with always-execute source" do
-        subject { Ajw2::Model::Event::JavaScript.new.onmessage(REALTIME_ALWAYS_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::JavaScript.new.render_onmessage(REALTIME_ALWAYS_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render JavaScript code" do
@@ -131,7 +131,7 @@ case 'event01':
       end
 
       context "with conditional-execute source" do
-        subject { Ajw2::Model::Event::JavaScript.new.onmessage(REALTIME_CONDITIONAL_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::JavaScript.new.render_onmessage(REALTIME_CONDITIONAL_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render JavaScript code" do

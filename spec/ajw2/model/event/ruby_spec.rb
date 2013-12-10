@@ -4,9 +4,9 @@ module Ajw2::Model::Event
   describe Ruby do
     before(:all) { load File.expand_path("../../../../fixtures/events_fixtures.rb", __FILE__) }
 
-    describe "#ajax_event" do
+    describe "#render_ajax" do
       context "with always-execute source" do
-        subject { Ajw2::Model::Event::Ruby.new.ajax_event(AJAX_ALWAYS_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render Ruby code" do
@@ -27,7 +27,7 @@ end
       end
 
       context "with conditional-execute source" do
-        subject { Ajw2::Model::Event::Ruby.new.ajax_event(AJAX_CONDITIONAL_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render Ruby code" do
@@ -53,9 +53,9 @@ end
       end
     end
 
-    describe "#realtime_event" do
+    describe "#render_realtime" do
       context "with always-execute source" do
-        subject { Ajw2::Model::Event::Ruby.new.realtime_event(REALTIME_ALWAYS_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::Ruby.new.render_realtime(REALTIME_ALWAYS_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render Ruby code" do
@@ -75,7 +75,7 @@ when "event01"
       end
 
       describe "with conditional-execute source" do
-        subject { Ajw2::Model::Event::Ruby.new.realtime_event(REALTIME_CONDITIONAL_SOURCE[:events].first) }
+        subject { Ajw2::Model::Event::Ruby.new.render_realtime(REALTIME_CONDITIONAL_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render Ruby code" do

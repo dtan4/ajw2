@@ -2,7 +2,7 @@ module Ajw2::Model::Event
   class JavaScript
     include Ajw2::Util
 
-    def ajax_event(event)
+    def render_ajax(event)
       <<-EOS
 $('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
 #{indent(params_js(event[:params]), 1)}
@@ -22,7 +22,7 @@ $('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
       EOS
     end
 
-    def realtime_event(event)
+    def render_realtime(event)
       <<-EOS
 $('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
 #{indent(params_js(event[:params]), 1)}
@@ -33,7 +33,7 @@ $('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
       EOS
     end
 
-    def onmessage(event)
+    def render_onmessage(event)
       <<-EOS
 case '#{event[:id]}':
   var _response = _ws_json['msg'];

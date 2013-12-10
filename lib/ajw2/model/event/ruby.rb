@@ -2,7 +2,7 @@ module Ajw2::Model::Event
   class Ruby
     include Ajw2::Util
 
-    def realtime_event(event)
+    def render_realtime(event)
       <<-EOS
 when "#{event[:id]}"
 #{indent(params_rb(event[:params], :ruby, 1), 1)}
@@ -13,7 +13,7 @@ when "#{event[:id]}"
       EOS
     end
 
-    def ajax_event(event)
+    def render_ajax(event)
       <<-EOS
 post "/#{event[:id]}" do
   content_type :json
