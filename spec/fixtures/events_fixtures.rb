@@ -37,6 +37,56 @@ AJAX_ALWAYS_SOURCE = {
                       ]
                      }
 
+AJAX_ALWAYS_SOURCE_APPEND = {
+                      events:
+                      [
+                       {
+                        id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+                        params: [
+                                 {
+                                  name: "message", type: "string",
+                                  value: {
+                                          element: "messageTextBox",
+                                          func: "getValue", type: "element"
+                                         }
+                                 }
+                                ],
+                        action: {
+                                 type: "always",
+                                 interfaces: [
+                                              {
+                                               id: "if01", element: "messageTable",
+                                               func: "appendElements", type: "element",
+                                               params: [
+                                                        {
+                                                         tag: "tr",
+                                                         children: [
+                                                                    {
+                                                                     tag: "td"
+                                                                    },
+                                                                    {
+                                                                     tag: "td",
+                                                                     value: { name: "message", type: "string" }
+                                                                    }
+                                                                   ]
+                                                        }
+                                                       ]
+
+                                              }
+                                             ],
+                                 databases: [
+                                             {
+                                              id: "db01", database: "messages", func: "create",
+                                              params: [
+                                                       { name: "message", type: "string" }
+                                                      ]
+                                             }
+                                            ]
+                                }
+                       }
+                      ]
+                     }
+
 AJAX_CONDITIONAL_SOURCE = {
                            events:
                            [

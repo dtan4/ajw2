@@ -131,7 +131,7 @@ when "event01"
     end
 
     describe "#render_js_ajax" do
-      context "with always-execute source" do
+      context "with always-execute source which set values" do
         subject { Ajw2::Model::Events.new(AJAX_ALWAYS_SOURCE).render_js_ajax }
         it { should be_an_instance_of Array }
         it { should have(1).item }
@@ -148,6 +148,33 @@ $('#submitBtn').click(function() {
       var _response = JSON.parse(_xhr_msg);
       var if01 = _response['if01'];
       $('#messageLabel').val(if01['message']);
+    },
+    error: function(_xhr, _xhr_msg) {
+      alert(_xhr_msg);
+    }
+  });
+});
+                                   EOS
+        end
+      end
+
+      context "with always-execute source which append elements" do
+        subject { Ajw2::Model::Events.new(AJAX_ALWAYS_SOURCE_APPEND).render_js_ajax }
+        it { should be_an_instance_of Array }
+        it { should have(1).item }
+
+        it "should render JavaScript code" do
+          expect(subject[0]).to eq(<<-EOS)
+$('#submitBtn').click(function() {
+  var message = $('#messageTextBox').val();
+  $.ajax({
+    type: 'POST',
+    url: '/event01',
+    params: { 'message': message },
+    success: function(_xhr_msg) {
+      var _response = JSON.parse(_xhr_msg);
+      var if01 = _response['if01'];
+      $('#messageTable').append($('<tr>').append($('<td>')).append($('<td>').val(if01['message'])));
     },
     error: function(_xhr, _xhr_msg) {
       alert(_xhr_msg);

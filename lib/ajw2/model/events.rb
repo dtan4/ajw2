@@ -305,7 +305,7 @@ if (_response['result']) {
     def js_interface(interface)
       case interface[:type]
       when "element"
-        set_values = js_set_element_value(interface)
+        set_values = js_element_action(interface)
       else
         raise "Undefined interface action target type!"
       end
@@ -316,15 +316,30 @@ var #{interface[:id]} = _response['#{interface[:id]}'];
       EOS
     end
 
-    def js_set_element_value(interface)
-      raise "Too many parameters!" unless interface[:params].length == 1
-
+    def js_element_action(interface)
       case interface[:func]
       when "setValue"
-        "$('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);"
+        raise "Too many parameters!" unless interface[:params].length == 1
+        <<-EOS
+$('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);
+        EOS
+      when "appendElements"
+        interface[:params].inject([]) do |result, param|
+          result << "$('\##{interface[:element]}').append(#{js_append_element(param, interface[:id])});"
+          result
+        end.join("\n")
       else
         ""
       end
+    end
+
+    def js_append_element(element, id)
+      result = "$('<#{element[:tag]}>')"
+      result << ".val(#{id}['#{element[:value][:name]}'])" if element[:value]
+      element[:children].each do |elem|
+        result << ".append(#{js_append_element(elem, id)})"
+      end if element[:children]
+      result
     end
   end
 end
