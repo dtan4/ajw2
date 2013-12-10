@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Ajw2::Model::Event
   describe JavaScript do
-    before(:all) { load File.expand_path("../../../../fixtures/events_fixtures.rb", __FILE__) }
+    before(:all) { load File.expand_path("../../../../fixtures/events_fixtures.rb", __FILE__) unless defined? AJAX_ALWAYS_SOURCE }
 
     describe "#render_ajax" do
       context "with always-execute source which set values" do
