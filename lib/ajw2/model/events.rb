@@ -303,16 +303,17 @@ if (_response['result']) {
     alias js_else js_always
 
     def js_interface(interface)
-      result = ["var #{interface[:id]} = _response['#{interface[:id]}'];"]
-
       case interface[:type]
       when "element"
-        result << js_set_element_value(interface)
+        set_values = js_set_element_value(interface)
       else
         raise "Undefined interface action target type!"
       end
 
-      result.join("\n")
+      <<-EOS
+var #{interface[:id]} = _response['#{interface[:id]}'];
+#{set_values}
+      EOS
     end
 
     def js_set_element_value(interface)

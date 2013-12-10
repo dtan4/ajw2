@@ -10,10 +10,11 @@ module Ajw2::Model
     end
 
     def render_header
-      result = ["meta charset=\"utf-8\""]
-      result << "title"
-      result << "  | #{ERB::Util.html_escape(@source[:name])}"
-      result.join("\n") << "\n"
+      <<-EOS
+meta charset="utf-8"
+title
+  | #{ERB::Util.html_escape(@source[:name])}
+      EOS
     end
   end
 end
