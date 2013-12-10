@@ -79,4 +79,18 @@ describe Ajw2::Util do
       end
     end
   end
+
+  describe "#symbolize_keys" do
+    context "with flat Hash" do
+      it "should return Hash with symbolized keys" do
+        expect(@dummy.symbolize_keys({ "hoge" => "fuga", "foo" => "bar" })).to eq({ hoge: "fuga", foo: "bar" })
+      end
+    end
+
+    context "with deep Hash" do
+      it "should return Hash with symbolized keys" do
+        expect(@dummy.symbolize_keys({ "hoge" => "fuga", "foo" => { "bar" => "baz" } })).to eq({ hoge: "fuga", foo: { bar: "baz" } })
+      end
+    end
+  end
 end

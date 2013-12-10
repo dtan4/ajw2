@@ -1,9 +1,12 @@
 require "active_support/core_ext/hash"
 require "json"
 require "yaml"
+require "ajw2/util"
 
 module Ajw2
   class Ajml
+    include Ajw2::Util
+
     attr_reader :application, :interfaces, :databases, :events
 
     def parse(path)
@@ -17,19 +20,6 @@ module Ajw2
     end
 
     private
-
-    def symbolize_keys(argument)
-      if argument.class == Hash
-        argument.inject({}) do |result, (key, value)|
-          result[key.to_sym] = symbolize_keys(value)
-          result
-        end
-      elsif argument.class == Array
-        argument.map { |arg| symbolize_keys(arg) }
-      else
-        argument
-      end
-    end
 
     def parse_xml(path)
       xml = open(path).read
