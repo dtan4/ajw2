@@ -2,7 +2,7 @@ require "active_support/inflector"
 
 module Ajw2::Model
   class Events
-    include Ajw2
+    include Ajw2::Util
 
     attr_reader :source
 

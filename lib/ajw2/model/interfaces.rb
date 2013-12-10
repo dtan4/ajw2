@@ -2,7 +2,7 @@ require "erb"
 
 module Ajw2::Model
   class Interfaces
-    include Ajw2
+    include Ajw2::Util
 
     INPUT_TYPE = %w{
       text password hidden search tel url email datetime date month week time

@@ -1,9 +1,10 @@
 require "erb"
 require "fileutils"
+require "ajw2/util"
 
 module Ajw2
   class Generator
-    include Ajw2
+    include Ajw2::Util
 
     attr_reader :application, :interfaces, :databases, :events
 
