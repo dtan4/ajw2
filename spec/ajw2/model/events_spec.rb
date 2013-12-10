@@ -8,7 +8,7 @@ module Ajw2::Model
       context "with Hash" do
         subject { Ajw2::Model::Events.new(AJAX_ALWAYS_SOURCE) }
         its(:source) { should be_instance_of Hash }
-p      end
+      end
 
       context "with non-Hash" do
         it "should raise Exception" do
@@ -237,7 +237,7 @@ $('#submitBtn').click(function() {
 });
                                    EOS
         end
-p      end
+      end
 
       context "with always-execute source" do
         subject { Ajw2::Model::Events.new(REALTIME_ALWAYS_SOURCE).render_js_realtime }
