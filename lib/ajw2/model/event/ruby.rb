@@ -5,7 +5,7 @@ module Ajw2::Model::Event
     def render_realtime(event)
       <<-EOS
 when "#{event[:id]}"
-#{indent(params_rb(event[:params], :ruby, 1), 1)}
+#{indent(params_rb(event[:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   EventMachine.next_tick do
     settings.sockets.each { |s| s.send(response.to_json) }
@@ -18,7 +18,7 @@ when "#{event[:id]}"
 post "/#{event[:id]}" do
   content_type :json
   response = { _db_errors: [] }
-#{indent(params_rb(event[:params], :ruby, 1), 1)}
+#{indent(params_rb(event[:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   response.to_json
 end
@@ -27,16 +27,11 @@ end
 
     private
 
-    def params_rb(params, type, indent)
+    def params_rb(params, hash = false)
       params.inject([]) do |result, param|
-        result << case type
-                  when :hash
-                    "#{param[:name]}: #{param[:name]}"
-                  when :response
-                    "response[:#{param[:name]}] = #{param[:name]}"
-                  else
-                    "#{param[:name]} = params[:#{param[:name]}]"
-                  end
+        result <<
+          (hash ? "#{param[:name]}: #{param[:name]}" : "#{param[:name]} = params[:#{param[:name]}]")
+        result
       end.join("\n")
     end
 
@@ -116,7 +111,7 @@ EOS
     def create(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.new(
-#{indent(params_rb(database[:params], :hash, 2), 1)}
+#{indent(params_rb(database[:params], true), 1)}
 )
 response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
       EOS
@@ -140,7 +135,10 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
 
     def interfaces_rb(interfaces)
       interfaces.inject([]) do |result, interface|
-        result << interface_rb(interface)
+        result << <<-EOS
+response[:#{interface[:id]}] = {}
+#{interface_rb(interface)}
+                  EOS
       end.join("\n")
     end
 
@@ -149,8 +147,14 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
       when "signup"
       when "signin"
       when "setValue"
-        params_rb(interface[:params], :response, 1)
+        interface_set_params(interface)
       end
+    end
+
+    def interface_set_params(interface)
+      interface[:params].inject([]) do |result, param|
+        result << "response[:#{interface[:id]}][:#{param[:name]}] = #{param[:name]}"
+      end.join("\n")
     end
   end
 end

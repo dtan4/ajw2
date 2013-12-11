@@ -20,7 +20,8 @@ post "/event01" do
   )
   response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
   if response[:_db_errors].length == 0
-    response[:message] = message
+    response[:if01] = {}
+    response[:if01][:message] = message
   end
   response.to_json
 end
@@ -44,7 +45,8 @@ post "/event01" do
     )
     response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
     if response[:_db_errors].length == 0
-      response[:message] = message
+      response[:if01] = {}
+      response[:if01][:message] = message
     end
     response[:result] = true
   else
@@ -73,7 +75,8 @@ when "event01"
   )
   response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
   if response[:_db_errors].length == 0
-    response[:message] = message
+    response[:if01] = {}
+    response[:if01][:message] = message
   end
   EventMachine.next_tick do
     settings.sockets.each { |s| s.send(response.to_json) }
@@ -96,7 +99,8 @@ when "event01"
     )
     response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
     if response[:_db_errors].length == 0
-      response[:message] = message
+      response[:if01] = {}
+      response[:if01][:message] = message
     end
     response[:result] = true
   else
