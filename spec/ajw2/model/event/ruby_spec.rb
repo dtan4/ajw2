@@ -13,13 +13,15 @@ module Ajw2::Model::Event
           expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
-  response = {}
+  response = { _db_errors: [] }
   message = params[:message]
   db01 = Message.new(
     message: message
   )
-  db01.save
-  response[:message] = message
+  response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+  if response[:_db_errors].length == 0
+    response[:message] = message
+  end
   response.to_json
 end
                                    EOS
@@ -34,16 +36,20 @@ end
           expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
-  response = {}
+  response = { _db_errors: [] }
   message = params[:message]
   if (message == "hoge")
     db01 = Message.new(
       message: message
     )
-    db01.save
-    response[:message] = message
+    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+    if response[:_db_errors].length == 0
+      response[:message] = message
+    end
     response[:result] = true
   else
+    if response[:_db_errors].length == 0
+    end
     response[:result] = false
   end
   response.to_json
@@ -65,8 +71,10 @@ when "event01"
   db01 = Message.new(
     message: message
   )
-  db01.save
-  response[:message] = message
+  response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+  if response[:_db_errors].length == 0
+    response[:message] = message
+  end
   EventMachine.next_tick do
     settings.sockets.each { |s| s.send(response.to_json) }
   end
@@ -86,10 +94,14 @@ when "event01"
     db01 = Message.new(
       message: message
     )
-    db01.save
-    response[:message] = message
+    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+    if response[:_db_errors].length == 0
+      response[:message] = message
+    end
     response[:result] = true
   else
+    if response[:_db_errors].length == 0
+    end
     response[:result] = false
   end
   EventMachine.next_tick do

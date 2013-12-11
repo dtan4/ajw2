@@ -93,15 +93,24 @@ if (_response['result']) {
     end
 
     def always(interfaces)
-      interfaces.inject([]) do |result, interface|
-        result << interface(interface)
-      end.join("\n")
+      <<-EOS
+if (_response['_db_errors'].length == 0) {
+#{indent(interfaces_js(interfaces), 1)}
+} else {
+}
+      EOS
     end
 
     alias conditional_then always
     alias conditional_else always
 
-    def interface(interface)
+    def interfaces_js(interfaces)
+      interfaces.inject([]) do |result, interface|
+        result << interface_js(interface)
+      end.join("\n")
+    end
+
+    def interface_js(interface)
       case interface[:type]
       when "element"
         set_values = element_action(interface)

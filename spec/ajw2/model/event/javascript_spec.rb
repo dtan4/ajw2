@@ -19,8 +19,11 @@ $('#submitBtn').click(function() {
     params: { 'message': message },
     success: function(_xhr_msg) {
       var _response = JSON.parse(_xhr_msg);
-      var if01 = _response['if01'];
-      $('#messageLabel').val(if01['message']);
+      if (_response['_db_errors'].length == 0) {
+        var if01 = _response['if01'];
+        $('#messageLabel').val(if01['message']);
+      } else {
+      }
     },
     error: function(_xhr, _xhr_msg) {
       alert(_xhr_msg);
@@ -45,8 +48,11 @@ $('#submitBtn').click(function() {
     params: { 'message': message },
     success: function(_xhr_msg) {
       var _response = JSON.parse(_xhr_msg);
-      var if01 = _response['if01'];
-      $('#messageTable').append($('<tr>').append($('<td>')).append($('<td>').val(if01['message'])));
+      if (_response['_db_errors'].length == 0) {
+        var if01 = _response['if01'];
+        $('#messageTable').append($('<tr>').append($('<td>')).append($('<td>').val(if01['message'])));
+      } else {
+      }
     },
     error: function(_xhr, _xhr_msg) {
       alert(_xhr_msg);
@@ -72,9 +78,15 @@ $('#submitBtn').click(function() {
     success: function(_xhr_msg) {
       var _response = JSON.parse(_xhr_msg);
       if (_response['result']) {
-        var if01 = _response['if01'];
-        $('#messageLabel').val(if01['message']);
+        if (_response['_db_errors'].length == 0) {
+          var if01 = _response['if01'];
+          $('#messageLabel').val(if01['message']);
+        } else {
+        }
       } else {
+        if (_response['_db_errors'].length == 0) {
+        } else {
+        }
       }
     },
     error: function(_xhr, _xhr_msg) {
@@ -123,8 +135,11 @@ $('#submitBtn').click(function() {
           expect(subject).to eq(<<-EOS)
 case 'event01':
   var _response = _ws_json['msg'];
-  var if01 = _response['if01'];
-  $('#messageLabel').val(if01['message']);
+  if (_response['_db_errors'].length == 0) {
+    var if01 = _response['if01'];
+    $('#messageLabel').val(if01['message']);
+  } else {
+  }
   break;
                                    EOS
         end
@@ -139,9 +154,15 @@ case 'event01':
 case 'event01':
   var _response = _ws_json['msg'];
   if (_response['result']) {
-    var if01 = _response['if01'];
-    $('#messageLabel').val(if01['message']);
+    if (_response['_db_errors'].length == 0) {
+      var if01 = _response['if01'];
+      $('#messageLabel').val(if01['message']);
+    } else {
+    }
   } else {
+    if (_response['_db_errors'].length == 0) {
+    } else {
+    }
   }
   break;
                                    EOS

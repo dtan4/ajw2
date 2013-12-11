@@ -17,7 +17,7 @@ when "#{event[:id]}"
       <<-EOS
 post "/#{event[:id]}" do
   content_type :json
-  response = {}
+  response = { _db_errors: [] }
 #{indent(params_rb(event[:params], :ruby, 1), 1)}
 #{indent(action_rb(event[:action]), 1)}
   response.to_json
@@ -60,7 +60,9 @@ end
     def always(action)
       <<-EOS.strip
 #{databases_rb(action[:databases])}
-#{interfaces_rb(action[:interfaces])}
+if response[:_db_errors].length == 0
+#{indent(interfaces_rb(action[:interfaces]), 1)}
+end
 EOS
     end
 
@@ -116,7 +118,7 @@ EOS
 #{database[:id]} = #{database[:database].singularize.capitalize}.new(
 #{indent(params_rb(database[:params], :hash, 2), 1)}
 )
-#{database[:id]}.save
+response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
       EOS
     end
 
