@@ -1,7 +1,9 @@
 require "simplecov"
 require "simplecov-rcov"
 SimpleCov.formatter = SimpleCov::Formatter::RcovFormatter
-SimpleCov.start
+SimpleCov.start do
+  add_filter "vendor"
+end
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'ajw2'
