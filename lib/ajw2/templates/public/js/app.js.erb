@@ -1,18 +1,21 @@
-var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+$(function() {
+  var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
 
 <%- @events.render_js_ajax.each do |js| -%>
-<%= js %>
-<%- end -%>
-<%- @events.render_js_realtime.each do |js| -%>
-<%= js %>
-<%- end -%>
-ws.onmessage = function(msg) {
-  var _ws_json = JSON.parse(msg);
-<%- if @events.render_js_onmessage.length > 0 -%>
-  switch (_ws_json['result']) {
-<%- @events.render_js_onmessage.each do |js| -%>
 <%= indent(js, 1) %>
 <%- end -%>
-  }
+<%- @events.render_js_realtime.each do |js| -%>
+<%= indent(js, 1) %>
 <%- end -%>
-}
+
+  ws.onmessage = function(msg) {
+    var _ws_json = JSON.parse(msg);
+<%- if @events.render_js_onmessage.length > 0 -%>
+    switch (_ws_json['result']) {
+<%- @events.render_js_onmessage.each do |js| -%>
+<%= indent(js, 2) %>
+<%- end -%>
+    }
+<%- end -%>
+  };
+});
