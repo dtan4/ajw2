@@ -238,6 +238,105 @@ class App < Sinatra::Base
 end
           EOS
 
+APP_RB_REALTIME_ONLY = <<-EOS
+class User < ActiveRecord::Base
+  validates_presence_of :name
+  validates_presence_of :password
+end
+
+class Message < ActiveRecord::Base
+  validates_presence_of :user_id
+  validates_presence_of :message
+end
+
+class App < Sinatra::Base
+  configure do
+    register Sinatra::ActiveRecordExtension
+    set :sockets, []
+    use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    Slim::Engine.default_options[:pretty] = true
+  end
+
+  get "/" do
+    if !request.websocket?
+      slim :index
+    else
+      request.websocket do |ws|
+        ws.onopen do
+          settings.sockets << ws
+        end
+
+        ws.onmessage do |msg|
+          _ws_json = JSON.parse(msg)
+          response = {}
+          case _ws_json["func"]
+          when "event01"
+            message = params[:message]
+            db01 = Message.new(
+              message: message
+            )
+            db01.save
+            response[:message] = message
+            EventMachine.next_tick do
+              settings.sockets.each { |s| s.send(response.to_json) }
+            end
+          else
+          end
+        end
+
+        ws.onclose do
+          settings.sockets.delete(ws)
+        end
+      end
+    end
+  end
+
+end
+          EOS
+
+APP_RB_NOEVENT = <<-EOS
+class User < ActiveRecord::Base
+  validates_presence_of :name
+  validates_presence_of :password
+end
+
+class Message < ActiveRecord::Base
+  validates_presence_of :user_id
+  validates_presence_of :message
+end
+
+class App < Sinatra::Base
+  configure do
+    register Sinatra::ActiveRecordExtension
+    set :sockets, []
+    use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    Slim::Engine.default_options[:pretty] = true
+  end
+
+  get "/" do
+    if !request.websocket?
+      slim :index
+    else
+      request.websocket do |ws|
+        ws.onopen do
+          settings.sockets << ws
+        end
+
+        ws.onmessage do |msg|
+          _ws_json = JSON.parse(msg)
+          response = {}
+        end
+
+        ws.onclose do
+          settings.sockets.delete(ws)
+        end
+      end
+    end
+  end
+
+end
+          EOS
+
 LAYOUT_SLIM = <<-EOS
 doctype html
 html
@@ -357,6 +456,41 @@ $(function() {
       }
     });
   });
+
+  ws.onmessage = function(msg) {
+    var _ws_json = JSON.parse(msg);
+  };
+});
+         EOS
+
+APP_JS_REALTIME_ONLY = <<-EOS
+$(function() {
+  var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+
+  $('#submitBtn').click(function() {
+    var message = $('#messageTextBox').val();
+    var params = { 'message': message };
+    var request = { 'func': 'event01', 'params': params };
+    ws.send(JSON.stringfy(request));
+  });
+
+  ws.onmessage = function(msg) {
+    var _ws_json = JSON.parse(msg);
+    switch (_ws_json['result']) {
+    case 'event01':
+      var _response = _ws_json['msg'];
+      var if01 = _response['if01'];
+      $('#messageLabel').val(if01['message']);
+      break;
+    }
+  };
+});
+         EOS
+
+APP_JS_NOEVENT = <<-EOS
+$(function() {
+  var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+
 
   ws.onmessage = function(msg) {
     var _ws_json = JSON.parse(msg);

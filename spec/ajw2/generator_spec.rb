@@ -129,6 +129,58 @@ module Ajw2
         end
       end
 
+      context "with WebSocket-only events" do
+        before do
+          FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+
+          @events = double("events",
+                         render_rb_ajax: [],
+                         render_rb_realtime: RENDER_RB_REALTIME,
+                         render_js_ajax: [],
+                         render_js_realtime: RENDER_JS_REALTIME,
+                         render_js_onmessage: RENDER_JS_ONMESSAGE)
+          @generator =
+            Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+          @generator.generate(@outdir)
+        end
+
+        it_behaves_like "generates successfully"
+
+        it "should generate app.rb" do
+          expect(open(File.expand_path("app.rb", @outdir)).read).to eq APP_RB_REALTIME_ONLY
+        end
+
+        it "should generate public/js/app.js" do
+          expect(open(File.expand_path("public/js/app.js", @outdir)).read).to eq APP_JS_REALTIME_ONLY
+        end
+      end
+
+      context "with no event" do
+        before do
+          FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+
+          @events = double("events",
+                         render_rb_ajax: [],
+                         render_rb_realtime: [],
+                         render_js_ajax: [],
+                         render_js_realtime: [],
+                         render_js_onmessage: [])
+          @generator =
+            Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+          @generator.generate(@outdir)
+        end
+
+        it_behaves_like "generates successfully"
+
+        it "should generate app.rb" do
+          expect(open(File.expand_path("app.rb", @outdir)).read).to eq APP_RB_NOEVENT
+        end
+
+        it "should generate public/js/app.js" do
+          expect(open(File.expand_path("public/js/app.js", @outdir)).read).to eq APP_JS_NOEVENT
+        end
+      end
+
       context "with invalid source" do
         before do
           FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
