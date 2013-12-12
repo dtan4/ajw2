@@ -142,9 +142,16 @@ module Ajw2
 
         subject { @generator.generate(@outdir) }
 
+        it "should raise Exception" do
+          expect { @generator.generate(@outdir) }.to raise_error
+        end
+
         it "should not create outdir" do
-          subject
-          expect(Dir.exists? @outdir).to be_false
+          begin
+            subject
+          rescue
+            expect(Dir.exists? @outdir).to be_false
+          end
         end
       end
 

@@ -35,8 +35,8 @@ module Ajw2
 
         generate_migration_files(out_dir)
       rescue Exception => e
-        $stderr.puts "#{e.class}: #{e.message}"
         FileUtils.rm_rf(out_dir) if Dir.exists?(out_dir)
+        raise e
       end
     end
 
