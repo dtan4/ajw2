@@ -63,6 +63,33 @@ $('#submitBtn').click(function() {
         end
       end
 
+      context "with onload (ready) event" do
+        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE_READY[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render JavaScript code" do
+          expect(subject).to eq(<<-EOS)
+var message = $('#messageTextBox').val();
+$.ajax({
+  type: 'POST',
+  url: '/event01',
+  params: { 'message': message },
+  success: function(_xhr_msg) {
+    var _response = JSON.parse(_xhr_msg);
+    if (_response['_db_errors'].length == 0) {
+      var if01 = _response['if01'];
+      $('#messageLabel').val(if01['message']);
+    } else {
+    }
+  },
+  error: function(_xhr, _xhr_msg) {
+    alert(_xhr_msg);
+  }
+});
+                                   EOS
+        end
+      end
+
       context "with conditional-execute source" do
         subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_CONDITIONAL_SOURCE[:events].first) }
         it { should be_an_instance_of String }
@@ -118,6 +145,20 @@ $('#submitBtn').click(function() {
       context "with always-execute source" do
         subject { Ajw2::Model::Event::JavaScript.new.render_realtime(REALTIME_ALWAYS_SOURCE[:events].first) }
         it_behaves_like "with valid source"
+      end
+
+      context "with onload (ready) source" do
+        subject { Ajw2::Model::Event::JavaScript.new.render_realtime(REALTIME_ALWAYS_SOURCE_READY[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render JavaScript code" do
+          expect(subject).to eq(<<-EOS)
+var message = $('#messageTextBox').val();
+var params = { 'message': message };
+var request = { 'func': 'event01', 'params': params };
+ws.send(JSON.stringfy(request));
+                                   EOS
+        end
       end
 
       context "with conditional-execute source" do

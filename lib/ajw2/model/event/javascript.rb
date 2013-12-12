@@ -3,34 +3,27 @@ module Ajw2::Model::Event
     include Ajw2::Util
 
     def render_ajax(event)
-      <<-EOS
+      if event[:type] == "ready"
+        js_body_ajax(event)
+      else
+        <<-EOS
 $('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
-#{indent(params_js(event[:params]), 1)}
-  $.ajax({
-    type: 'POST',
-    url: '/#{event[:id]}',
-    params: { #{params_json(event[:params])} },
-    success: function(_xhr_msg) {
-      var _response = JSON.parse(_xhr_msg);
-#{indent(action_js(event[:action]), 3)}
-    },
-    error: function(_xhr, _xhr_msg) {
-      alert(_xhr_msg);
-    }
-  });
+#{indent(js_body_ajax(event), 1)}
 });
-      EOS
+        EOS
+      end
     end
 
     def render_realtime(event)
-      <<-EOS
+      if event[:type] == "ready"
+        js_body_realtime(event)
+      else
+        <<-EOS
 $('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
-#{indent(params_js(event[:params]), 1)}
-  var params = { #{params_json(event[:params])} };
-  var request = { 'func': '#{event[:id]}', 'params': params };
-  ws.send(JSON.stringfy(request));
+#{indent(js_body_realtime(event), 1)}
 });
-      EOS
+        EOS
+      end
     end
 
     def render_onmessage(event)
@@ -43,6 +36,33 @@ case '#{event[:id]}':
     end
 
     private
+
+    def js_body_ajax(event)
+      <<-EOS
+#{params_js(event[:params])}
+$.ajax({
+  type: 'POST',
+  url: '/#{event[:id]}',
+  params: { #{params_json(event[:params])} },
+  success: function(_xhr_msg) {
+    var _response = JSON.parse(_xhr_msg);
+#{indent(action_js(event[:action]), 2)}
+  },
+  error: function(_xhr, _xhr_msg) {
+    alert(_xhr_msg);
+  }
+});
+       EOS
+    end
+
+    def js_body_realtime(event)
+      <<-EOS
+#{params_js(event[:params])}
+var params = { #{params_json(event[:params])} };
+var request = { 'func': '#{event[:id]}', 'params': params };
+ws.send(JSON.stringfy(request));
+      EOS
+    end
 
     def get_element_value(value)
       case value[:func]

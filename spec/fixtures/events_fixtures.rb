@@ -85,6 +85,45 @@ AJAX_ALWAYS_SOURCE_APPEND = {
                                 }
                        }
                       ]
+                            }
+
+AJAX_ALWAYS_SOURCE_READY = {
+                      events:
+                      [
+                       {
+                        id: "event01", type: "ready", realtime: false,
+                        params: [
+                                 {
+                                  name: "message", type: "string",
+                                  value: {
+                                          element: "messageTextBox",
+                                          func: "getValue", type: "element"
+                                         }
+                                 }
+                                ],
+                        action: {
+                                 type: "always",
+                                 interfaces: [
+                                              {
+                                               id: "if01", element: "messageLabel",
+                                               func: "setValue", type: "element",
+                                               params: [
+                                                        { name: "message", type: "string" }
+                                                       ]
+
+                                              }
+                                             ],
+                                 databases: [
+                                             {
+                                              id: "db01", database: "messages", func: "create",
+                                              params: [
+                                                       { name: "message", type: "string" }
+                                                      ]
+                                             }
+                                            ]
+                                }
+                       }
+                      ]
                      }
 
 AJAX_CONDITIONAL_SOURCE = {
@@ -154,6 +193,45 @@ REALTIME_ALWAYS_SOURCE = {
                           [
                            {
                             id: "event01", target: "submitBtn", type: "onClick", realtime: true,
+                            params: [
+                                     {
+                                      name: "message", type: "string",
+                                      value: {
+                                              element: "messageTextBox",
+                                              func: "getValue", type: "element"
+                                             }
+                                     }
+                                    ],
+                            action: {
+                                     type: "always",
+                                     interfaces: [
+                                                  {
+                                                   id: "if01", element: "messageLabel",
+                                                   func: "setValue", type: "element",
+                                                   params: [
+                                                            { name: "message", type: "string" }
+                                                           ]
+
+                                                  }
+                                                 ],
+                                     databases: [
+                                                 {
+                                                  id: "db01", database: "messages", func: "create",
+                                                  params: [
+                                                           { name: "message", type: "string" }
+                                                          ]
+                                                 }
+                                                ]
+                                    }
+                           }
+                          ]
+                         }
+
+REALTIME_ALWAYS_SOURCE_READY = {
+                          events:
+                          [
+                           {
+                            id: "event01", type: "ready", realtime: true,
                             params: [
                                      {
                                       name: "message", type: "string",
