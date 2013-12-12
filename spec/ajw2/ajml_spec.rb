@@ -1,9 +1,9 @@
 require "spec_helper"
 
 module Ajw2
-  describe Ajml do
+  describe Description do
     before(:all) do
-      @ajml_path = fixture_path("chat.ajml")
+      @description_path = fixture_path("chat.description")
       @xml_path = fixture_path("chat.xml")
       @json_path = fixture_path("chat.json")
       @yaml_path = fixture_path("chat.yaml")
@@ -14,24 +14,24 @@ module Ajw2
     describe "#parse" do
       shared_context "with valid file" do
         before do
-          @ajml = Ajw2::Ajml.new
-          @ajml.parse(path)
+          @description = Ajw2::Description.new
+          @description.parse(path)
         end
 
         it "should set application" do
-          expect(@ajml.application).to be_an_instance_of Ajw2::Model::Application
+          expect(@description.application).to be_an_instance_of Ajw2::Model::Application
         end
 
         it "should set interfaces" do
-          expect(@ajml.interfaces).to be_an_instance_of Ajw2::Model::Interfaces
+          expect(@description.interfaces).to be_an_instance_of Ajw2::Model::Interfaces
         end
 
         it "should set databases" do
-          expect(@ajml.databases).to be_an_instance_of Ajw2::Model::Databases
+          expect(@description.databases).to be_an_instance_of Ajw2::Model::Databases
         end
 
         it "should set events" do
-          expect(@ajml.events).to be_an_instance_of Ajw2::Model::Events
+          expect(@description.events).to be_an_instance_of Ajw2::Model::Events
         end
       end
 
@@ -56,8 +56,8 @@ module Ajw2
       context "with invalid file" do
         it "should raise Exception" do
           expect {
-            ajml = Ajw2::Ajml.new
-            ajml.parse(@invalid_ajml_path)
+            description = Ajw2::Description.new
+            description.parse(@invalid_description_path)
           }.to raise_error
         end
       end
@@ -65,8 +65,8 @@ module Ajw2
       context "with invalid file extension" do
         it "should raise Exception" do
           expect {
-            ajml = Ajw2::Ajml.new
-            ajml.parse(@invalid_ext_path)
+            description = Ajw2::Description.new
+            description.parse(@invalid_ext_path)
           }.to raise_error
         end
       end
@@ -74,8 +74,8 @@ module Ajw2
       context "with file is nil" do
         it "should raise Exception" do
           expect {
-            ajml = Ajw2::Ajml.new
-            ajml.parse(nil)
+            description = Ajw2::Description.new
+            description.parse(nil)
           }.to raise_error
         end
       end
@@ -83,8 +83,8 @@ module Ajw2
       context "with file which does not exist" do
         it "should raise Exception" do
           expect {
-            ajml = Ajw2::Ajml.new
-            ajml.parse(@invalid_path + "hogehoge")
+            description = Ajw2::Description.new
+            description.parse(@invalid_path + "hogehoge")
           }.to raise_error
         end
       end

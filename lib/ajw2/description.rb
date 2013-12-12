@@ -4,7 +4,7 @@ require "yaml"
 require "ajw2/util"
 
 module Ajw2
-  class Ajml
+  class Description
     include Ajw2::Util
 
     attr_reader :application, :interfaces, :databases, :events
@@ -30,11 +30,11 @@ module Ajw2
       create_models(symbolize_keys(YAML.load(yaml)))
     end
 
-    def create_models(ajml)
-      @application = Ajw2::Model::Application.new(ajml[:application])
-      @interfaces = Ajw2::Model::Interfaces.new(ajml[:interfaces])
-      @databases = Ajw2::Model::Databases.new(ajml[:databases])
-      @events = Ajw2::Model::Events.new(ajml[:events])
+    def create_models(description)
+      @application = Ajw2::Model::Application.new(description[:application])
+      @interfaces = Ajw2::Model::Interfaces.new(description[:interfaces])
+      @databases = Ajw2::Model::Databases.new(description[:databases])
+      @events = Ajw2::Model::Events.new(description[:events])
     end
   end
 end
