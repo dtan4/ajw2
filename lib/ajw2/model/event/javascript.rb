@@ -29,7 +29,6 @@ $('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
     def render_onmessage(event)
       <<-EOS
 case '#{event[:id]}':
-  var _response = _ws_json['msg'];
 #{indent(action_js(event[:action]), 1)}
   break;
       EOS
@@ -43,13 +42,12 @@ case '#{event[:id]}':
 $.ajax({
   type: 'POST',
   url: '/#{event[:id]}',
-  params: { #{params_json(event[:params])} },
-  success: function(_xhr_msg) {
-    var _response = JSON.parse(_xhr_msg);
+  data: { #{params_json(event[:params])} },
+  success: function(_msg) {
 #{indent(action_js(event[:action]), 2)}
   },
-  error: function(_xhr, _xhr_msg) {
-    alert(_xhr_msg);
+  error: function(_xhr, _msg) {
+    alert('XMLHttpRequest Error: ' + _msg);
   }
 });
        EOS
@@ -104,7 +102,7 @@ ws.send(JSON.stringfy(request));
 
     def conditional(action)
       <<-EOS
-if (_response['result']) {
+if (_msg['result']) {
 #{indent(conditional_then(action[:then][:interfaces]), 1)}
 } else {
 #{indent(conditional_else(action[:else][:interfaces]), 1)}
@@ -114,7 +112,7 @@ if (_response['result']) {
 
     def always(interfaces)
       <<-EOS
-if (_response['_db_errors'].length == 0) {
+if (_msg['_db_errors'].length == 0) {
 #{indent(interfaces_js(interfaces), 1)}
 } else {
 }
@@ -139,7 +137,7 @@ if (_response['_db_errors'].length == 0) {
       end
 
       <<-EOS
-var #{interface[:id]} = _response['#{interface[:id]}'];
+var #{interface[:id]} = _msg['#{interface[:id]}'];
 #{set_values}
       EOS
     end

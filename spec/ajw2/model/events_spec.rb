@@ -17,10 +17,9 @@ $('#submitBtn').click(function() {
   $.ajax({
     type: 'POST',
     url: '/event01',
-    params: { 'message': message },
+    data: { 'message': message },
     success: function(_xhr_msg) {
-      var _response = JSON.parse(_xhr_msg);
-      var if01 = _response['if01'];
+      var if01 = _xhr_msg['if01'];
       $('#messageLabel').val(if01['message']);
     },
     error: function(_xhr, _xhr_msg) {
@@ -159,10 +158,9 @@ $('#submitBtn').click(function() {
   $.ajax({
     type: 'POST',
     url: '/event01',
-    params: { 'message': message },
+    data: { 'message': message },
     success: function(_xhr_msg) {
-      var _response = JSON.parse(_xhr_msg);
-      var if01 = _response['if01'];
+      var if01 = _xhr_msg['if01'];
       $('#messageLabel').val(if01['message']);
     },
     error: function(_xhr, _xhr_msg) {

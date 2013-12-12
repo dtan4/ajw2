@@ -82,14 +82,13 @@ $('#submitBtn').click(function() {
   $.ajax({
     type: 'POST',
     url: '/event01',
-    params: { 'message': message },
-    success: function(_xhr_msg) {
-      var _response = JSON.parse(_xhr_msg);
-      var if01 = _response['if01'];
+    data: { 'message': message },
+    success: function(_msg) {
+      var if01 = _msg['if01'];
       $('#messageLabel').val(if01['message']);
     },
-    error: function(_xhr, _xhr_msg) {
-      alert(_xhr_msg);
+    error: function(_xhr, _msg) {
+      alert('XMLHttpRequest Error: ' + _msg);
     }
   });
 });
@@ -110,8 +109,7 @@ EOS
 RENDER_JS_ONMESSAGE = [
                        (<<-EOS)
 case 'event01':
-  var _response = _ws_json['msg'];
-  var if01 = _response['if01'];
+  var if01 = _msg['if01'];
   $('#messageLabel').val(if01['message']);
   break;
 EOS
@@ -405,14 +403,13 @@ $(function() {
     $.ajax({
       type: 'POST',
       url: '/event01',
-      params: { 'message': message },
-      success: function(_xhr_msg) {
-        var _response = JSON.parse(_xhr_msg);
-        var if01 = _response['if01'];
+      data: { 'message': message },
+      success: function(_msg) {
+        var if01 = _msg['if01'];
         $('#messageLabel').val(if01['message']);
       },
-      error: function(_xhr, _xhr_msg) {
-        alert(_xhr_msg);
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
       }
     });
   });
@@ -423,12 +420,10 @@ $(function() {
     ws.send(JSON.stringfy(request));
   });
 
-  ws.onmessage = function(msg) {
-    var _ws_json = JSON.parse(msg);
-    switch (_ws_json['result']) {
+  ws.onmessage = function(_msg) {
+    switch (_msg['_event']) {
     case 'event01':
-      var _response = _ws_json['msg'];
-      var if01 = _response['if01'];
+      var if01 = _msg['if01'];
       $('#messageLabel').val(if01['message']);
       break;
     }
@@ -445,20 +440,18 @@ $(function() {
     $.ajax({
       type: 'POST',
       url: '/event01',
-      params: { 'message': message },
-      success: function(_xhr_msg) {
-        var _response = JSON.parse(_xhr_msg);
-        var if01 = _response['if01'];
+      data: { 'message': message },
+      success: function(_msg) {
+        var if01 = _msg['if01'];
         $('#messageLabel').val(if01['message']);
       },
-      error: function(_xhr, _xhr_msg) {
-        alert(_xhr_msg);
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
       }
     });
   });
 
-  ws.onmessage = function(msg) {
-    var _ws_json = JSON.parse(msg);
+  ws.onmessage = function(_msg) {
   };
 });
          EOS
@@ -474,12 +467,10 @@ $(function() {
     ws.send(JSON.stringfy(request));
   });
 
-  ws.onmessage = function(msg) {
-    var _ws_json = JSON.parse(msg);
-    switch (_ws_json['result']) {
+  ws.onmessage = function(_msg) {
+    switch (_msg['_event']) {
     case 'event01':
-      var _response = _ws_json['msg'];
-      var if01 = _response['if01'];
+      var if01 = _msg['if01'];
       $('#messageLabel').val(if01['message']);
       break;
     }
@@ -492,8 +483,7 @@ $(function() {
   var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
 
 
-  ws.onmessage = function(msg) {
-    var _ws_json = JSON.parse(msg);
+  ws.onmessage = function(_msg) {
   };
 });
          EOS

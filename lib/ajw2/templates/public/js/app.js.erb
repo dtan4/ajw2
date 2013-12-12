@@ -8,10 +8,9 @@ $(function() {
 <%= indent(js, 1) %>
 <%- end -%>
 
-  ws.onmessage = function(msg) {
-    var _ws_json = JSON.parse(msg);
+  ws.onmessage = function(_msg) {
 <%- if @events.render_js_onmessage.length > 0 -%>
-    switch (_ws_json['result']) {
+    switch (_msg['_event']) {
 <%- @events.render_js_onmessage.each do |js| -%>
 <%= indent(js, 2) %>
 <%- end -%>

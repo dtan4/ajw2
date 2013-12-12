@@ -16,17 +16,16 @@ $('#submitBtn').click(function() {
   $.ajax({
     type: 'POST',
     url: '/event01',
-    params: { 'message': message },
-    success: function(_xhr_msg) {
-      var _response = JSON.parse(_xhr_msg);
-      if (_response['_db_errors'].length == 0) {
-        var if01 = _response['if01'];
+    data: { 'message': message },
+    success: function(_msg) {
+      if (_msg['_db_errors'].length == 0) {
+        var if01 = _msg['if01'];
         $('#messageLabel').val(if01['message']);
       } else {
       }
     },
-    error: function(_xhr, _xhr_msg) {
-      alert(_xhr_msg);
+    error: function(_xhr, _msg) {
+      alert('XMLHttpRequest Error: ' + _msg);
     }
   });
 });
@@ -45,17 +44,16 @@ $('#submitBtn').click(function() {
   $.ajax({
     type: 'POST',
     url: '/event01',
-    params: { 'message': message },
-    success: function(_xhr_msg) {
-      var _response = JSON.parse(_xhr_msg);
-      if (_response['_db_errors'].length == 0) {
-        var if01 = _response['if01'];
+    data: { 'message': message },
+    success: function(_msg) {
+      if (_msg['_db_errors'].length == 0) {
+        var if01 = _msg['if01'];
         $('#messageTable').append($('<tr>').append($('<td>')).append($('<td>').val(if01['message'])));
       } else {
       }
     },
-    error: function(_xhr, _xhr_msg) {
-      alert(_xhr_msg);
+    error: function(_xhr, _msg) {
+      alert('XMLHttpRequest Error: ' + _msg);
     }
   });
 });
@@ -73,17 +71,16 @@ var message = $('#messageTextBox').val();
 $.ajax({
   type: 'POST',
   url: '/event01',
-  params: { 'message': message },
-  success: function(_xhr_msg) {
-    var _response = JSON.parse(_xhr_msg);
-    if (_response['_db_errors'].length == 0) {
-      var if01 = _response['if01'];
+  data: { 'message': message },
+  success: function(_msg) {
+    if (_msg['_db_errors'].length == 0) {
+      var if01 = _msg['if01'];
       $('#messageLabel').val(if01['message']);
     } else {
     }
   },
-  error: function(_xhr, _xhr_msg) {
-    alert(_xhr_msg);
+  error: function(_xhr, _msg) {
+    alert('XMLHttpRequest Error: ' + _msg);
   }
 });
                                    EOS
@@ -101,23 +98,22 @@ $('#submitBtn').click(function() {
   $.ajax({
     type: 'POST',
     url: '/event01',
-    params: { 'message': message },
-    success: function(_xhr_msg) {
-      var _response = JSON.parse(_xhr_msg);
-      if (_response['result']) {
-        if (_response['_db_errors'].length == 0) {
-          var if01 = _response['if01'];
+    data: { 'message': message },
+    success: function(_msg) {
+      if (_msg['result']) {
+        if (_msg['_db_errors'].length == 0) {
+          var if01 = _msg['if01'];
           $('#messageLabel').val(if01['message']);
         } else {
         }
       } else {
-        if (_response['_db_errors'].length == 0) {
+        if (_msg['_db_errors'].length == 0) {
         } else {
         }
       }
     },
-    error: function(_xhr, _xhr_msg) {
-      alert(_xhr_msg);
+    error: function(_xhr, _msg) {
+      alert('XMLHttpRequest Error: ' + _msg);
     }
   });
 });
@@ -175,9 +171,8 @@ ws.send(JSON.stringfy(request));
         it "should render JavaScript code" do
           expect(subject).to eq(<<-EOS)
 case 'event01':
-  var _response = _ws_json['msg'];
-  if (_response['_db_errors'].length == 0) {
-    var if01 = _response['if01'];
+  if (_msg['_db_errors'].length == 0) {
+    var if01 = _msg['if01'];
     $('#messageLabel').val(if01['message']);
   } else {
   }
@@ -193,15 +188,14 @@ case 'event01':
         it "should render JavaScript code" do
           expect(subject).to eq(<<-EOS)
 case 'event01':
-  var _response = _ws_json['msg'];
-  if (_response['result']) {
-    if (_response['_db_errors'].length == 0) {
-      var if01 = _response['if01'];
+  if (_msg['result']) {
+    if (_msg['_db_errors'].length == 0) {
+      var if01 = _msg['if01'];
       $('#messageLabel').val(if01['message']);
     } else {
     }
   } else {
-    if (_response['_db_errors'].length == 0) {
+    if (_msg['_db_errors'].length == 0) {
     } else {
     }
   }

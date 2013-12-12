@@ -5,6 +5,7 @@ module Ajw2::Model::Event
     def render_realtime(event)
       <<-EOS
 when "#{event[:id]}"
+  response[:_event] = "#{event[:id]}"
 #{indent(params_rb(event[:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   EventMachine.next_tick do
