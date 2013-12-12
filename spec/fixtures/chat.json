@@ -29,6 +29,40 @@
                         "id": "selectButton"
                     }
                 ]
+            },
+            {
+                "type": "panel",
+                "_isDisplay": true,
+                "id": "tablePanel",
+                "children": [
+                    {
+                        "type": "table",
+                        "id": "messageTable",
+                        "children": [
+                            {
+                                "type": "thead",
+                                "id": "messageTableHead",
+                                "children": [
+                                    {
+                                        "type": "tr",
+                                        "id": "messageTableHeadRow",
+                                        "children": [
+                                            {
+                                                "type": "th",
+                                                "id": "messageTableHeadCol1",
+                                                "value": "message"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "tbody",
+                                "id": "messageTableBody"
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     },
@@ -37,37 +71,11 @@
         "dbType": "sqlite",
         "database": [
             {
-                "tablename": "users",
-                "type": "server",
-                "property": [
-                    {
-                        "name": "username",
-                        "type": "string",
-                        "null": false
-                    },
-                    {
-                        "name": "password",
-                        "type": "password",
-                        "null": true
-                    },
-                    {
-                        "name": "role",
-                        "type": "role",
-                        "null": true
-                    }
-                ]
-            },
-            {
                 "tablename": "messages",
                 "type": "server",
                 "property": [
                     {
-                        "name": "user_id",
-                        "type": "integer",
-                        "null": false
-                    },
-                    {
-                        "name": "content",
+                        "name": "message",
                         "type": "string",
                         "null": false
                     }
@@ -98,13 +106,21 @@
                     "interfaces": [
                         {
                             "id": "if01",
-                            "element": "messageLabel",
-                            "func": "setValue",
+                            "element": "messageTableBody",
+                            "func": "appendElements",
                             "type": "element",
                             "params": [
                                 {
-                                    "name": "message",
-                                    "type": "string"
+                                    "tag": "tr",
+                                    "children": [
+                                        {
+                                            "tag": "td",
+                                            "value": {
+                                                "name": "message",
+                                                "type": "string"
+                                            }
+                                        }
+                                    ]
                                 }
                             ]
                         }

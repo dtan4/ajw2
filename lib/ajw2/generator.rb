@@ -20,19 +20,24 @@ module Ajw2
     def generate(out_dir)
       raise Exception if Dir.exists? out_dir
 
-      [
-       "app.rb",
-       "config.ru",
-       "Rakefile",
-       "Gemfile",
-       "views/layout.slim",
-       "views/index.slim",
-       "config/database.yml",
-       "public/js/jquery.min.js",
-       "public/js/app.js"
-      ].each { |file| generate_file(file, out_dir) }
+      begin
+        [
+         "app.rb",
+         "config.ru",
+         "Rakefile",
+         "Gemfile",
+         "views/layout.slim",
+         "views/index.slim",
+         "config/database.yml",
+         "public/js/jquery.min.js",
+         "public/js/app.js"
+        ].each { |file| generate_file(file, out_dir) }
 
-      generate_migration_files(out_dir)
+        generate_migration_files(out_dir)
+      rescue Exception => e
+        $stderr.puts "#{e.class}: #{e.message}"
+        FileUtils.rm_rf(out_dir) if Dir.exists?(out_dir)
+      end
     end
 
     private

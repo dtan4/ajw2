@@ -129,6 +129,25 @@ module Ajw2
         end
       end
 
+      context "with invalid source" do
+        before do
+          FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+
+          @databases = double("databases",
+                            render_migration: "hoge",
+                            render_definition: "hoge")
+          @generator =
+            Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+        end
+
+        subject { @generator.generate(@outdir) }
+
+        it "should not create outdir" do
+          subject
+          expect(Dir.exists? @outdir).to be_false
+        end
+      end
+
       context "with existed outdir" do
         it "should raise Exception" do
           FileUtils.mkdir_p(@outdir)
