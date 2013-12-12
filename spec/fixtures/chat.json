@@ -115,7 +115,7 @@
                                     "children": [
                                         {
                                             "tag": "td",
-                                            "value": {
+                                            "text": {
                                                 "name": "message",
                                                 "type": "string"
                                             }

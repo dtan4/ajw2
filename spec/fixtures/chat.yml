@@ -72,7 +72,7 @@ events:
         - tag: tr
           children:
           - tag: td
-            value:
+            text:
               name: message
               type: string
       databases:
