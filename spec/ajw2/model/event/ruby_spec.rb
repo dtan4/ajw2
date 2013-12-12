@@ -5,8 +5,32 @@ module Ajw2::Model::Event
     before(:all) { load File.expand_path("../../../../fixtures/events_fixtures.rb", __FILE__) unless defined? AJAX_ALWAYS_SOURCE }
 
     describe "#render_ajax" do
-      context "with always-execute source" do
+      context "with always-execute source which set values" do
         subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render Ruby code" do
+          expect(subject).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = { _db_errors: [] }
+  message = params[:message]
+  db01 = Message.new(
+    message: message
+  )
+  response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+  if response[:_db_errors].length == 0
+    response[:if01] = {}
+    response[:if01][:message] = message
+  end
+  response.to_json
+end
+                                   EOS
+        end
+      end
+
+      context "with always-execute source which append elements" do
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_APPEND[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render Ruby code" do

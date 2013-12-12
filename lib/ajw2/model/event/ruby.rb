@@ -149,12 +149,23 @@ response[:#{interface[:id]}] = {}
       when "signin"
       when "setValue"
         interface_set_params(interface)
+      when "appendElements"
+        interface_set_params_append(interface[:params], interface[:id])
       end
     end
 
     def interface_set_params(interface)
       interface[:params].inject([]) do |result, param|
         result << "response[:#{interface[:id]}][:#{param[:name]}] = #{param[:name]}"
+      end.join("\n")
+    end
+
+    def interface_set_params_append(elements, id)
+      elements.inject([]) do |result, el|
+        result <<
+          "response[:#{id}][:#{el[:value][:name]}] = #{el[:value][:name]}" if el[:value]
+        result << interface_set_params_append(el[:children], id) if el[:children]
+        result
       end.join("\n")
     end
   end
