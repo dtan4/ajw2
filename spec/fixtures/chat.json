@@ -1,8 +1,8 @@
 {
     "application": {
         "name": "sample",
-        "css": [""],
-        "js": [""]
+        "css": [],
+        "js": []
     },
     "interfaces": {
         "type": "slim",
@@ -20,13 +20,13 @@
                     },
                     {
                         "type": "text",
-                        "id": "userIdTextbox",
-                        "placeholder": "user name"
+                        "id": "messageTextBox",
+                        "placeholder": "message"
                     },
                     {
                         "type": "button",
-                        "value": "Selection",
-                        "id": "selectButton"
+                        "value": "submit",
+                        "id": "submitBtn"
                     }
                 ]
             },

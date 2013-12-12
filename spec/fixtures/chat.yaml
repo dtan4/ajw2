@@ -1,80 +1,84 @@
 ---
-:application:
-  :name: sample
-:interfaces:
-  :type: slim
-  :pretty: true
-  :elements:
-  - :type: panel
-    :_isDisplay: true
-    :id: rootPanel
-    :children:
-    - :type: label
-      :value: Chat Application
-      :id: label0
-    - :type: text
-      :id: userIdTextbox
-      :placeholder: user name
-    - :type: button
-      :value: Selection
-      :id: selectButton
-:databases:
-  :_isDisplay: true
-  :dbType: sqlite
-  :database:
-  - :tablename: users
-    :type: server
-    :property:
-    - :name: username
-      :type: string
-      :null: false
-    - :name: password
-      :type: password
-      :null: true
-    - :name: role
-      :type: role
-      :null: true
-  - :tablename: messages
-    :type: server
-    :property:
-    - :name: user_id
-      :type: integer
-      :null: false
-    - :name: content
-      :type: string
-      :null: false
-:events:
-  :events:
-  - :target: button1
-    :type: :onClick
-    :action:
-      :login:
-        :id: login0
-        :param:
-        - :id: param1
-          :name: user_id
-          :type: :string
-          :value:
-            :element: userIdTextbox
-            :func: :getValue
-            :type: :element
-            :elemType: :widget
-      :branch:
-        :id: branch1
-        :condition:
-          :operator: :success
-      :then:
-        :id: then1
-        :call:
-        - :element: rootFrame
-          :func: :selectPanel
-          :id: call2
-          :param:
-          - :id: param13
-            :name: panel
-            :type: :element
-            :element:
-              :target: roomSelectPanel
-              :type: :child
-      :else:
-        :id: else1
+application:
+  name: sample
+  css: []
+  js: []
+interfaces:
+  type: slim
+  pretty: true
+  elements:
+  - type: panel
+    _isDisplay: true
+    id: rootPanel
+    children:
+    - type: label
+      value: Chat Application
+      id: label0
+    - type: text
+      id: messageTextBox
+      placeholder: message
+    - type: button
+      value: submit
+      id: submitBtn
+  - type: panel
+    _isDisplay: true
+    id: tablePanel
+    children:
+    - type: table
+      id: messageTable
+      children:
+      - type: thead
+        id: messageTableHead
+        children:
+        - type: tr
+          id: messageTableHeadRow
+          children:
+          - type: th
+            id: messageTableHeadCol1
+            value: message
+      - type: tbody
+        id: messageTableBody
+databases:
+  _isDisplay: true
+  dbType: sqlite
+  database:
+  - tablename: messages
+    type: server
+    property:
+    - name: message
+      type: string
+      'null': false
+events:
+  events:
+  - id: event01
+    target: submitBtn
+    type: onClick
+    realtime: false
+    params:
+    - name: message
+      type: string
+      value:
+        element: messageTextBox
+        func: getValue
+        type: element
+    action:
+      type: always
+      interfaces:
+      - id: if01
+        element: messageTableBody
+        func: appendElements
+        type: element
+        params:
+        - tag: tr
+          children:
+          - tag: td
+            value:
+              name: message
+              type: string
+      databases:
+      - id: db01
+        database: messages
+        func: create
+        params:
+        - name: message
+          type: string
