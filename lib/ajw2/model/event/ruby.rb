@@ -147,7 +147,7 @@ response[:#{interface[:id]}] = {}
       case interface[:func]
       when "signup"
       when "signin"
-      when "setValue"
+      when "setValue", "setText"
         interface_set_params(interface)
       when "appendElements"
         interface_set_params_append(interface[:params], interface[:id])
@@ -162,8 +162,10 @@ response[:#{interface[:id]}] = {}
 
     def interface_set_params_append(elements, id)
       elements.inject([]) do |result, el|
-        result <<
-          "response[:#{id}][:#{el[:value][:name]}] = #{el[:value][:name]}" if el[:value]
+        [:value, :text].each do |attr|
+          result <<
+            "response[:#{id}][:#{el[attr][:name]}] = #{el[attr][:name]}" if el[attr]
+        end
         result << interface_set_params_append(el[:children], id) if el[:children]
         result
       end.join("\n")

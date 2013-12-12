@@ -146,9 +146,14 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
       case interface[:func]
       when "setValue"
         raise "Too many parameters!" unless interface[:params].length == 1
-      <<-EOS
+        <<-EOS
 $('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);
-      EOS
+        EOS
+      when "setText"
+        raise "Too many parameters!" unless interface[:params].length == 1
+        <<-EOS
+$('\##{interface[:element]}').text(#{interface[:id]}['#{interface[:params][0][:name]}']);
+        EOS
       when "appendElements"
         interface[:params].inject([]) do |result, param|
           result << "$('\##{interface[:element]}').append(#{append_element(param, interface[:id])});"
@@ -162,6 +167,7 @@ $('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:na
     def append_element(element, id)
       result = "$('<#{element[:tag]}>')"
       result << ".val(#{id}['#{element[:value][:name]}'])" if element[:value]
+      result << ".text(#{id}['#{element[:text][:name]}'])" if element[:text]
       element[:children].each do |elem|
         result << ".append(#{append_element(elem, id)})"
       end if element[:children]

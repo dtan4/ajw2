@@ -34,6 +34,42 @@ AJAX_ALWAYS_SOURCE =
  ]
 }
 
+AJAX_ALWAYS_SOURCE_TEXT =
+{
+ events:
+ [
+  {
+   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+   params: [
+            {
+             name: "message", type: "string",
+             value: { element: "messageTextBox", func: "getValue", type: "element" }
+            }
+           ],
+   action: {
+            type: "always",
+            interfaces: [
+                         {
+                          id: "if01", element: "messageLabel",
+                          func: "setText", type: "element",
+                          params: [
+                                   { name: "message", type: "string" }
+                                  ]
+                         }
+                        ],
+            databases: [
+                        {
+                         id: "db01", database: "messages", func: "create",
+                         params: [
+                                  { name: "message", type: "string" }
+                                 ]
+                        }
+                       ]
+           }
+  }
+ ]
+}
+
 AJAX_ALWAYS_SOURCE_APPEND =
 {
  events:
