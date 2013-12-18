@@ -460,7 +460,8 @@ $(function() {
     ws.send(JSON.stringify(request));
   });
 
-  ws.onmessage = function(_msg) {
+  ws.onmessage = function(_ws_msg) {
+    var _msg = JSON.parse(_ws_msg.data);
     switch (_msg['_event']) {
     case 'event01':
       var if01 = _msg['if01'];
@@ -495,7 +496,8 @@ $(function() {
     });
   });
 
-  ws.onmessage = function(_msg) {
+  ws.onmessage = function(_ws_msg) {
+    var _msg = JSON.parse(_ws_msg.data);
   };
 });
          EOS
@@ -512,7 +514,8 @@ $(function() {
     ws.send(JSON.stringify(request));
   });
 
-  ws.onmessage = function(_msg) {
+  ws.onmessage = function(_ws_msg) {
+    var _msg = JSON.parse(_ws_msg.data);
     switch (_msg['_event']) {
     case 'event01':
       var if01 = _msg['if01'];
@@ -529,7 +532,8 @@ $(function() {
   var _csrf_token = $('meta[name=_csrf]').attr('content');
 
 
-  ws.onmessage = function(_msg) {
+  ws.onmessage = function(_ws_msg) {
+    var _msg = JSON.parse(_ws_msg.data);
   };
 });
          EOS
