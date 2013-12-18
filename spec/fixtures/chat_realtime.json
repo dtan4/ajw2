@@ -1,0 +1,146 @@
+{
+    "application": {
+        "name": "sample",
+        "css": [],
+        "js": []
+    },
+    "interfaces": {
+        "type": "slim",
+        "pretty": true,
+        "elements": [
+            {
+                "type": "panel",
+                "_isDisplay": true,
+                "id": "rootPanel",
+                "children": [
+                    {
+                        "type": "label",
+                        "value": "Chat Application",
+                        "id": "label0"
+                    },
+                    {
+                        "type": "text",
+                        "id": "messageTextBox",
+                        "placeholder": "message"
+                    },
+                    {
+                        "type": "button",
+                        "value": "submit",
+                        "id": "submitBtn"
+                    }
+                ]
+            },
+            {
+                "type": "panel",
+                "_isDisplay": true,
+                "id": "tablePanel",
+                "children": [
+                    {
+                        "type": "table",
+                        "id": "messageTable",
+                        "children": [
+                            {
+                                "type": "thead",
+                                "id": "messageTableHead",
+                                "children": [
+                                    {
+                                        "type": "tr",
+                                        "id": "messageTableHeadRow",
+                                        "children": [
+                                            {
+                                                "type": "th",
+                                                "id": "messageTableHeadCol1",
+                                                "value": "message"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "tbody",
+                                "id": "messageTableBody"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "databases": {
+        "_isDisplay": true,
+        "dbType": "sqlite",
+        "database": [
+            {
+                "tablename": "messages",
+                "type": "server",
+                "property": [
+                    {
+                        "name": "message",
+                        "type": "string",
+                        "null": false
+                    }
+                ]
+            }
+        ]
+    },
+    "events": {
+        "events": [
+            {
+                "id": "event01",
+                "target": "submitBtn",
+                "type": "onClick",
+                "realtime": true,
+                "params": [
+                    {
+                        "name": "message",
+                        "type": "string",
+                        "value": {
+                            "element": "messageTextBox",
+                            "func": "getValue",
+                            "type": "element"
+                        }
+                    }
+                ],
+                "action": {
+                    "type": "always",
+                    "interfaces": [
+                        {
+                            "id": "if01",
+                            "element": "messageTableBody",
+                            "func": "appendElements",
+                            "type": "element",
+                            "params": [
+                                {
+                                    "tag": "tr",
+                                    "children": [
+                                        {
+                                            "tag": "td",
+                                            "text": {
+                                                "name": "message",
+                                                "type": "string"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "databases": [
+                        {
+                            "id": "db01",
+                            "database": "messages",
+                            "func": "create",
+                            "params": [
+                                {
+                                    "name": "message",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+
+}
