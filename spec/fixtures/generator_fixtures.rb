@@ -104,7 +104,7 @@ $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   var params = { 'message': message };
   var request = { 'func': 'event01', 'params': params };
-  ws.send(JSON.stringfy(request));
+  ws.send(JSON.stringify(request));
 });
 EOS
                      ]
@@ -453,7 +453,7 @@ $(function() {
     var message = $('#messageTextBox').val();
     var params = { 'message': message };
     var request = { 'func': 'event01', 'params': params };
-    ws.send(JSON.stringfy(request));
+    ws.send(JSON.stringify(request));
   });
 
   ws.onmessage = function(_msg) {
@@ -505,7 +505,7 @@ $(function() {
     var message = $('#messageTextBox').val();
     var params = { 'message': message };
     var request = { 'func': 'event01', 'params': params };
-    ws.send(JSON.stringfy(request));
+    ws.send(JSON.stringify(request));
   });
 
   ws.onmessage = function(_msg) {

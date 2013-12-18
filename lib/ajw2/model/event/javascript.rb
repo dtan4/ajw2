@@ -61,7 +61,7 @@ $.ajax({
 #{params_js(event[:params])}
 var params = { #{params_json(event[:params])} };
 var request = { 'func': '#{event[:id]}', 'params': params };
-ws.send(JSON.stringfy(request));
+ws.send(JSON.stringify(request));
       EOS
     end
 
