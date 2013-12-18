@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Ajw2::VERSION
   spec.authors       = ["fujita"]
   spec.email         = ["fujita@tt.cs.titech.ac.jp"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{One-Page Modern Web Application Generator}
+  spec.description   = %q{One-Page Modern Web Application Generator using Client-Side Centric Model}
   spec.homepage      = ""
   spec.license       = "MIT"
 

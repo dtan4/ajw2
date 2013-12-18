@@ -1,6 +1,6 @@
 # Ajw2
 
-TODO: Write a gem description
+One-Page Modern Web Application Generator using Client-Side Centric Model
 
 ## Installation
 
@@ -17,8 +17,9 @@ Or install it yourself as:
     $ gem install ajw2
 
 ## Usage
-
-TODO: Write usage instructions here
+```
+$ ajw2 MODEL_DEFINITION_FILE OUTPUT_DIR
+```
 
 ## Contributing
 
