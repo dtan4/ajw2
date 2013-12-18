@@ -117,6 +117,7 @@ end
         it "should render Ruby code" do
           expect(subject).to eq <<-EOS
 when "event01"
+  response[:_db_errors] = []
   response[:_event] = "event01"
   message = params[:message]
   db01 = Message.new(
@@ -141,6 +142,7 @@ when "event01"
         it "should render Ruby code" do
           expect(subject).to eq <<-EOS
 when "event01"
+  response[:_db_errors] = []
   response[:_event] = "event01"
   message = params[:message]
   if (message == "hoge")
