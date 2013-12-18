@@ -154,10 +154,10 @@ class App < Sinatra::Base
         end
 
         ws.onmessage do |msg|
-          _ws_json = JSON.parse(msg)
+          _ws_json = JSON.parse(msg, symbolize_names: true)
           params = _ws_json[:params]
           response = {}
-          case _ws_json["func"]
+          case _ws_json[:func]
           when "event01"
             message = params[:message]
             db01 = Message.new(
@@ -229,7 +229,7 @@ class App < Sinatra::Base
         end
 
         ws.onmessage do |msg|
-          _ws_json = JSON.parse(msg)
+          _ws_json = JSON.parse(msg, symbolize_names: true)
           params = _ws_json[:params]
           response = {}
         end
@@ -291,10 +291,10 @@ class App < Sinatra::Base
         end
 
         ws.onmessage do |msg|
-          _ws_json = JSON.parse(msg)
+          _ws_json = JSON.parse(msg, symbolize_names: true)
           params = _ws_json[:params]
           response = {}
-          case _ws_json["func"]
+          case _ws_json[:func]
           when "event01"
             message = params[:message]
             db01 = Message.new(
@@ -355,7 +355,7 @@ class App < Sinatra::Base
         end
 
         ws.onmessage do |msg|
-          _ws_json = JSON.parse(msg)
+          _ws_json = JSON.parse(msg, symbolize_names: true)
           params = _ws_json[:params]
           response = {}
         end
