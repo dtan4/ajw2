@@ -155,6 +155,7 @@ class App < Sinatra::Base
 
         ws.onmessage do |msg|
           _ws_json = JSON.parse(msg)
+          params = _ws_json[:params]
           response = {}
           case _ws_json["func"]
           when "event01"
@@ -229,6 +230,7 @@ class App < Sinatra::Base
 
         ws.onmessage do |msg|
           _ws_json = JSON.parse(msg)
+          params = _ws_json[:params]
           response = {}
         end
 
@@ -290,6 +292,7 @@ class App < Sinatra::Base
 
         ws.onmessage do |msg|
           _ws_json = JSON.parse(msg)
+          params = _ws_json[:params]
           response = {}
           case _ws_json["func"]
           when "event01"
@@ -353,6 +356,7 @@ class App < Sinatra::Base
 
         ws.onmessage do |msg|
           _ws_json = JSON.parse(msg)
+          params = _ws_json[:params]
           response = {}
         end
 

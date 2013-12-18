@@ -27,6 +27,7 @@ class App < Sinatra::Base
 
         ws.onmessage do |msg|
           _ws_json = JSON.parse(msg)
+          params = _ws_json[:params]
           response = {}
 <%- if @events.render_rb_realtime.length > 0 -%>
           case _ws_json["func"]
