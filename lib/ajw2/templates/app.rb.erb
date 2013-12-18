@@ -6,7 +6,14 @@ class App < Sinatra::Base
     register Sinatra::ActiveRecordExtension
     set :sockets, []
     use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    use Rack::Csrf, raise: true
     Slim::Engine.default_options[:pretty] = true
+  end
+
+  helpers do
+    def csrf_meta_tag
+      Rack::Csrf.csrf_metatag(env)
+    end
   end
 
   get "/" do

@@ -18,6 +18,9 @@ $('#submitBtn').click(function() {
     type: 'POST',
     url: '/event01',
     data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
     success: function(_xhr_msg) {
       var if01 = _xhr_msg['if01'];
       $('#messageLabel').val(if01['message']);
@@ -159,6 +162,9 @@ $('#submitBtn').click(function() {
     type: 'POST',
     url: '/event01',
     data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
     success: function(_xhr_msg) {
       var if01 = _xhr_msg['if01'];
       $('#messageLabel').val(if01['message']);

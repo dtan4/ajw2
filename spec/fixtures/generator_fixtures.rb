@@ -83,6 +83,9 @@ $('#submitBtn').click(function() {
     type: 'POST',
     url: '/event01',
     data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
     success: function(_msg) {
       var if01 = _msg['if01'];
       $('#messageLabel').val(if01['message']);
@@ -131,7 +134,14 @@ class App < Sinatra::Base
     register Sinatra::ActiveRecordExtension
     set :sockets, []
     use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    use Rack::Csrf, raise: true
     Slim::Engine.default_options[:pretty] = true
+  end
+
+  helpers do
+    def csrf_meta_tag
+      Rack::Csrf.csrf_metatag(env)
+    end
   end
 
   get "/" do
@@ -198,7 +208,14 @@ class App < Sinatra::Base
     register Sinatra::ActiveRecordExtension
     set :sockets, []
     use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    use Rack::Csrf, raise: true
     Slim::Engine.default_options[:pretty] = true
+  end
+
+  helpers do
+    def csrf_meta_tag
+      Rack::Csrf.csrf_metatag(env)
+    end
   end
 
   get "/" do
@@ -252,7 +269,14 @@ class App < Sinatra::Base
     register Sinatra::ActiveRecordExtension
     set :sockets, []
     use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    use Rack::Csrf, raise: true
     Slim::Engine.default_options[:pretty] = true
+  end
+
+  helpers do
+    def csrf_meta_tag
+      Rack::Csrf.csrf_metatag(env)
+    end
   end
 
   get "/" do
@@ -308,7 +332,14 @@ class App < Sinatra::Base
     register Sinatra::ActiveRecordExtension
     set :sockets, []
     use Rack::Session::Cookie, expire_after: 3600, secret: "salt"
+    use Rack::Csrf, raise: true
     Slim::Engine.default_options[:pretty] = true
+  end
+
+  helpers do
+    def csrf_meta_tag
+      Rack::Csrf.csrf_metatag(env)
+    end
   end
 
   get "/" do
@@ -340,6 +371,7 @@ doctype html
 html
   head
     meta charset="utf-8"
+    == csrf_meta_tag
     title sample
     link rel="stylesheet" type="text/css" href="/css/ext/application.css"
   html
@@ -397,6 +429,7 @@ end
 APP_JS = <<-EOS
 $(function() {
   var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+  var _csrf_token = $('meta[name=_csrf]').attr('content');
 
   $('#submitBtn').click(function() {
     var message = $('#messageTextBox').val();
@@ -404,6 +437,9 @@ $(function() {
       type: 'POST',
       url: '/event01',
       data: { 'message': message },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
       success: function(_msg) {
         var if01 = _msg['if01'];
         $('#messageLabel').val(if01['message']);
@@ -434,6 +470,7 @@ $(function() {
 APP_JS_AJAX_ONLY = <<-EOS
 $(function() {
   var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+  var _csrf_token = $('meta[name=_csrf]').attr('content');
 
   $('#submitBtn').click(function() {
     var message = $('#messageTextBox').val();
@@ -441,6 +478,9 @@ $(function() {
       type: 'POST',
       url: '/event01',
       data: { 'message': message },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
       success: function(_msg) {
         var if01 = _msg['if01'];
         $('#messageLabel').val(if01['message']);
@@ -459,6 +499,7 @@ $(function() {
 APP_JS_REALTIME_ONLY = <<-EOS
 $(function() {
   var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+  var _csrf_token = $('meta[name=_csrf]').attr('content');
 
   $('#submitBtn').click(function() {
     var message = $('#messageTextBox').val();
@@ -481,6 +522,7 @@ $(function() {
 APP_JS_NOEVENT = <<-EOS
 $(function() {
   var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+  var _csrf_token = $('meta[name=_csrf]').attr('content');
 
 
   ws.onmessage = function(_msg) {

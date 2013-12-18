@@ -17,6 +17,9 @@ $('#submitBtn').click(function() {
     type: 'POST',
     url: '/event01',
     data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
     success: function(_msg) {
       if (_msg['_db_errors'].length == 0) {
         var if01 = _msg['if01'];
@@ -45,6 +48,9 @@ $('#submitBtn').click(function() {
     type: 'POST',
     url: '/event01',
     data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
     success: function(_msg) {
       if (_msg['_db_errors'].length == 0) {
         var if01 = _msg['if01'];
@@ -73,6 +79,9 @@ $('#submitBtn').click(function() {
     type: 'POST',
     url: '/event01',
     data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
     success: function(_msg) {
       if (_msg['_db_errors'].length == 0) {
         var if01 = _msg['if01'];
@@ -100,6 +109,9 @@ $.ajax({
   type: 'POST',
   url: '/event01',
   data: { 'message': message },
+  beforeSend: function(_xhr) {
+    _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+  },
   success: function(_msg) {
     if (_msg['_db_errors'].length == 0) {
       var if01 = _msg['if01'];
@@ -127,6 +139,9 @@ $('#submitBtn').click(function() {
     type: 'POST',
     url: '/event01',
     data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
     success: function(_msg) {
       if (_msg['result']) {
         if (_msg['_db_errors'].length == 0) {

@@ -1,5 +1,6 @@
 $(function() {
   var ws = new WebSocket('ws://' + window.location.host + window.location.pathname);
+  var _csrf_token = $('meta[name=_csrf]').attr('content');
 
 <%- @events.render_js_ajax.each do |js| -%>
 <%= indent(js, 1) %>

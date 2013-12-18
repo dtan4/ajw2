@@ -43,6 +43,9 @@ $.ajax({
   type: 'POST',
   url: '/#{event[:id]}',
   data: { #{params_json(event[:params])} },
+  beforeSend: function(_xhr) {
+    _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+  },
   success: function(_msg) {
 #{indent(action_js(event[:action]), 2)}
   },

@@ -2,6 +2,7 @@ doctype html
 html
   head
     meta charset="utf-8"
+    == csrf_meta_tag
 <%= indent(@application.render_header, 2) %>
 <%= indent(@application.render_css_include, 2) %>
   html
