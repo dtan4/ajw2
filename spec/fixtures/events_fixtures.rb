@@ -206,6 +206,168 @@ AJAX_CONDITIONAL_SOURCE =
  ]
 }
 
+AJAX_CONDITIONAL_SOURCE_NEQ =
+{
+ events:
+ [
+  {
+   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+   params: [
+            {
+             name: "message", type: "string",
+             value: { element: "messageTextBox", func: "getValue", type: "element" }
+            }
+           ],
+   action: {
+            type: "conditional",
+            condition: {
+                        operand: "neq",
+                        left: {
+                               type: "param",
+                               value: { name: "message", type: "string" }
+                              },
+                        right: {
+                                type: "literal",
+                                value: { value: "hoge", type: "string" }
+                               }
+                       },
+            then: {
+                   interfaces: [
+                                {
+                                 id: "if01", element: "messageLabel",
+                                 func: "setValue", type: "element",
+                                 params: [
+                                          { name: "message", type: "string" }
+                                         ]
+
+                                }
+                               ],
+                   databases: [
+                               {
+                                id: "db01", database: "messages", func: "create",
+                                params: [
+                                         { name: "message", type: "string" }
+                                        ]
+                               }
+                              ]
+                  },
+            else: {
+                   interfaces: [],
+                   databases: []
+                  }
+           }
+  }
+ ]
+}
+
+AJAX_CONDITIONAL_SOURCE_GT =
+{
+ events:
+ [
+  {
+   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+   params: [
+            {
+             name: "message", type: "string",
+             value: { element: "messageTextBox", func: "getValue", type: "element" }
+            }
+           ],
+   action: {
+            type: "conditional",
+            condition: {
+                        operand: "gt",
+                        left: {
+                               type: "param",
+                               value: { name: "message", type: "string" }
+                              },
+                        right: {
+                                type: "literal",
+                                value: { value: "hoge", type: "string" }
+                               }
+                       },
+            then: {
+                   interfaces: [
+                                {
+                                 id: "if01", element: "messageLabel",
+                                 func: "setValue", type: "element",
+                                 params: [
+                                          { name: "message", type: "string" }
+                                         ]
+
+                                }
+                               ],
+                   databases: [
+                               {
+                                id: "db01", database: "messages", func: "create",
+                                params: [
+                                         { name: "message", type: "string" }
+                                        ]
+                               }
+                              ]
+                  },
+            else: {
+                   interfaces: [],
+                   databases: []
+                  }
+           }
+  }
+ ]
+}
+
+AJAX_CONDITIONAL_SOURCE_LT =
+{
+ events:
+ [
+  {
+   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+   params: [
+            {
+             name: "message", type: "string",
+             value: { element: "messageTextBox", func: "getValue", type: "element" }
+            }
+           ],
+   action: {
+            type: "conditional",
+            condition: {
+                        operand: "lt",
+                        left: {
+                               type: "param",
+                               value: { name: "message", type: "string" }
+                              },
+                        right: {
+                                type: "literal",
+                                value: { value: "hoge", type: "string" }
+                               }
+                       },
+            then: {
+                   interfaces: [
+                                {
+                                 id: "if01", element: "messageLabel",
+                                 func: "setValue", type: "element",
+                                 params: [
+                                          { name: "message", type: "string" }
+                                         ]
+
+                                }
+                               ],
+                   databases: [
+                               {
+                                id: "db01", database: "messages", func: "create",
+                                params: [
+                                         { name: "message", type: "string" }
+                                        ]
+                               }
+                              ]
+                  },
+            else: {
+                   interfaces: [],
+                   databases: []
+                  }
+           }
+  }
+ ]
+}
+
 REALTIME_ALWAYS_SOURCE =
 {
  events:

@@ -77,7 +77,7 @@ end
         end
       end
 
-      context "with conditional-execute source" do
+      context "with conditional-execute source using equal" do
         subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE[:events].first) }
         it { should be_an_instance_of String }
 
@@ -88,6 +88,99 @@ post "/event01" do
   response = { _db_errors: [] }
   message = params[:message]
   if (message == "hoge")
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+    if response[:_db_errors].length == 0
+      response[:if01] = {}
+      response[:if01][:message] = message
+    end
+    response[:result] = true
+  else
+    if response[:_db_errors].length == 0
+    end
+    response[:result] = false
+  end
+  response.to_json
+end
+                                   EOS
+        end
+      end
+
+      context "with conditional-execute source using not-equal" do
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_NEQ[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render Ruby code" do
+          expect(subject).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = { _db_errors: [] }
+  message = params[:message]
+  if (message != "hoge")
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+    if response[:_db_errors].length == 0
+      response[:if01] = {}
+      response[:if01][:message] = message
+    end
+    response[:result] = true
+  else
+    if response[:_db_errors].length == 0
+    end
+    response[:result] = false
+  end
+  response.to_json
+end
+                                   EOS
+        end
+      end
+
+      context "with conditional-execute source using less-than" do
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_LT[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render Ruby code" do
+          expect(subject).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = { _db_errors: [] }
+  message = params[:message]
+  if (message < "hoge")
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+    if response[:_db_errors].length == 0
+      response[:if01] = {}
+      response[:if01][:message] = message
+    end
+    response[:result] = true
+  else
+    if response[:_db_errors].length == 0
+    end
+    response[:result] = false
+  end
+  response.to_json
+end
+                                   EOS
+        end
+      end
+
+      context "with conditional-execute source using more-than" do
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_GT[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render Ruby code" do
+          expect(subject).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = { _db_errors: [] }
+  message = params[:message]
+  if (message > "hoge")
     db01 = Message.new(
       message: message
     )
