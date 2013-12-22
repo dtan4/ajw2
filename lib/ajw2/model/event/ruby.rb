@@ -130,7 +130,12 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
     end
 
     def delete(database)
-
+      <<-EOS.chomp
+#{database[:id]} = #{database[:database].singularize.capitalize}.where(
+#{indent(params_rb(database[:params], true), 1)}
+)
+#{database[:id]}.destroy
+      EOS
     end
 
     def hash(params)

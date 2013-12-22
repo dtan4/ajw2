@@ -77,6 +77,30 @@ end
         end
       end
 
+      context "with always-execute source which deletes record" do
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_DB_DELETE[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render Ruby code" do
+          expect(subject).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = { _db_errors: [] }
+  message = params[:message]
+  db01 = Message.where(
+    message: message
+  )
+  db01.destroy
+  if response[:_db_errors].length == 0
+    response[:if01] = {}
+    response[:if01][:message] = message
+  end
+  response.to_json
+end
+                                   EOS
+        end
+      end
+
       context "with conditional-execute source using equal" do
         subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE[:events].first) }
         it { should be_an_instance_of String }
