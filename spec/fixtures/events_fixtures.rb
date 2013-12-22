@@ -3,13 +3,15 @@ AJAX_ALWAYS_SOURCE =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "always",
             interfaces: [
@@ -39,13 +41,15 @@ AJAX_ALWAYS_SOURCE_TEXT =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "always",
             interfaces: [
@@ -75,13 +79,15 @@ AJAX_ALWAYS_SOURCE_APPEND =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "always",
             interfaces: [
@@ -120,13 +126,15 @@ AJAX_ALWAYS_SOURCE_READY =
  events:
  [
   {
-   id: "event01", type: "ready", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", type: "ready", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "always",
             interfaces: [
@@ -157,13 +165,15 @@ AJAX_CONDITIONAL_SOURCE =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "conditional",
             condition: {
@@ -211,13 +221,15 @@ AJAX_CONDITIONAL_SOURCE_NEQ =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "conditional",
             condition: {
@@ -265,13 +277,15 @@ AJAX_CONDITIONAL_SOURCE_GT =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "conditional",
             condition: {
@@ -319,13 +333,15 @@ AJAX_CONDITIONAL_SOURCE_LT =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: false,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "conditional",
             condition: {
@@ -373,13 +389,15 @@ REALTIME_ALWAYS_SOURCE =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: true,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: true,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "always",
             interfaces: [
@@ -410,13 +428,15 @@ REALTIME_ALWAYS_SOURCE_READY =
  events:
  [
   {
-   id: "event01", type: "ready", realtime: true,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", type: "ready", realtime: true,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "always",
             interfaces: [
@@ -447,13 +467,15 @@ REALTIME_CONDITIONAL_SOURCE =
  events:
  [
   {
-   id: "event01", target: "submitBtn", type: "onClick", realtime: true,
-   params: [
-            {
-             name: "message", type: "string",
-             value: { element: "messageTextBox", func: "getValue", type: "element" }
-            }
-           ],
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: true,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
    action: {
             type: "conditional",
             condition: {

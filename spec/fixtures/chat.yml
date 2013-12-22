@@ -50,17 +50,18 @@ databases:
       'null': false
 events:
   events:
-  - id: event01
-    target: submitBtn
-    type: onClick
-    realtime: false
-    params:
-    - name: message
-      type: string
-      value:
-        element: messageTextBox
-        func: getValue
-        type: element
+  - trigger:
+      id: event01
+      target: submitBtn
+      type: onClick
+      realtime: false
+      params:
+      - name: message
+        type: string
+        value:
+          element: messageTextBox
+          func: getValue
+          type: element
     action:
       type: always
       interfaces:

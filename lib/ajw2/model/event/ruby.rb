@@ -3,11 +3,12 @@ module Ajw2::Model::Event
     include Ajw2::Util
 
     def render_realtime(event)
+      trigger = event[:trigger]
       <<-EOS
-when "#{event[:id]}"
+when "#{trigger[:id]}"
   response[:_db_errors] = []
-  response[:_event] = "#{event[:id]}"
-#{indent(params_rb(event[:params]), 1)}
+  response[:_event] = "#{trigger[:id]}"
+#{indent(params_rb(trigger[:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   EventMachine.next_tick do
     settings.sockets.each { |s| s.send(response.to_json) }
@@ -16,11 +17,12 @@ when "#{event[:id]}"
     end
 
     def render_ajax(event)
+      trigger = event[:trigger]
       <<-EOS
-post "/#{event[:id]}" do
+post "/#{trigger[:id]}" do
   content_type :json
   response = { _db_errors: [] }
-#{indent(params_rb(event[:params]), 1)}
+#{indent(params_rb(trigger[:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   response.to_json
 end

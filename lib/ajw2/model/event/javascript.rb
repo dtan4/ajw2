@@ -3,51 +3,60 @@ module Ajw2::Model::Event
     include Ajw2::Util
 
     def render_ajax(event)
-      if event[:type] == "ready"
-        js_body_ajax(event)
+      trigger = event[:trigger]
+      action = event[:action]
+
+      if trigger[:type] == "ready"
+        js_body_ajax(trigger, action)
       else
         <<-EOS
-$('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
-#{indent(js_body_ajax(event), 1)}
+$('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
+#{indent(js_body_ajax(trigger, action), 1)}
 });
         EOS
       end
     end
 
     def render_realtime(event)
-      if event[:type] == "ready"
-        js_body_realtime(event)
+      trigger = event[:trigger]
+      action = event[:action]
+
+      if trigger[:type] == "ready"
+        js_body_realtime(trigger, action)
       else
         <<-EOS
-$('\##{event[:target]}').#{trigger_function(event[:type])}(function() {
-#{indent(js_body_realtime(event), 1)}
+$('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
+#{indent(js_body_realtime(trigger, action), 1)}
 });
         EOS
       end
     end
 
     def render_onmessage(event)
+      trigger = event[:trigger]
+      action = event[:action]
+
       <<-EOS
-case '#{event[:id]}':
-#{indent(action_js(event[:action]), 1)}
+case '#{trigger[:id]}':
+#{indent(action_js(action), 1)}
   break;
       EOS
     end
 
     private
 
-    def js_body_ajax(event)
+    def js_body_ajax(trigger, action)
       <<-EOS
-#{params_js(event[:params])}
+#{params_js(trigger[:params])}
 $.ajax({
   type: 'POST',
-  url: '/#{event[:id]}',
-  data: { #{params_json(event[:params])} },
+  url: '/#{trigger[:id]}',
+  data: { #{params_json(trigger[:params])} },
   beforeSend: function(_xhr) {
     _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
   },
   success: function(_msg) {
-#{indent(action_js(event[:action]), 2)}
+#{indent(action_js(action), 2)}
   },
   error: function(_xhr, _msg) {
     alert('XMLHttpRequest Error: ' + _msg);
@@ -56,11 +65,11 @@ $.ajax({
        EOS
     end
 
-    def js_body_realtime(event)
+    def js_body_realtime(trigger, action)
       <<-EOS
-#{params_js(event[:params])}
-var params = { #{params_json(event[:params])} };
-var request = { 'func': '#{event[:id]}', 'params': params };
+#{params_js(trigger[:params])}
+var params = { #{params_json(trigger[:params])} };
+var request = { 'func': '#{trigger[:id]}', 'params': params };
 ws.send(JSON.stringify(request));
       EOS
     end
