@@ -80,6 +80,7 @@ events:
       - id: db01
         database: messages
         func: create
-        params:
+        params: []
+        properties:
         - name: message
           type: string

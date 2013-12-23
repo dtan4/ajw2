@@ -122,7 +122,7 @@ EOS
     def create(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.new(
-#{indent(params_rb(database[:params], true), 1)}
+#{indent(params_rb(database[:properties], true), 1)}
 )
 response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
       EOS
