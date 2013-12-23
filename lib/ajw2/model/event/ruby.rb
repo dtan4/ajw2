@@ -1,7 +1,11 @@
 module Ajw2::Model::Event
+  # Generate Ruby code from Events model
   class Ruby
     include Ajw2::Util
 
+    # Generate Ruby code using WebSocket
+    # @param [Hash] event Events model description
+    # @return [String] Ruby code
     def render_realtime(event)
       trigger = event[:trigger]
       <<-EOS
@@ -16,6 +20,9 @@ when "#{trigger[:id]}"
       EOS
     end
 
+    # Generate Ruby code using Ajax
+    # @param [Hash] event Events model description
+    # @return [String] Ruby code
     def render_ajax(event)
       trigger = event[:trigger]
       <<-EOS

@@ -1,6 +1,7 @@
 require "erb"
 
 module Ajw2::Model
+  # Generate source code from Interfaces model
   class Interfaces
     include Ajw2::Util
 
@@ -11,11 +12,15 @@ module Ajw2::Model
 
     attr_reader :source
 
+    # Initializer
+    # @param [Hash] source entire model description
     def initialize(source)
       raise ArgumentError, "Interfaces section must be a Hash" unless source.class == Hash
       @source = source
     end
 
+    # Generate Slim template
+    # @return [Array] collection of generated code
     def render
       raise "/interfaces/elements is not found" unless @source[:elements]
 

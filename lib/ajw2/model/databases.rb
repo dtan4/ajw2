@@ -1,29 +1,39 @@
 require "active_support/inflector"
 
 module Ajw2::Model
+  # Generate source code from Databases model
   class Databases
     include Ajw2::Util
 
     attr_reader :source
 
+    # Initializer
+    # @param [Hash] source entire model description
     def initialize(source)
       raise ArgumentError, "Databases section must be a Hash" unless source.class == Hash
       @source = source
     end
 
+    # Generate Ruby code which does database migration
+    # @return [Array] collection of generated code
     def render_migration
       raise "/databases/database is not found" unless @source[:database]
 
       @source[:database].inject([]) { |migration, table| migration << render_migration_table(table) }
     end
 
+    # Generate Ruby code which defines ActiveRecord model
+    # @return [Array] collection of generated code
     def render_definition
       raise "/databases/database is not found" unless @source[:database]
 
       @source[:database].inject([]) { |definition, table| definition << render_definition_table(table) }
     end
 
+    # Generate YAML which sets up database
+    # @return [String] YAML
     def render_config(env, application)
+
       raise "/databases/dbType is not found" unless @source[:dbType]
 
       case @source[:dbType]

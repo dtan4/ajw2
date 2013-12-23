@@ -4,11 +4,15 @@ require "yaml"
 require "ajw2/util"
 
 module Ajw2
+  # Model description
   class Description
     include Ajw2::Util
 
     attr_reader :application, :interfaces, :databases, :events
 
+    # Parse given file
+    # @param [String] path path to model description (JSON or YAML)
+    # @return [Hash] Hash of model description created from given file
     def parse(path)
       case File.extname(path)
       when /^\.json$/i then parse_json(path)

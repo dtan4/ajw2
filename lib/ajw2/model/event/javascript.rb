@@ -1,7 +1,11 @@
 module Ajw2::Model::Event
+  # Generate Ruby code from Events model
   class JavaScript
     include Ajw2::Util
 
+    # Generate JavaScript code using Ajax
+    # @param [Hash] event Events model description
+    # @return [String] JavaScript code
     def render_ajax(event)
       trigger = event[:trigger]
       action = event[:action]
@@ -17,6 +21,9 @@ $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
       end
     end
 
+    # Generate JavaScript code using WebSocket
+    # @param [Hash] event Events model description
+    # @return [String] JavaScript code
     def render_realtime(event)
       trigger = event[:trigger]
       action = event[:action]
@@ -32,6 +39,9 @@ $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
       end
     end
 
+    # Generate JavaScript code which receives message via WebSocket
+    # @param [Hash] event Events model description
+    # @return [String] JavaScript code
     def render_onmessage(event)
       trigger = event[:trigger]
       action = event[:action]

@@ -3,6 +3,7 @@ require "fileutils"
 require "ajw2/util"
 
 module Ajw2
+  # Generate source code from model description
   class Generator
     include Ajw2::Util
 
@@ -10,6 +11,11 @@ module Ajw2
 
     TEMPLATE_DIR = File.expand_path("../templates", __FILE__)
 
+    # Initializer
+    # @param [Ajw2::Model::Application] application Application settings generator
+    # @param [Ajw2::Model::Interfaces] interfaces Interfaces model generator
+    # @param [Ajw2::Model::Databases] databases Databases model generator
+    # @param [Ajw2::Model::Events] events Events settings generator
     def initialize(application, interfaces, databases, events)
       @application = application
       @interfaces = interfaces
@@ -17,6 +23,8 @@ module Ajw2
       @events = events
     end
 
+    # Execute generation
+    # @param [String] out_dir directory path to output files
     def generate(out_dir)
       raise Exception if Dir.exists? out_dir
 
