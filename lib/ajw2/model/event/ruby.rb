@@ -7,6 +7,9 @@ module Ajw2::Model::Event
     # @param [Hash] event Events model description
     # @return [String] Ruby code
     def render_realtime(event)
+      raise "event/trigger is not found" unless event[:trigger]
+      raise "event/action is not found" unless event[:action]
+
       trigger = event[:trigger]
       <<-EOS
 when "#{trigger[:id]}"
@@ -24,6 +27,9 @@ when "#{trigger[:id]}"
     # @param [Hash] event Events model description
     # @return [String] Ruby code
     def render_ajax(event)
+      raise "event/trigger is not found" unless event[:trigger]
+      raise "event/action is not found" unless event[:action]
+
       trigger = event[:trigger]
       <<-EOS
 post "/#{trigger[:id]}" do

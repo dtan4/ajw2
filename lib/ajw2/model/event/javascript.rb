@@ -7,6 +7,9 @@ module Ajw2::Model::Event
     # @param [Hash] event Events model description
     # @return [String] JavaScript code
     def render_ajax(event)
+      raise "event/trigger is not found" unless event[:trigger]
+      raise "event/action is not found" unless event[:action]
+
       trigger = event[:trigger]
       action = event[:action]
 
@@ -25,6 +28,9 @@ $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
     # @param [Hash] event Events model description
     # @return [String] JavaScript code
     def render_realtime(event)
+      raise "event/trigger is not found" unless event[:trigger]
+      raise "event/action is not found" unless event[:action]
+
       trigger = event[:trigger]
       action = event[:action]
 
@@ -43,12 +49,12 @@ $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
     # @param [Hash] event Events model description
     # @return [String] JavaScript code
     def render_onmessage(event)
-      trigger = event[:trigger]
-      action = event[:action]
+      raise "event/trigger is not found" unless event[:trigger]
+      raise "event/action is not found" unless event[:action]
 
       <<-EOS
-case '#{trigger[:id]}':
-#{indent(action_js(action), 1)}
+case '#{event[:trigger][:id]}':
+#{indent(action_js(event[:action]), 1)}
   break;
       EOS
     end
