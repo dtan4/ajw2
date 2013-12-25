@@ -44,10 +44,25 @@ end
 
     private
 
+    def literal_value(param)
+      case param[:value]
+      when "integer", "decimal", "boolean"
+        param[:value][:value]
+      else
+        "\"#{param[:value][:value]}\""
+      end
+    end
+
     def params_rb(params, hash = false)
       params.inject([]) do |result, param|
-        result <<
-          (hash ? "#{param[:name]}: #{param[:name]}" : "#{param[:name]} = params[:#{param[:name]}]")
+        result << case param[:value][:type]
+                  when "element"
+                    (hash ? "#{param[:name]}: #{param[:name]}" :
+                     "#{param[:name]} = params[:#{param[:name]}]")
+                  when "literal"
+                    (hash ? "#{param[:name]}: \"#{param[:value][:value]}\"" :
+                     "#{param[:name]} = #{literal_value(param)}")
+                  end
         result
       end.join("\n")
     end
