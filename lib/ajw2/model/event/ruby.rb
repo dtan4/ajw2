@@ -126,6 +126,13 @@ EOS
       end.join(", ")
     end
 
+    def update_record(record, array)
+      array.inject([]) do |result, pair|
+        result << "#{record}.#{pair[:field]} = #{pair[:param]}"
+        result
+      end.join("\n")
+    end
+
     def create(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.new(
@@ -140,7 +147,13 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
     end
 
     def update(database)
-
+      <<-EOS.chomp
+#{database[:id]} = #{database[:database].singularize.capitalize}.where(
+#{indent(field_param(database[:where]), 1)}
+)
+#{update_record(database[:id], database[:fields])}
+response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
+      EOS
     end
 
     def delete(database)

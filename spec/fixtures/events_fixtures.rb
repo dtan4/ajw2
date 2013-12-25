@@ -164,6 +164,51 @@ AJAX_ALWAYS_SOURCE_READY =
  ]
 }
 
+AJAX_ALWAYS_SOURCE_DB_UPDATE =
+{
+ events:
+ [
+  {
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "string",
+                       value: { element: "messageTextBox", func: "getValue", type: "element" }
+                      },
+                      {
+                       name: "newMessage", type: "string",
+                       value: { element: "newMessageTextBox", func: "getValue", type: "element" }
+                      }
+                     ]
+            },
+   action: {
+            type: "always",
+            interfaces: [
+                         {
+                          id: "if01", element: "messageLabel",
+                          func: "setValue", type: "element",
+                          params: [
+                                   { name: "message", type: "string" }
+                                  ]
+                         }
+                        ],
+            databases: [
+                        {
+                         id: "db01", database: "messages", func: "update",
+                         where: [
+                                 { field: "message", param: "message" }
+                                ],
+                         fields: [
+                                  { field: "message", param: "newMessage" }
+                                 ]
+                        }
+                       ]
+           }
+  }
+ ]
+}
+
 AJAX_ALWAYS_SOURCE_DB_DELETE =
 {
  events:
