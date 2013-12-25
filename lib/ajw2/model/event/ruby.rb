@@ -119,10 +119,17 @@ EOS
       end
     end
 
+    def field_param(array)
+      array.inject([]) do |result, pair|
+        result << "#{pair[:field]}: #{pair[:param]}"
+        result
+      end.join(", ")
+    end
+
     def create(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.new(
-#{indent(params_rb(database[:properties], true), 1)}
+#{indent(field_param(database[:fields]), 1)}
 )
 response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
       EOS
@@ -139,7 +146,7 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
     def delete(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.where(
-#{indent(params_rb(database[:params], true), 1)}
+#{indent(field_param(database[:where]), 1)}
 )
 #{database[:id]}.destroy
       EOS

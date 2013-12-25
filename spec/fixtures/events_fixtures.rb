@@ -26,9 +26,9 @@ AJAX_ALWAYS_SOURCE =
             databases: [
                         {
                          id: "db01", database: "messages", func: "create",
-                         params: [],
-                         properties: [
-                                  { name: "message", type: "string" }
+                         where: [],
+                         fields: [
+                                  { field: "message", param: "message" }
                                  ]
                         }
                        ]
@@ -65,10 +65,10 @@ AJAX_ALWAYS_SOURCE_TEXT =
             databases: [
                         {
                          id: "db01", database: "messages", func: "create",
-                         params: [],
-                         properties: [
-                                      { name: "message", type: "string" }
-                                     ]
+                         where: [],
+                         fields: [
+                                  { field: "message", param: "message" }
+                                 ]
                         }
                        ]
            }
@@ -113,10 +113,10 @@ AJAX_ALWAYS_SOURCE_APPEND =
             databases: [
                         {
                          id: "db01", database: "messages", func: "create",
-                         params: [],
-                         properties: [
-                                      { name: "message", type: "string" }
-                                     ]
+                         where: [],
+                         fields: [
+                                  { field: "message", param: "message" }
+                                 ]
                         }
                        ]
            }
@@ -153,10 +153,10 @@ AJAX_ALWAYS_SOURCE_READY =
             databases: [
                         {
                          id: "db01", database: "messages", func: "create",
-                         params: [],
-                         properties: [
-                                      { name: "message", type: "string" }
-                                     ]
+                         where: [],
+                         fields: [
+                                  { field: "message", param: "message" }
+                                 ]
                         }
                        ]
            }
@@ -192,10 +192,10 @@ AJAX_ALWAYS_SOURCE_DB_DELETE =
             databases: [
                         {
                          id: "db01", database: "messages", func: "delete",
-                         params: [
-                                  { name: "message", type: "string" }
-                                 ],
-                         properties: []
+                         where: [
+                                 { field: "message", param: "message" }
+                                ],
+                         fields: []
                         }
                        ]
            }
@@ -244,10 +244,10 @@ AJAX_CONDITIONAL_SOURCE =
                    databases: [
                                {
                                 id: "db01", database: "messages", func: "create",
-                                params: [],
-                                properties: [
-                                             { name: "message", type: "string" }
-                                            ]
+                                where: [],
+                                fields: [
+                                         { field: "message", param: "message" }
+                                        ]
                                }
                               ]
                   },
@@ -301,10 +301,10 @@ AJAX_CONDITIONAL_SOURCE_NEQ =
                    databases: [
                                {
                                 id: "db01", database: "messages", func: "create",
-                                params: [],
-                                properties: [
-                                             { name: "message", type: "string" }
-                                            ]
+                                where: [],
+                                fields: [
+                                         { field: "message", param: "message" }
+                                        ]
                                }
                               ]
                   },
@@ -358,10 +358,10 @@ AJAX_CONDITIONAL_SOURCE_GT =
                    databases: [
                                {
                                 id: "db01", database: "messages", func: "create",
-                                params: [],
-                                properties: [
-                                             { name: "message", type: "string" }
-                                            ]
+                                where: [],
+                                fields: [
+                                         { field: "message", param: "message" }
+                                        ]
                                }
                               ]
                   },
@@ -415,10 +415,10 @@ AJAX_CONDITIONAL_SOURCE_LT =
                    databases: [
                                {
                                 id: "db01", database: "messages", func: "create",
-                                params: [],
-                                properties: [
-                                             { name: "message", type: "string" }
-                                            ]
+                                where: [],
+                                fields: [
+                                         { field: "message", param: "message" }
+                                        ]
                                }
                               ]
                   },
@@ -460,10 +460,10 @@ REALTIME_ALWAYS_SOURCE =
             databases: [
                         {
                          id: "db01", database: "messages", func: "create",
-                         params: [],
-                         properties: [
-                                      { name: "message", type: "string" }
-                                     ]
+                         where: [],
+                         fields: [
+                                  { field: "message", param: "message" }
+                                 ]
                         }
                        ]
            }
@@ -500,10 +500,10 @@ REALTIME_ALWAYS_SOURCE_READY =
             databases: [
                         {
                          id: "db01", database: "messages", func: "create",
-                         params: [],
-                         properties: [
-                                      { name: "message", type: "string" }
-                                     ]
+                         where: [],
+                         fields: [
+                                  { field: "message", param: "message" }
+                                 ]
                         }
                        ]
            }
@@ -546,16 +546,15 @@ REALTIME_CONDITIONAL_SOURCE =
                                  params: [
                                           { name: "message", type: "string" }
                                          ]
-
                                 }
                                ],
                    databases: [
                                {
                                 id: "db01", database: "messages", func: "create",
-                                params: [],
-                                properties: [
-                                             { name: "message", type: "string" }
-                                            ]
+                                where: [],
+                                fields: [
+                                         { field: "message", param: "message" }
+                                        ]
                                }
                               ]
                   },

@@ -132,11 +132,11 @@
                             "id": "db01",
                             "database": "messages",
                             "func": "create",
-                            "params": [],
-                            "properties": [
+                            "where": [],
+                            "fields": [
                                 {
-                                    "name": "message",
-                                    "type": "string"
+                                    "field": "message",
+                                    "param": "message"
                                 }
                             ]
                         }
