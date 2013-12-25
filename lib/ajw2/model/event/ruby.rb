@@ -165,10 +165,6 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
       EOS
     end
 
-    def hash(params)
-
-    end
-
     def interfaces_rb(interfaces)
       interfaces.inject([]) do |result, interface|
         result << <<-EOS
