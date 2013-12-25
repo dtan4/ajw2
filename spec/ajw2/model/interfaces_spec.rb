@@ -4,32 +4,33 @@ module Ajw2::Model
   describe Interfaces do
     let(:source) {
       {
-       type: "slim",
-       pretty: true,
-       elements:
-       [
-        {
-         type: "panel",
-         id: "rootPanel",
-         children: [
-                    {
-                     type: "label",
-                     value: "Chat Application",
-                     id: "label0",
-                    },
-                    {
-                     type: "text",
-                     id: "userIdTextbox",
-                     placeholder: "user name",
-                    },
-                    {
-                     type: "button",
-                     value: "Selection",
-                     id: "selectButton",
-                    }
-                   ]
-        }
-       ]
+       type: "slim", pretty: true,
+       elements: [
+                  {
+                   type: "panel", id: "rootPanel",
+                   children: [
+                              { type: "label", value: "Chat Application", id: "label0" },
+                              { type: "text", id: "userIdTextbox", placeholder: "user name" },
+                              { type: "button", value: "Selection", id: "selectButton" }
+                             ]
+                  }
+                 ]
+      }
+    }
+
+    let(:dirty_source) {
+      {
+       type: "slim", pretty: true,
+       elements: [
+                  {
+                   type: "panel", id: "rootPanel",
+                   children: [
+                              { type: "label", value: "<script>alert('xss');</script>", id: "label0" },
+                              { type: "text", id: "userIdTextbox", placeholder: '<script>alert("xss");</script>' },
+                              { type: "button", value: "Selection", id: "selectButton" }
+                             ]
+                  }
+                 ]
       }
     }
 
@@ -65,15 +66,7 @@ EOS
       end
 
       context "with dirty source (include XSS)" do
-        before do
-          @dirty_source = source
-          @dirty_source[:elements][0][:children][0][:value] =
-            "<script>alert('xss');</script>"
-          @dirty_source[:elements][0][:children][1][:placeholder] =
-            '<script>alert("xss");</script>'
-        end
-
-        subject { Ajw2::Model::Interfaces.new(source).render }
+        subject { Ajw2::Model::Interfaces.new(dirty_source).render }
         it { should be_an_instance_of String }
 
         it "should return escaped Slim template" do
