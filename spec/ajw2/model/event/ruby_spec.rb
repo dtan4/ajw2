@@ -53,8 +53,8 @@ end
         end
       end
 
-      context "with always-execute source which sets raw literal" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_LITERAL[:events].first) }
+      context "with always-execute source which sets string literal" do
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_STRING_LITERAL[:events].first) }
         it { should be_an_instance_of String }
 
         it "should render Ruby code" do
@@ -63,6 +63,30 @@ post "/event01" do
   content_type :json
   response = { _db_errors: [] }
   message = "rawValue"
+  db01 = Message.new(
+    message: message
+  )
+  response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+  if response[:_db_errors].length == 0
+    response[:if01] = {}
+    response[:if01][:message] = message
+  end
+  response.to_json
+end
+                                   EOS
+        end
+      end
+
+      context "with always-execute source which sets integer literal" do
+        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_INTEGER_LITERAL[:events].first) }
+        it { should be_an_instance_of String }
+
+        it "should render Ruby code" do
+          expect(subject).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = { _db_errors: [] }
+  message = 42
   db01 = Message.new(
     message: message
   )

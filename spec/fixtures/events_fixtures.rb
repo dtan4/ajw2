@@ -76,7 +76,7 @@ AJAX_ALWAYS_SOURCE_TEXT =
  ]
 }
 
-AJAX_ALWAYS_SOURCE_LITERAL =
+AJAX_ALWAYS_SOURCE_STRING_LITERAL =
 {
  events:
  [
@@ -87,6 +87,45 @@ AJAX_ALWAYS_SOURCE_LITERAL =
                       {
                        name: "message", type: "string",
                        value: { value: "rawValue", type: "literal" }
+                      }
+                     ]
+            },
+   action: {
+            type: "always",
+            interfaces: [
+                         {
+                          id: "if01", element: "messageLabel",
+                          func: "setValue", type: "element",
+                          params: [
+                                   { name: "message", type: "string" }
+                                  ]
+                         }
+                        ],
+            databases: [
+                        {
+                         id: "db01", database: "messages", func: "create",
+                         where: [],
+                         fields: [
+                                  { field: "message", param: "message" }
+                                 ]
+                        }
+                       ]
+           }
+  }
+ ]
+}
+
+AJAX_ALWAYS_SOURCE_INTEGER_LITERAL =
+{
+ events:
+ [
+  {
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "message", type: "integer",
+                       value: { value: "42", type: "literal" }
                       }
                      ]
             },

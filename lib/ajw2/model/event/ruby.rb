@@ -45,7 +45,7 @@ end
     private
 
     def literal_value(param)
-      case param[:value]
+      case param[:type]
       when "integer", "decimal", "boolean"
         param[:value][:value]
       else
