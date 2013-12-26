@@ -5,12 +5,13 @@ module Ajw2::Model::Event
     before(:all) { load File.expand_path("../../../../fixtures/events_fixtures.rb", __FILE__) unless defined? AJAX_ALWAYS_SOURCE }
 
     describe "#render_ajax" do
-      context "with always-execute source which sets element value" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE[:events].first) }
-        it { should be_an_instance_of String }
+      context "with always-execute source" do
+        context "which sets element value" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -26,15 +27,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which sets element text" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_TEXT[:events].first) }
-        it { should be_an_instance_of String }
+        context "which sets element text" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_TEXT[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -50,15 +51,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which sets string literal" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_STRING_LITERAL[:events].first) }
-        it { should be_an_instance_of String }
+        context "which sets string literal" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_STRING_LITERAL[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -74,15 +75,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which sets integer literal" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_INTEGER_LITERAL[:events].first) }
-        it { should be_an_instance_of String }
+        context "which sets integer literal" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_INTEGER_LITERAL[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -98,15 +99,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which appends elements" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_APPEND[:events].first) }
-        it { should be_an_instance_of String }
+        context "which appends elements" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_APPEND[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -122,15 +123,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which updates record" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_DB_UPDATE[:events].first) }
-        it { should be_an_instance_of String }
+        context "which updates record" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_DB_UPDATE[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -148,15 +149,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which deletes record" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_DB_DELETE[:events].first) }
-        it { should be_an_instance_of String }
+        context "which deletes record" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_DB_DELETE[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -172,15 +173,17 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
       end
 
-      context "with conditional-execute source using equal" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE[:events].first) }
-        it { should be_an_instance_of String }
+      context "with conditional-execute source" do
+        context "using equal" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -203,15 +206,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with conditional-execute source using not-equal" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_NEQ[:events].first) }
-        it { should be_an_instance_of String }
+        context "using not-equal" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_NEQ[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -234,15 +237,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with conditional-execute source using less-than" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_LT[:events].first) }
-        it { should be_an_instance_of String }
+        context "using less-than" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_LT[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -265,15 +268,15 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
-      end
 
-      context "with conditional-execute source using more-than" do
-        subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_GT[:events].first) }
-        it { should be_an_instance_of String }
+        context "using more-than" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_CONDITIONAL_SOURCE_GT[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render Ruby code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
 post "/event01" do
   content_type :json
   response = { _db_errors: [] }
@@ -296,6 +299,7 @@ post "/event01" do
   response.to_json
 end
                                    EOS
+          end
         end
       end
     end

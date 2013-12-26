@@ -5,12 +5,13 @@ module Ajw2::Model::Event
     before(:all) { load File.expand_path("../../../../fixtures/events_fixtures.rb", __FILE__) unless defined? AJAX_ALWAYS_SOURCE }
 
     describe "#render_ajax" do
-      context "with always-execute source which sets element value" do
-        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE[:events].first) }
-        it { should be_an_instance_of String }
+      context "with always-execute source" do
+        context "which sets element value" do
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render JavaScript code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render JavaScript code" do
+            expect(subject).to eq(<<-EOS)
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   $.ajax({
@@ -33,15 +34,15 @@ $('#submitBtn').click(function() {
   });
 });
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which sets element text" do
-        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE_TEXT[:events].first) }
-        it { should be_an_instance_of String }
+        context "which sets element text" do
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE_TEXT[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render JavaScript code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render JavaScript code" do
+            expect(subject).to eq(<<-EOS)
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   $.ajax({
@@ -64,15 +65,15 @@ $('#submitBtn').click(function() {
   });
 });
                                    EOS
+          end
         end
-      end
 
-      context "with always-execute source which appends elements" do
-        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE_APPEND[:events].first) }
-        it { should be_an_instance_of String }
+        context "which appends elements" do
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(AJAX_ALWAYS_SOURCE_APPEND[:events].first) }
+          it { should be_an_instance_of String }
 
-        it "should render JavaScript code" do
-          expect(subject).to eq(<<-EOS)
+          it "should render JavaScript code" do
+            expect(subject).to eq(<<-EOS)
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   $.ajax({
@@ -95,6 +96,7 @@ $('#submitBtn').click(function() {
   });
 });
                                    EOS
+          end
         end
       end
 

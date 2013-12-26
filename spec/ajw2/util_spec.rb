@@ -37,39 +37,43 @@ describe Ajw2::Util do
   end
 
   describe "#valid_hash?" do
-    context "with valid Hash contains only ascii-char" do
-      subject { @dummy.valid_hash?({ hoge: "fuga", foo: "bar" }) }
-      it { should be_true }
-    end
+    context "with valid Hash" do
+      context "contains only ascii-char" do
+        subject { @dummy.valid_hash?({ hoge: "fuga", foo: "bar" }) }
+        it { should be_true }
+      end
 
-    context "with valid Hash contains breakline" do
-      subject { @dummy.valid_hash?({ hoge: "fuga\npiyo", foo: "bar" }) }
-      it { should be_true }
-    end
+      context "contains breakline" do
+        subject { @dummy.valid_hash?({ hoge: "fuga\npiyo", foo: "bar" }) }
+        it { should be_true }
+      end
 
-    context "with valid Hash contains Unicode char" do
-      subject { @dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }) }
-      it { should be_true }
-    end
+      context "contains Unicode char" do
+        subject { @dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }) }
+        it { should be_true }
+      end
 
-    context "with valid Hash contains Array" do
-      subject { @dummy.valid_hash?({ hoge: "fuga", foo: [{ foo: "bar" }, { baz: "moo" }] }) }
-      it { should be_true }
-    end
+      context "contains Array" do
+        subject { @dummy.valid_hash?({ hoge: "fuga", foo: [{ foo: "bar" }, { baz: "moo" }] }) }
+        it { should be_true }
+      end
 
-    context "with valid deep Hash" do
-      subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "baz" } }) }
-      it { should be_true }
+      context "contains Hash" do
+        subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "baz" } }) }
+        it { should be_true }
+      end
     end
 
     context "with invalid hash" do
-      subject { @dummy.valid_hash?({ hoge: "fu'ga", foo: "bar" }) }
-      it { should be_false }
-    end
+      context "contains only String" do
+        subject { @dummy.valid_hash?({ hoge: "fu'ga", foo: "bar" }) }
+        it { should be_false }
+      end
 
-    context "with invalid deep hash" do
-      subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "ba'z" } }) }
-      it { should be_false }
+      context "contains hash" do
+        subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "ba'z" } }) }
+        it { should be_false }
+      end
     end
 
     context "with regexp" do
