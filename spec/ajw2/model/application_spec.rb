@@ -76,5 +76,33 @@ script src="/js/ext/main.js"
                               EOS
       end
     end
+
+    describe "#external_files" do
+      context "when type is :css" do
+        subject { Ajw2::Model::Application.new(source).external_files(:css) }
+        it { should be_kind_of Array }
+
+        it "should return the list of external CSS files" do
+          expect(subject).to eq ["application.css", "main.css"]
+        end
+      end
+
+      context "when type is :js" do
+        subject { Ajw2::Model::Application.new(source).external_files(:js) }
+        it { should be_kind_of Array }
+
+        it "should return the list of external JavaScript files" do
+          expect(subject).to eq ["application.js", "main.js"]
+        end
+      end
+
+      context "when type is unknown" do
+        subject { Ajw2::Model::Application.new(source).external_files(:hoge) }
+
+        it "should raise ArgumentError" do
+          expect { subject }.to raise_error ArgumentError
+        end
+      end
+    end
   end
 end

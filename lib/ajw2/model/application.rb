@@ -42,5 +42,10 @@ title
         result << "script src=\"/js/ext/#{File.basename(js)}\""
       end.join("\n") + "\n"
     end
+
+    def external_files(type)
+      raise ArgumentError unless [:css, :js].include? type
+      @source[type]
+    end
   end
 end
