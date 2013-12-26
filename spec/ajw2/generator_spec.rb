@@ -82,11 +82,11 @@ module Ajw2
           FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
           @events = double("events",
-                         render_rb_ajax: RENDER_RB_AJAX,
-                         render_rb_realtime: RENDER_RB_REALTIME,
-                         render_js_ajax: RENDER_JS_AJAX,
-                         render_js_realtime: RENDER_JS_REALTIME,
-                         render_js_onmessage: RENDER_JS_ONMESSAGE)
+                           render_rb_ajax: RENDER_RB_AJAX,
+                           render_rb_realtime: RENDER_RB_REALTIME,
+                           render_js_ajax: RENDER_JS_AJAX,
+                           render_js_realtime: RENDER_JS_REALTIME,
+                           render_js_onmessage: RENDER_JS_ONMESSAGE)
           @generator =
             Ajw2::Generator.new(@application, @interfaces, @databases, @events)
           @generator.generate(@outdir)
@@ -108,11 +108,11 @@ module Ajw2
           FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
           @events = double("events",
-                         render_rb_ajax: RENDER_RB_AJAX,
-                         render_rb_realtime: [],
-                         render_js_ajax: RENDER_JS_AJAX,
-                         render_js_realtime: [],
-                         render_js_onmessage: [])
+                           render_rb_ajax: RENDER_RB_AJAX,
+                           render_rb_realtime: [],
+                           render_js_ajax: RENDER_JS_AJAX,
+                           render_js_realtime: [],
+                           render_js_onmessage: [])
           @generator =
             Ajw2::Generator.new(@application, @interfaces, @databases, @events)
           @generator.generate(@outdir)
@@ -134,11 +134,11 @@ module Ajw2
           FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
           @events = double("events",
-                         render_rb_ajax: [],
-                         render_rb_realtime: RENDER_RB_REALTIME,
-                         render_js_ajax: [],
-                         render_js_realtime: RENDER_JS_REALTIME,
-                         render_js_onmessage: RENDER_JS_ONMESSAGE)
+                           render_rb_ajax: [],
+                           render_rb_realtime: RENDER_RB_REALTIME,
+                           render_js_ajax: [],
+                           render_js_realtime: RENDER_JS_REALTIME,
+                           render_js_onmessage: RENDER_JS_ONMESSAGE)
           @generator =
             Ajw2::Generator.new(@application, @interfaces, @databases, @events)
           @generator.generate(@outdir)
@@ -160,11 +160,11 @@ module Ajw2
           FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
           @events = double("events",
-                         render_rb_ajax: [],
-                         render_rb_realtime: [],
-                         render_js_ajax: [],
-                         render_js_realtime: [],
-                         render_js_onmessage: [])
+                           render_rb_ajax: [],
+                           render_rb_realtime: [],
+                           render_js_ajax: [],
+                           render_js_realtime: [],
+                           render_js_onmessage: [])
           @generator =
             Ajw2::Generator.new(@application, @interfaces, @databases, @events)
           @generator.generate(@outdir)
@@ -186,8 +186,8 @@ module Ajw2
           FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
           @databases = double("databases",
-                            render_migration: "hoge",
-                            render_definition: "hoge")
+                              render_migration: "hoge",
+                              render_definition: "hoge")
           @generator =
             Ajw2::Generator.new(@application, @interfaces, @databases, @events)
         end
