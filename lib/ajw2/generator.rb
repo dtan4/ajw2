@@ -25,7 +25,7 @@ module Ajw2
 
     # Execute generation
     # @param [String] out_dir directory path to output files
-    def generate(out_dir)
+    def generate(out_dir, external_file_dir)
       raise Exception if Dir.exists? out_dir
 
       begin
@@ -42,6 +42,7 @@ module Ajw2
         ].each { |file| generate_file(file, out_dir) }
 
         generate_migration_files(out_dir)
+        copy_external_files(out_dir, external_file_dir)
       rescue Exception => e
         FileUtils.rm_rf(out_dir) if Dir.exists?(out_dir)
         raise e
@@ -83,6 +84,16 @@ module Ajw2
         erb = ERB.new(open(template_path("db/migrate/migration.rb.erb")).read)
         file = "db/migrate/" << "%.3d" % (idx + 1) << "_create_#{migration[:tablename]}.rb"
         open(destination_path(file, dir), "w") { |f| f.puts erb.result(binding) }
+      end
+    end
+
+    def copy_external_files(outdir, external_file_dir)
+      [:css, :js].each do |type|
+        dir = File.expand_path("public/#{type.to_s}", outdir)
+        FileUtils.mkdir_p(dir) unless Dir.exists?(dir)
+        FileUtils.cp(@application.external_files(type).map do |file|
+                       File.expand_path(file, external_file_dir)
+                     end, dir)
       end
     end
   end

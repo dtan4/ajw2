@@ -18,6 +18,8 @@ module Ajw2
                               render_css_include: RENDER_CSS_INCLUDE,
                               render_js_include: RENDER_JS_INCLUDE,
                               name: "sample")
+        @application.stub(:external_files).with(:js).and_return([])
+        @application.stub(:external_files).with(:css).and_return([])
 
         @interfaces = double("interfaces",
                              render: "h1 sample")
@@ -31,6 +33,7 @@ module Ajw2
         end
 
         @outdir = File.expand_path("../tmp", __FILE__)
+        @external_file_dir = File.expand_path("../ext_dir_tmp", __FILE__)
       end
 
       context "with non-existed outdir" do
@@ -90,7 +93,7 @@ module Ajw2
                              render_js_onmessage: RENDER_JS_ONMESSAGE)
             @generator =
               Ajw2::Generator.new(@application, @interfaces, @databases, @events)
-            @generator.generate(@outdir)
+            @generator.generate(@outdir, @external_file_dir)
           end
 
           it_behaves_like "generates successfully"
@@ -116,7 +119,7 @@ module Ajw2
                              render_js_onmessage: [])
             @generator =
               Ajw2::Generator.new(@application, @interfaces, @databases, @events)
-            @generator.generate(@outdir)
+            @generator.generate(@outdir, @external_file_dir)
           end
 
           it_behaves_like "generates successfully"
@@ -142,7 +145,7 @@ module Ajw2
                              render_js_onmessage: RENDER_JS_ONMESSAGE)
             @generator =
               Ajw2::Generator.new(@application, @interfaces, @databases, @events)
-            @generator.generate(@outdir)
+            @generator.generate(@outdir, @external_file_dir)
           end
 
           it_behaves_like "generates successfully"
@@ -168,7 +171,7 @@ module Ajw2
                              render_js_onmessage: [])
             @generator =
               Ajw2::Generator.new(@application, @interfaces, @databases, @events)
-            @generator.generate(@outdir)
+            @generator.generate(@outdir, @external_file_dir)
           end
 
           it_behaves_like "generates successfully"
@@ -179,6 +182,53 @@ module Ajw2
 
           it "should generate public/js/app.js" do
             expect(open(File.expand_path("public/js/app.js", @outdir)).read).to eq APP_JS_NOEVENT
+          end
+        end
+
+        context "with external resource" do
+          before do
+            FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+
+            @application_with_ext = double("application",
+                                           render_header: "title sample",
+                                           render_css_include: RENDER_CSS_INCLUDE,
+                                           render_js_include: RENDER_JS_INCLUDE,
+                                           name: "sample")
+            @application_with_ext.stub(:external_files).with(:js).and_return(["external.js"])
+            @application_with_ext.stub(:external_files).with(:css).and_return(["external.css"])
+
+            FileUtils.mkdir_p(@external_file_dir)
+            open(File.expand_path("external.js", @external_file_dir), "w") { |f| f.puts "hoge" }
+            open(File.expand_path("external.css", @external_file_dir), "w") { |f| f.puts "hoge" }
+
+            @databases_with_ext = double("databases",
+                                         render_migration: RENDER_MIGRATION,
+                                         render_definition: RENDER_DEFINITION)
+
+            [:development, :test, :production].each do |env|
+              @databases_with_ext.stub(:render_config).with(env, @application_with_ext).and_return("database: sample_#{env}")
+            end
+
+            @events = double("events",
+                             render_rb_ajax: [],
+                             render_rb_realtime: [],
+                             render_js_ajax: [],
+                             render_js_realtime: [],
+                             render_js_onmessage: [])
+
+            @generator =
+              Ajw2::Generator.new(@application_with_ext, @interfaces, @databases_with_ext, @events)
+            @generator.generate(@outdir, @external_file_dir)
+          end
+
+          it_behaves_like "generates successfully"
+
+          it "should include external.js" do
+            expect(File.exists?(File.expand_path("public/js/external.js", @outdir))).to be_true
+          end
+
+          it "should include external.css" do
+            expect(File.exists?(File.expand_path("public/css/external.css", @outdir))).to be_true
           end
         end
 
@@ -193,10 +243,10 @@ module Ajw2
               Ajw2::Generator.new(@application, @interfaces, @databases, @events)
           end
 
-          subject { @generator.generate(@outdir) }
+          subject { @generator.generate(@outdir, @external_file_dir) }
 
           it "should raise Exception" do
-            expect { @generator.generate(@outdir) }.to raise_error
+            expect { @generator.generate(@outdir, @external_file_dir) }.to raise_error
           end
 
           it "should not create outdir" do
@@ -213,13 +263,14 @@ module Ajw2
         it "should raise Exception" do
           FileUtils.mkdir_p(@outdir)
           expect {
-            @generator.generate(@outdir)
+            @generator.generate(@outdir, @external_file_dir)
           }.to raise_error
         end
       end
 
       after do
         FileUtils.rm_r(@outdir) if Dir.exists? @outdir
+        FileUtils.rm_r(@external_file_dir) if Dir.exists? @external_file_dir
       end
     end
   end
