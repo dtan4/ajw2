@@ -43,6 +43,9 @@ title
       end.join("\n") + "\n"
     end
 
+    # Return the list of external files
+    # @param [Symbol] type external file type, :css or :js
+    # @return [Array] collection of generated code
     def external_files(type)
       raise ArgumentError unless [:css, :js].include? type
       @source[type]
