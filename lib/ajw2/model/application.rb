@@ -29,7 +29,7 @@ title
       raise "/application/css is not found" unless @source[:css]
 
       @source[:css].inject([]) do |result, css|
-        result << "link rel=\"stylesheet\" type=\"text/css\" href=\"/css/ext/#{File.basename(css)}\""
+        result << "link rel=\"stylesheet\" type=\"text/css\" href=\"/css/#{File.basename(css)}\""
       end.join("\n") + "\n"
     end
 
@@ -39,7 +39,7 @@ title
       raise "/application/js is not found" unless @source[:js]
 
       @source[:js].inject([]) do |result, js|
-        result << "script src=\"/js/ext/#{File.basename(js)}\""
+        result << "script src=\"/js/#{File.basename(js)}\""
       end.join("\n") + "\n"
     end
 

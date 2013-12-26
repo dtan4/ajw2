@@ -59,20 +59,24 @@ EOS
 
     describe "#render_css_include" do
       subject { Ajw2::Model::Application.new(source).render_css_include }
+      it { should be_kind_of String }
+
       it "should render Slim template" do
         expect(subject).to eq(<<-EOS)
-link rel="stylesheet" type="text/css" href="/css/ext/application.css"
-link rel="stylesheet" type="text/css" href="/css/ext/main.css"
+link rel="stylesheet" type="text/css" href="/css/application.css"
+link rel="stylesheet" type="text/css" href="/css/main.css"
                               EOS
       end
     end
 
     describe "#render_js_include" do
       subject { Ajw2::Model::Application.new(source).render_js_include }
+      it { should be_kind_of String }
+
       it "should render Slim template" do
         expect(subject).to eq(<<-EOS)
-script src="/js/ext/application.js"
-script src="/js/ext/main.js"
+script src="/js/application.js"
+script src="/js/main.js"
                               EOS
       end
     end
