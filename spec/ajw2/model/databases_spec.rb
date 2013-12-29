@@ -190,5 +190,53 @@ timeout: 5000
         end
       end
     end
+
+    describe "#render_database_gem" do
+      before do
+        @application = double("application", name: "sample")
+      end
+
+      context "when dbType is mysql" do
+        subject { Ajw2::Model::Databases.new({ dbType: "mysql" }).render_database_gem }
+        it { should be_an_instance_of String }
+
+        it "should render gem requirement" do
+          expect(subject).to be == 'gem "mysql2"'
+        end
+      end
+
+      context "when dbType is postgres" do
+        subject { Ajw2::Model::Databases.new({ dbType: "postgres" }).render_database_gem }
+        it { should be_an_instance_of String }
+
+        it "should render gem requirement" do
+          expect(subject).to be == 'gem "pg"'
+        end
+      end
+
+      context "when dbType is sqlite" do
+        subject { Ajw2::Model::Databases.new({ dbType: "sqlite" }).render_database_gem }
+        it { should be_an_instance_of String }
+
+        it "should render gem requirement" do
+          expect(subject).to be == 'gem "sqlite3"'
+        end
+      end
+
+      context "when dbType is unknown" do
+        subject { Ajw2::Model::Databases.new({ dbType: "hogehoge" }).render_database_gem }
+        it { should be_an_instance_of String }
+
+        it "should render gem requirement" do
+          expect(subject).to be == 'gem "sqlite3"'
+        end
+      end
+
+      context "with invalid source" do
+        it "should raise Exception" do
+          expect { Ajw2::Model::Databases.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/databases/dbType is not found"
+        end
+      end
+    end
   end
 end

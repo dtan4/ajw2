@@ -33,7 +33,6 @@ module Ajw2::Model
     # Generate YAML which sets up database
     # @return [String] YAML
     def render_config(env, application)
-
       raise "/databases/dbType is not found" unless @source[:dbType]
 
       case @source[:dbType]
@@ -65,6 +64,19 @@ database: db/#{env}.sqlite3
 pool: 5
 timeout: 5000
         EOS
+      end
+    end
+
+    def render_database_gem
+      raise "/databases/dbType is not found" unless @source[:dbType]
+
+      case @source[:dbType]
+      when "mysql"
+        'gem "mysql2"'
+      when "postgres"
+        'gem "pg"'
+      else
+        'gem "sqlite3"'
       end
     end
 

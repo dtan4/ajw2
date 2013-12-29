@@ -26,7 +26,8 @@ module Ajw2
 
         @databases = double("databases",
                             render_migration: RENDER_MIGRATION,
-                            render_definition: RENDER_DEFINITION)
+                            render_definition: RENDER_DEFINITION,
+                            render_database_gem: "sqlite")
 
         [:development, :test, :production].each do |env|
           @databases.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
@@ -203,7 +204,8 @@ module Ajw2
 
             @databases_with_ext = double("databases",
                                          render_migration: RENDER_MIGRATION,
-                                         render_definition: RENDER_DEFINITION)
+                                         render_definition: RENDER_DEFINITION,
+                                         render_database_gem: "sqlite")
 
             [:development, :test, :production].each do |env|
               @databases_with_ext.stub(:render_config).with(env, @application_with_ext).and_return("database: sample_#{env}")
