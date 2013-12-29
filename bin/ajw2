@@ -2,9 +2,13 @@
 
 require "ajw2"
 
-USAGE = "USAGE: ajw2 <source file> <output directory>"
+USAGE = <<-EOS
+USAGE:
+  $ ajw2 <source file> <output directory>
+  $ ajw2 <source file> <output directory> <external resource directory>
+EOS
 
-unless ARGV.length == 2
+unless (ARGV.length == 2) || (ARGV.length == 3)
   $stderr.puts USAGE
   exit 1
 end

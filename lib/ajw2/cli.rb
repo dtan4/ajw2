@@ -6,7 +6,16 @@ module Ajw2
     # Parse command-line arguments and execute generating program
     # @param [Array] args command-line arguments, [source, out_dir, external_file_dir]
     def self.execute(args)
-      source, out_dir, external_file_dir = *args
+      case args.length
+      when 2
+        source, out_dir = *args
+        external_file_dir = ""
+      when 3
+        source, out_dir, external_file_dir = *args
+      else
+        raise ArgumentError, "Invalid arguments count"
+      end
+
       description = Ajw2::Description.new
       description.parse(source)
       generator = Ajw2::Generator.new(description.application, description.interfaces,
