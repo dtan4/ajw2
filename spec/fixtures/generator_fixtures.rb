@@ -381,8 +381,8 @@ html
   html
     == yield
     script src="/js/jquery.min.js"
-    script src="/js/app.js"
     script src="/js/ext/application.js"
+    script src="/js/app.js"
           EOS
 
 INDEX_SLIM = <<-EOS
