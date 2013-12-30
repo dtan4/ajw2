@@ -6,7 +6,7 @@
         ],
         "js": [
             { "type": "file", "src": "main.js" },
-            { "type": "file", "src":"fullcalendar.js" }
+            { "type": "file", "src": "fullcalendar.js" }
         ]
     },
     "interfaces": {
@@ -100,5 +100,4 @@
             }
         ]
     }
-
 }
