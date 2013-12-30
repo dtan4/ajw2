@@ -5,8 +5,14 @@ module Ajw2::Model
     let(:source) {
       {
        name: "sample",
-       css: ["application.css", "main.css"],
-       js: ["application.js", "main.js"]
+       css: [
+             { type: "file", src: "application.css" },
+             { type: "url", src: "http://example.com/sample.css" }
+            ],
+       js: [
+             { type: "file", src: "application.js" },
+             { type: "url", src: "http://example.com/sample.js" }
+           ]
       }
     }
 
@@ -64,7 +70,7 @@ EOS
       it "should render Slim template" do
         expect(subject).to eq(<<-EOS)
 link rel="stylesheet" type="text/css" href="/css/application.css"
-link rel="stylesheet" type="text/css" href="/css/main.css"
+link rel="stylesheet" type="text/css" href="http://example.com/sample.css"
                               EOS
       end
     end
@@ -76,7 +82,7 @@ link rel="stylesheet" type="text/css" href="/css/main.css"
       it "should render Slim template" do
         expect(subject).to eq(<<-EOS)
 script src="/js/application.js"
-script src="/js/main.js"
+script src="http://example.com/sample.js"
                               EOS
       end
     end
@@ -87,7 +93,7 @@ script src="/js/main.js"
         it { should be_kind_of Array }
 
         it "should return the list of external CSS files" do
-          expect(subject).to eq ["application.css", "main.css"]
+          expect(subject).to eq ["application.css"]
         end
       end
 
@@ -96,7 +102,7 @@ script src="/js/main.js"
         it { should be_kind_of Array }
 
         it "should return the list of external JavaScript files" do
-          expect(subject).to eq ["application.js", "main.js"]
+          expect(subject).to eq ["application.js"]
         end
       end
 

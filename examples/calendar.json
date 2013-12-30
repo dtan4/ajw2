@@ -1,10 +1,12 @@
 {
     "application": {
         "name": "sample",
-        "css": ["fullcalendar.css"],
+        "css": [
+            { "type": "file", "src": "fullcalendar.css" }
+        ],
         "js": [
-            "main.js",
-            "fullcalendar.js"
+            { "type": "file", "src": "main.js" },
+            { "type": "file", "src":"fullcalendar.js" }
         ]
     },
     "interfaces": {
