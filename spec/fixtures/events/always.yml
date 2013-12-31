@@ -1,0 +1,69 @@
+event:
+  trigger:
+    id: event01
+    target: submitBtn
+    type: onClick
+    realtime: false
+    params:
+    - name: message
+      type: string
+      value:
+        element: messageTextBox
+        func: getValue
+        type: element
+  action:
+    type: always
+    interfaces:
+    - id: if01
+      element: messageLabel
+      func: setValue
+      type: element
+      params:
+      - name: message
+        type: string
+    databases:
+    - id: db01
+      database: messages
+      func: create
+      where: []
+      fields:
+      - field: message
+        param: message
+    call: []
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: [] }
+    message = params[:message]
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+    if response[:_db_errors].length == 0
+      response[:if01] = {}
+      response[:if01][:message] = message
+    end
+    response.to_json
+  end
+javascript: |
+  $('#submitBtn').click(function() {
+    var message = $('#messageTextBox').val();
+    $.ajax({
+      type: 'POST',
+      url: '/event01',
+      data: { 'message': message },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
+      success: function(_msg) {
+        if (_msg['_db_errors'].length == 0) {
+          var if01 = _msg['if01'];
+          $('#messageLabel').val(if01['message']);
+        } else {
+        }
+      },
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
+      }
+    });
+  });

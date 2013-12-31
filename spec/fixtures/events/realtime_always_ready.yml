@@ -1,0 +1,36 @@
+event:
+  trigger:
+    id: event01
+    type: ready
+    realtime: true
+    params:
+    - name: message
+      type: string
+      value:
+        element: messageTextBox
+        func: getValue
+        type: element
+  action:
+    type: always
+    interfaces:
+    - id: if01
+      element: messageLabel
+      func: setValue
+      type: element
+      params:
+      - name: message
+        type: string
+    databases:
+    - id: db01
+      database: messages
+      func: create
+      where: []
+      fields:
+      - field: message
+        param: message
+    call: []
+javascript: |
+  var message = $('#messageTextBox').val();
+  var params = { 'message': message };
+  var request = { 'func': 'event01', 'params': params };
+  ws.send(JSON.stringify(request));

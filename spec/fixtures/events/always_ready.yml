@@ -1,0 +1,51 @@
+event:
+  trigger:
+    id: event01
+    type: ready
+    realtime: false
+    params:
+    - name: message
+      type: string
+      value:
+        element: messageTextBox
+        func: getValue
+        type: element
+  action:
+    type: always
+    interfaces:
+    - id: if01
+      element: messageLabel
+      func: setValue
+      type: element
+      params:
+      - name: message
+        type: string
+    databases:
+    - id: db01
+      database: messages
+      func: create
+      where: []
+      fields:
+      - field: message
+        param: message
+    call: []
+javascript: |
+  var message = $('#messageTextBox').val();
+  $.ajax({
+    type: 'POST',
+    url: '/event01',
+    data: { 'message': message },
+    beforeSend: function(_xhr) {
+      _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    },
+    success: function(_msg) {
+      if (_msg['_db_errors'].length == 0) {
+        var if01 = _msg['if01'];
+        $('#messageLabel').val(if01['message']);
+      } else {
+      }
+    },
+    error: function(_xhr, _msg) {
+      alert('XMLHttpRequest Error: ' + _msg);
+    }
+  });

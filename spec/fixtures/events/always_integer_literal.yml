@@ -1,0 +1,46 @@
+event:
+  trigger:
+    id: event01
+    target: submitBtn
+    type: onClick
+    realtime: false
+    params:
+    - name: message
+      type: integer
+      value:
+        value: '42'
+        type: literal
+  action:
+    type: always
+    interfaces:
+    - id: if01
+      element: messageLabel
+      func: setValue
+      type: element
+      params:
+      - name: message
+        type: string
+    databases:
+    - id: db01
+      database: messages
+      func: create
+      where: []
+      fields:
+      - field: message
+        param: message
+    call: []
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: [] }
+    message = 42
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
+    if response[:_db_errors].length == 0
+      response[:if01] = {}
+      response[:if01][:message] = message
+    end
+    response.to_json
+  end
