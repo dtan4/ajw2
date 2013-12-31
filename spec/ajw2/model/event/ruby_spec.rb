@@ -175,6 +175,31 @@ end
                                    EOS
           end
         end
+
+        context "which call Web API" do
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(AJAX_ALWAYS_SOURCE_CALL_API[:events].first) }
+          it { should be_an_instance_of String }
+
+          it "should render Ruby code" do
+            expect(subject).to eq(<<-EOS)
+post "/event01" do
+  content_type :json
+  response = { _db_errors: [] }
+  address = params[:address]
+  sensor = false
+  call01 = http_get(
+    "http://maps.googleapis.com/maps/api/geocode/json",
+    address: address, sensor: sensor
+  )
+  if response[:_db_errors].length == 0
+    response[:if01] = {}
+    response[:if01][:message] = message
+  end
+  response.to_json
+end
+                                   EOS
+          end
+        end
       end
 
       context "with conditional-execute source" do

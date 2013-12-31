@@ -84,3 +84,4 @@ events:
         fields:
         - field: message
           param: message
+      call: []

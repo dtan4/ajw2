@@ -86,6 +86,7 @@ end
 
     def always(action)
       <<-EOS.strip
+#{call_rb(action[:call])}
 #{databases_rb(action[:databases])}
 if response[:_db_errors].length == 0
 #{indent(interfaces_rb(action[:interfaces]), 1)}
@@ -123,6 +124,39 @@ EOS
     alias conditional_then always
     alias conditional_else always
 
+    def field_param(array)
+      array.inject([]) do |result, pair|
+        result << "#{pair[:field]}: #{pair[:param]}"
+        result
+      end.join(", ")
+    end
+
+    def call_rb(calls)
+      calls.inject([]) do |result, call|
+        result << case call[:type]
+                  when "url"
+                    call_url(call)
+                  when "function"
+                    call_function(call)
+                  else
+                    raise Exception
+                  end
+      end.join("\n")
+    end
+
+    def call_url(call)
+      <<-EOS
+#{call[:id]} = http_#{call[:method]}(
+  "#{call[:endpoint]}",
+  #{field_param(call[:params])}
+)
+EOS
+    end
+
+    def call_function(call)
+      # TODO: Not Implemented
+    end
+
     def databases_rb(databases)
       databases.inject([]) do |result, database|
         result << database_rb(database)
@@ -138,13 +172,6 @@ EOS
       else
         raise Exception
       end
-    end
-
-    def field_param(array)
-      array.inject([]) do |result, pair|
-        result << "#{pair[:field]}: #{pair[:param]}"
-        result
-      end.join(", ")
     end
 
     def update_record(record, array)

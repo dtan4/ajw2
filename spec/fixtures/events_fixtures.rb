@@ -31,7 +31,8 @@ AJAX_ALWAYS_SOURCE =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -70,7 +71,8 @@ AJAX_ALWAYS_SOURCE_TEXT =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -109,7 +111,8 @@ AJAX_ALWAYS_SOURCE_STRING_LITERAL =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -148,7 +151,8 @@ AJAX_ALWAYS_SOURCE_INTEGER_LITERAL =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -196,7 +200,8 @@ AJAX_ALWAYS_SOURCE_APPEND =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -236,7 +241,8 @@ AJAX_ALWAYS_SOURCE_READY =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -281,7 +287,8 @@ AJAX_ALWAYS_SOURCE_DB_UPDATE =
                                   { field: "message", param: "newMessage" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -320,7 +327,53 @@ AJAX_ALWAYS_SOURCE_DB_DELETE =
                                 ],
                          fields: []
                         }
-                       ]
+                       ],
+            call: []
+           }
+  }
+ ]
+}
+
+AJAX_ALWAYS_SOURCE_CALL_API =
+{
+ events:
+ [
+  {
+   trigger: {
+             id: "event01", target: "submitBtn", type: "onClick", realtime: false,
+             params: [
+                      {
+                       name: "address", type: "string",
+                       value: { element: "addressTextBox", func: "getValue", type: "element" }
+                      },
+                      {
+                       name: "sensor", type: "boolean",
+                       value: { value: "false", type: "literal" }
+                      }
+                     ]
+            },
+   action: {
+            type: "always",
+            interfaces: [
+                         {
+                          id: "if01", element: "addressLabel",
+                          func: "setValue", type: "element",
+                          params: [
+                                   { name: "message", type: "string" }
+                                  ]
+                         }
+                        ],
+            databases: [],
+            call: [
+                   {
+                    id: "call01", type: "url", method: "get",
+                    endpoint: "http://maps.googleapis.com/maps/api/geocode/json",
+                    params: [
+                             { field: "address", param: "address" },
+                             { field: "sensor", param: "sensor" },
+                            ]
+                   }
+                  ]
            }
   }
  ]
@@ -372,11 +425,13 @@ AJAX_CONDITIONAL_SOURCE =
                                          { field: "message", param: "message" }
                                         ]
                                }
-                              ]
+                              ],
+                   call: []
                   },
             else: {
                    interfaces: [],
-                   databases: []
+                   databases: [],
+                   call: []
                   }
            }
   }
@@ -429,11 +484,13 @@ AJAX_CONDITIONAL_SOURCE_NEQ =
                                          { field: "message", param: "message" }
                                         ]
                                }
-                              ]
+                              ],
+                   call: []
                   },
             else: {
                    interfaces: [],
-                   databases: []
+                   databases: [],
+                   call: []
                   }
            }
   }
@@ -486,11 +543,13 @@ AJAX_CONDITIONAL_SOURCE_GT =
                                          { field: "message", param: "message" }
                                         ]
                                }
-                              ]
+                              ],
+                   call: []
                   },
             else: {
                    interfaces: [],
-                   databases: []
+                   databases: [],
+                   call: []
                   }
            }
   }
@@ -543,11 +602,13 @@ AJAX_CONDITIONAL_SOURCE_LT =
                                          { field: "message", param: "message" }
                                         ]
                                }
-                              ]
+                              ],
+                   call: []
                   },
             else: {
                    interfaces: [],
-                   databases: []
+                   databases: [],
+                   call: []
                   }
            }
   }
@@ -588,7 +649,8 @@ REALTIME_ALWAYS_SOURCE =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -628,7 +690,8 @@ REALTIME_ALWAYS_SOURCE_READY =
                                   { field: "message", param: "message" }
                                  ]
                         }
-                       ]
+                       ],
+            call: []
            }
   }
  ]
@@ -679,11 +742,13 @@ REALTIME_CONDITIONAL_SOURCE =
                                          { field: "message", param: "message" }
                                         ]
                                }
-                              ]
+                              ],
+                   call: []
                   },
             else: {
                    interfaces: [],
-                   databases: []
+                   databases: [],
+                   call: []
                   }
            }
   }

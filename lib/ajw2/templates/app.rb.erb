@@ -19,15 +19,15 @@ class App < Sinatra::Base
       parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
     end
 
-    def http_get(base_url, parameters)
-      uri = URI.parse(base_url + "?" + param_str(parameters))
+    def http_get(endpoint, parameters)
+      uri = URI.parse(endpoint + "?" + param_str(parameters))
       JSON.parse(Net::HTTP.get_response(uri).body)
     rescue
       {}
     end
 
-    def http_post(base_url, parameters)
-      uri = URI.parse(base_url)
+    def http_post(endpoint, parameters)
+      uri = URI.parse(endpoint)
       JSON.parse(Net::HTTP.post_form(uri, parameters).body)
     rescue
       {}
