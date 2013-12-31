@@ -142,6 +142,24 @@ class App < Sinatra::Base
     def csrf_meta_tag
       Rack::Csrf.csrf_metatag(env)
     end
+
+    def param_str(parameters)
+      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+    end
+
+    def http_get(base_url, parameters)
+      uri = URI.parse(base_url + "?" + param_str(parameters))
+      JSON.parse(Net::HTTP.get_response(uri).body)
+    rescue
+      {}
+    end
+
+    def http_post(base_url, parameters)
+      uri = URI.parse(base_url)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+    rescue
+      {}
+    end
   end
 
   get "/" do
@@ -217,6 +235,24 @@ class App < Sinatra::Base
     def csrf_meta_tag
       Rack::Csrf.csrf_metatag(env)
     end
+
+    def param_str(parameters)
+      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+    end
+
+    def http_get(base_url, parameters)
+      uri = URI.parse(base_url + "?" + param_str(parameters))
+      JSON.parse(Net::HTTP.get_response(uri).body)
+    rescue
+      {}
+    end
+
+    def http_post(base_url, parameters)
+      uri = URI.parse(base_url)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+    rescue
+      {}
+    end
   end
 
   get "/" do
@@ -278,6 +314,24 @@ class App < Sinatra::Base
   helpers do
     def csrf_meta_tag
       Rack::Csrf.csrf_metatag(env)
+    end
+
+    def param_str(parameters)
+      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+    end
+
+    def http_get(base_url, parameters)
+      uri = URI.parse(base_url + "?" + param_str(parameters))
+      JSON.parse(Net::HTTP.get_response(uri).body)
+    rescue
+      {}
+    end
+
+    def http_post(base_url, parameters)
+      uri = URI.parse(base_url)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+    rescue
+      {}
     end
   end
 
@@ -342,6 +396,24 @@ class App < Sinatra::Base
   helpers do
     def csrf_meta_tag
       Rack::Csrf.csrf_metatag(env)
+    end
+
+    def param_str(parameters)
+      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+    end
+
+    def http_get(base_url, parameters)
+      uri = URI.parse(base_url + "?" + param_str(parameters))
+      JSON.parse(Net::HTTP.get_response(uri).body)
+    rescue
+      {}
+    end
+
+    def http_post(base_url, parameters)
+      uri = URI.parse(base_url)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+    rescue
+      {}
     end
   end
 
