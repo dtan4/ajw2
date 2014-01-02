@@ -6,16 +6,34 @@ module Ajw2
     describe "#execute" do
       context "with valid argument" do
         shared_examples_for "execute successfully" do
-          subject { Ajw2::Cli.execute(@args) }
+          before(:all) { Ajw2::Cli.execute(@args) }
 
           it "should create out_dir" do
-            subject
             expect(Dir.exists?(@out_dir)).to be_true
           end
+
+          [
+           "app.rb",
+           "config.ru",
+           "Rakefile",
+           "Gemfile",
+           "views/layout.slim",
+           "views/index.slim",
+           "config/database.yml",
+           "db/migrate/001_create_messages.rb",
+           "public/js/jquery.min.js",
+           "public/js/app.js"
+          ].each do |path|
+            it "should create #{path}" do
+              expect(File.exists?(File.expand_path(path, @out_dir))).to be_true
+            end
+          end
+
+          after(:all) { FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir }
         end
 
         context "2 arguments" do
-          before do
+          before(:all) do
             @source = fixture_path("chat.json")
             @out_dir = "test_cli"
             @args = [@source, @out_dir]
@@ -23,14 +41,10 @@ module Ajw2
           end
 
           it_behaves_like "execute successfully"
-
-          after do
-            FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
-          end
         end
 
         context "3 arguments" do
-          before do
+          before(:all) do
             @source = fixture_path("chat.json")
             @out_dir = "test_cli"
             @external_resource_dir = "test_ext_files"
@@ -39,10 +53,6 @@ module Ajw2
           end
 
           it_behaves_like "execute successfully"
-
-          after do
-            FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
-          end
         end
       end
 
