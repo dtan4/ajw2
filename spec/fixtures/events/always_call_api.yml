@@ -24,8 +24,9 @@ event:
       func: setValue
       type: element
       value:
-        type: param
-        id: message
+        type: call
+        id: call01
+        jsonpath: /results[0]/formatted_address
     databases: []
     call:
     - id: call01
@@ -48,7 +49,7 @@ ruby: |
       address: address, sensor: sensor
     )
     if response[:_db_errors].length == 0
-      response[:if01] = message
+      response[:if01] = call01[:results][0][:formatted_address]
     end
     response.to_json
   end

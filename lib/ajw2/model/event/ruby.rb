@@ -67,6 +67,18 @@ end
       end.join("\n")
     end
 
+    def parse_jsonpath(jsonpath)
+      jsonpath.split("/")[1..-1].inject("") do |result, key|
+        if /^(?<k>[a-zA-Z]+)\[(?<i>\d+)\]$/ =~ key
+          result << "[:#{k}][#{i}]"
+        else
+          result << "[:#{key}]"
+        end
+
+        result
+      end
+    end
+
     def action_rb(action)
       action[:type] == "conditional" ?
         conditional(action) : always(action)
@@ -235,7 +247,7 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
       when "database"
         "response[:#{interface[:id]}] = #{interface[:value][:id]}.#{interface[:value][:field]}"
       when "call"
-        "response[:#{interface[:id]}] = #{interface[:value][:id]}"
+        "response[:#{interface[:id]}] = #{interface[:value][:id]}#{parse_jsonpath(interface[:value][:jsonpath])}"
       else
         "response[:#{interface[:id]}] = #{interface[:value][:id]}"
       end
