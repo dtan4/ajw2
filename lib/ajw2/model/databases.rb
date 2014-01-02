@@ -67,6 +67,8 @@ timeout: 5000
       end
     end
 
+    # Generate gem requirement of database adapter
+    # @return [String] gem requirement
     def render_database_gem
       raise "/databases/dbType is not found" unless @source[:dbType]
 
@@ -139,15 +141,7 @@ end
 
     def render_definition_field(field)
       field[:name] = add_encrypted_prefix(field[:name]) if field[:type] == "password"
-      if !field[:null]
-        "validates_presence_of :#{field[:name]}"
-      else
-        ""
-      end
-    end
-
-    def render_config_env(env, application)
-
+      !field[:null] ? "validates_presence_of :#{field[:name]}" :  ""
     end
   end
 end
