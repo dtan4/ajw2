@@ -1,4 +1,4 @@
-require "erb"
+require "cgi"
 
 module Ajw2::Model
   # Generate source code from Interfaces model
@@ -30,7 +30,7 @@ module Ajw2::Model
     private
 
     def escape(text)
-      ERB::Util.html_escape(text)
+      CGI.escapeHTML(text)
     end
 
     def render_element(element)
