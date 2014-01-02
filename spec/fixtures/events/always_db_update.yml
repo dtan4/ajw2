@@ -5,13 +5,13 @@ event:
     type: onClick
     realtime: false
     params:
-    - name: message
+    - id: message
       type: string
       value:
         element: messageTextBox
         func: getValue
         type: element
-    - name: newMessage
+    - id: newMessage
       type: string
       value:
         element: newMessageTextBox

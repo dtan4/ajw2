@@ -102,7 +102,7 @@ ws.send(JSON.stringify(request));
       params.inject([]) do |result, param|
         case param[:value][:type]
         when "element"
-          result << "var #{param[:name]} = #{get_element_value(param[:value])}"
+          result << "var #{param[:id]} = #{get_element_value(param[:value])}"
         else
           raise "Undefined event value type!"
         end
@@ -112,7 +112,7 @@ ws.send(JSON.stringify(request));
 
     def params_json(params)
       params.inject([]) do |result, param|
-        result << "'#{param[:name]}': #{param[:name]}"
+        result << "'#{param[:id]}': #{param[:id]}"
       end.join(" ")
     end
 

@@ -57,11 +57,11 @@ end
       params.inject([]) do |result, param|
         result << case param[:value][:type]
                   when "element"
-                    (hash ? "#{param[:name]}: #{param[:name]}" :
-                     "#{param[:name]} = params[:#{param[:name]}]")
+                    (hash ? "#{param[:id]}: #{param[:id]}" :
+                     "#{param[:id]} = params[:#{param[:id]}]")
                   when "literal"
-                    (hash ? "#{param[:name]}: \"#{param[:value][:value]}\"" :
-                     "#{param[:name]} = #{literal_value(param)}")
+                    (hash ? "#{param[:id]}: \"#{param[:value][:value]}\"" :
+                     "#{param[:id]} = #{literal_value(param)}")
                   end
         result
       end.join("\n")

@@ -5,7 +5,7 @@ event:
     type: onClick
     realtime: false
     params:
-    - name: message
+    - id: message
       type: integer
       value:
         value: '42'
