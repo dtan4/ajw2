@@ -173,14 +173,12 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
     def element_action(interface)
       case interface[:func]
       when "setValue"
-        raise "Too many parameters!" unless interface[:params].length == 1
         <<-EOS
-$('\##{interface[:element]}').val(#{interface[:id]}['#{interface[:params][0][:name]}']);
+$('\##{interface[:element]}').val(#{interface[:id]});
         EOS
       when "setText"
-        raise "Too many parameters!" unless interface[:params].length == 1
         <<-EOS
-$('\##{interface[:element]}').text(#{interface[:id]}['#{interface[:params][0][:name]}']);
+$('\##{interface[:element]}').text(#{interface[:id]});
         EOS
       when "appendElements"
         interface[:params].inject([]) do |result, param|
@@ -194,8 +192,8 @@ $('\##{interface[:element]}').text(#{interface[:id]}['#{interface[:params][0][:n
 
     def append_element(element, id)
       result = "$('<#{element[:tag]}>')"
-      result << ".val(#{id}['#{element[:value][:name]}'])" if element[:value]
-      result << ".text(#{id}['#{element[:text][:name]}'])" if element[:text]
+      result << ".val(#{id})" if element[:value]
+      result << ".text(#{id})" if element[:text]
       element[:children].each do |elem|
         result << ".append(#{append_element(elem, id)})"
       end if element[:children]

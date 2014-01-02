@@ -215,10 +215,7 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
 
     def interfaces_rb(interfaces)
       interfaces.inject([]) do |result, interface|
-        result << <<-EOS
-response[:#{interface[:id]}] = {}
-#{interface_rb(interface)}
-                  EOS
+        result << interface_rb(interface)
       end.join("\n")
     end
 
@@ -234,16 +231,21 @@ response[:#{interface[:id]}] = {}
     end
 
     def interface_set_params(interface)
-      interface[:params].inject([]) do |result, param|
-        result << "response[:#{interface[:id]}][:#{param[:name]}] = #{param[:name]}"
-      end.join("\n")
+      case interface[:value][:type]
+      when "database"
+        "response[:#{interface[:id]}] = #{interface[:value][:id]}"
+      when "call"
+        "response[:#{interface[:id]}] = #{interface[:value][:id]}"
+      else
+        "response[:#{interface[:id]}] = #{interface[:value][:id]}"
+      end
     end
 
     def interface_set_params_append(elements, id)
       elements.inject([]) do |result, el|
         [:value, :text].each do |attr|
           result <<
-            "response[:#{id}][:#{el[attr][:name]}] = #{el[attr][:name]}" if el[attr]
+            "response[:#{id}] = #{el[attr][:id]}" if el[attr]
         end
         result << interface_set_params_append(el[:children], id) if el[:children]
         result

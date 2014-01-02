@@ -18,9 +18,9 @@ event:
       element: messageLabel
       func: setValue
       type: element
-      params:
-      - name: message
-        type: string
+      value:
+        type: param
+        id: message
     databases:
     - id: db01
       database: messages
@@ -40,8 +40,7 @@ ruby: |
     )
     response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
     if response[:_db_errors].length == 0
-      response[:if01] = {}
-      response[:if01][:message] = message
+      response[:if01] = message
     end
     response.to_json
   end
@@ -58,7 +57,7 @@ javascript: |
       success: function(_msg) {
         if (_msg['_db_errors'].length == 0) {
           var if01 = _msg['if01'];
-          $('#messageLabel').val(if01['message']);
+          $('#messageLabel').val(if01);
         } else {
         }
       },

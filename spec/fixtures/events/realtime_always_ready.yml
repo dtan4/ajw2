@@ -17,9 +17,9 @@ event:
       element: messageLabel
       func: setValue
       type: element
-      params:
-      - name: message
-        type: string
+      value:
+        type: param
+        id: message
     databases:
     - id: db01
       database: messages
