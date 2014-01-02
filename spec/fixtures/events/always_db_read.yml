@@ -1,0 +1,53 @@
+event:
+  trigger:
+    id: event01
+    target: submitBtn
+    type: onClick
+    realtime: false
+    params:
+    - id: message
+      type: string
+      value:
+        element: messageTextBox
+        func: getValue
+        type: element
+    - id: newMessage
+      type: string
+      value:
+        element: newMessageTextBox
+        func: getValue
+        type: element
+  action:
+    type: always
+    interfaces:
+    - id: if01
+      element: messageLabel
+      func: setValue
+      type: element
+      value:
+        type: database
+        id: db01
+        field: message
+    databases:
+    - id: db01
+      database: messages
+      func: read
+      where:
+      - field: message
+        param: message
+      fields: []
+    call: []
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: [] }
+    message = params[:message]
+    newMessage = params[:newMessage]
+    db01 = Message.where(
+      message: message
+    )
+    if response[:_db_errors].length == 0
+      response[:if01] = db01.message
+    end
+    response.to_json
+  end

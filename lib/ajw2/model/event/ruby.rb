@@ -191,14 +191,16 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
     end
 
     def read(database)
-
-    end
-
-    def update(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.where(
 #{indent(field_param(database[:where]), 1)}
 )
+      EOS
+    end
+
+    def update(database)
+      <<-EOS.chomp
+#{read(database)}
 #{update_record(database[:id], database[:fields])}
 response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
       EOS
@@ -206,9 +208,7 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
 
     def delete(database)
       <<-EOS.chomp
-#{database[:id]} = #{database[:database].singularize.capitalize}.where(
-#{indent(field_param(database[:where]), 1)}
-)
+#{read(database)}
 #{database[:id]}.destroy
       EOS
     end
@@ -233,7 +233,7 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
     def interface_set_params(interface)
       case interface[:value][:type]
       when "database"
-        "response[:#{interface[:id]}] = #{interface[:value][:id]}"
+        "response[:#{interface[:id]}] = #{interface[:value][:id]}.#{interface[:value][:field]}"
       when "call"
         "response[:#{interface[:id]}] = #{interface[:value][:id]}"
       else

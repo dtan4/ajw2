@@ -48,6 +48,13 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which reads record" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_read.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "which updates record" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_update.yml"))) }
 
