@@ -48,7 +48,7 @@
                     "realtime": false,
                     "params": [
                         {
-                            "name": "message",
+                            "id": "message",
                             "type": "string",
                             "value": {
                                 "element": "messageTextBox",
@@ -73,8 +73,8 @@
                                         {
                                             "tag": "td",
                                             "text": {
-                                                "name": "message",
-                                                "type": "string"
+                                                "type": "param",
+                                                "id": "message"
                                             }
                                         }
                                     ]
@@ -91,7 +91,10 @@
                             "fields": [
                                 {
                                     "field": "message",
-                                    "param": "message"
+                                    "value":{
+                                        "type": "param",
+                                        "id": "message"
+                                    }
                                 }
                             ]
                         }

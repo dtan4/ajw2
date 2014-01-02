@@ -33,10 +33,14 @@ event:
       func: update
       where:
       - field: message
-        param: message
+        value:
+          type: param
+          id: message
       fields:
       - field: message
-        param: newMessage
+        value:
+          type: param
+          id: newMessage
     call: []
 ruby: |
   post "/event01" do

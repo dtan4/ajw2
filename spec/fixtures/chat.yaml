@@ -56,7 +56,7 @@ events:
       type: onClick
       realtime: false
       params:
-      - name: message
+      - id: message
         type: string
         value:
           element: messageTextBox
@@ -74,8 +74,8 @@ events:
           children:
           - tag: td
             text:
-              name: message
-              type: string
+              type: param
+              id: message
       databases:
       - id: db01
         database: messages
@@ -83,5 +83,7 @@ events:
         where: []
         fields:
         - field: message
-          param: message
+          value:
+            type: param
+            id: message
       call: []

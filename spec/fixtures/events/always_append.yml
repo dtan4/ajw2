@@ -33,7 +33,9 @@ event:
       where: []
       fields:
       - field: message
-        param: message
+        value:
+          type: param
+          id: message
     call: []
 ruby: |
   post "/event01" do

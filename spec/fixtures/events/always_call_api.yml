@@ -35,9 +35,13 @@ event:
       endpoint: http://maps.googleapis.com/maps/api/geocode/json
       params:
       - field: address
-        param: address
+        value:
+          type: param
+          id: address
       - field: sensor
-        param: sensor
+        value:
+          type: param
+          id: sensor
 ruby: |
   post "/event01" do
     content_type :json

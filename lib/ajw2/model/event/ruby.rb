@@ -79,6 +79,17 @@ end
       end
     end
 
+    def set_value(value)
+      case value[:type]
+      when "database"
+        "#{value[:id]}.#{value[:field]}"
+      when "call"
+        "#{value[:id]}#{parse_jsonpath(value[:jsonpath])}"
+      else
+        value[:id]
+      end
+    end
+
     def action_rb(action)
       action[:type] == "conditional" ?
         conditional(action) : always(action)
@@ -137,8 +148,8 @@ EOS
     alias conditional_else always
 
     def field_param(array)
-      array.inject([]) do |result, pair|
-        result << "#{pair[:field]}: #{pair[:param]}"
+      array.inject([]) do |result, field|
+        result << "#{field[:field]}: #{set_value(field[:value])}"
         result
       end.join(", ")
     end
@@ -187,8 +198,8 @@ EOS
     end
 
     def update_record(record, array)
-      array.inject([]) do |result, pair|
-        result << "#{record}.#{pair[:field]} = #{pair[:param]}"
+      array.inject([]) do |result, field|
+        result << "#{record}.#{field[:field]} = #{set_value(field[:value])}"
         result
       end.join("\n")
     end
@@ -231,6 +242,10 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
       end.join("\n")
     end
 
+    def interface_set_params(interface)
+      "response[:#{interface[:id]}] = #{set_value(interface[:value])}"
+    end
+
     def interface_rb(interface)
       case interface[:func]
       when "signup"
@@ -239,17 +254,6 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
         interface_set_params(interface)
       when "appendElements"
         interface_set_params_append(interface[:params], interface[:id])
-      end
-    end
-
-    def interface_set_params(interface)
-      case interface[:value][:type]
-      when "database"
-        "response[:#{interface[:id]}] = #{interface[:value][:id]}.#{interface[:value][:field]}"
-      when "call"
-        "response[:#{interface[:id]}] = #{interface[:value][:id]}#{parse_jsonpath(interface[:value][:jsonpath])}"
-      else
-        "response[:#{interface[:id]}] = #{interface[:value][:id]}"
       end
     end
 
