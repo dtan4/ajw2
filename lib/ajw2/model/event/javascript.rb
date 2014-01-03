@@ -61,6 +61,25 @@ case '#{event[:trigger][:id]}':
 
     private
 
+    # var message = $('#messageTextBox').val();
+    # $.ajax({
+    #   type: 'POST',
+    #   url: '/event01',
+    #   data: { 'message': message },
+    #   beforeSend: function(_xhr) {
+    #     _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+    #   },
+    #   success: function(_msg) {
+    #     if (_msg['_db_errors'].length == 0) {
+    #       var if01 = _msg['if01'];
+    #       $('#messageLabel').val(if01);
+    #     } else {
+    #     }
+    #   },
+    #   error: function(_xhr, _msg) {
+    #     alert('XMLHttpRequest Error: ' + _msg);
+    #   }
+    # });
     def js_body_ajax(trigger, action)
       <<-EOS
 #{params_js(trigger[:params])}
@@ -81,6 +100,10 @@ $.ajax({
        EOS
     end
 
+    # var message = $('#messageTextBox').val();
+    # var params = { 'message': message };
+    # var request = { 'func': 'event01', 'params': params };
+    # ws.send(JSON.stringify(request));
     def js_body_realtime(trigger, action)
       <<-EOS
 #{params_js(trigger[:params])}
@@ -90,6 +113,8 @@ ws.send(JSON.stringify(request));
       EOS
     end
 
+    # value[:type] == "getValue":
+    #   $('#messageTextBox').val();
     def get_element_value(value)
       case value[:func]
       when "getValue"
@@ -98,6 +123,8 @@ ws.send(JSON.stringify(request));
       end
     end
 
+    # param[:value][:type] == "element":
+    #   var message = $('#messageTextBox').val();
     def params_js(params)
       params.inject([]) do |result, param|
         case param[:value][:type]
@@ -116,6 +143,8 @@ ws.send(JSON.stringify(request));
       end.join(" ")
     end
 
+    # type == "onClick":
+    #   click
     def trigger_function(type)
       case type
       when "onClick" then "click"
@@ -128,6 +157,17 @@ ws.send(JSON.stringify(request));
         conditional(action) : always(action)
     end
 
+    # if (_msg['result']) {
+    #   if (_msg['_db_errors'].length == 0) {
+    #     var if01 = _msg['if01'];
+    #     $('#messageLabel').val(if01);
+    #   } else {
+    #   }
+    # } else {
+    #   if (_msg['_db_errors'].length == 0) {
+    #   } else {
+    #   }
+    # }
     def conditional(action)
       <<-EOS
 if (_msg['result']) {
@@ -138,6 +178,11 @@ if (_msg['result']) {
       EOS
     end
 
+    # if (_msg['_db_errors'].length == 0) {
+    #   var if01 = _msg['if01'];
+    #   $('#messageLabel').val(if01);
+    # } else {
+    # }
     def always(action)
       interfaces = action[:actions].select { |act| act[:type] == "interface" }
 
@@ -164,6 +209,8 @@ if (_msg['_db_errors'].length == 0) {
       EOS
     end
 
+    # var if01 = _msg['if01'];
+    # $('#messageLabel').val(if01);
     def set_value(interface)
       <<-EOS
 var #{interface[:id]} = _msg['#{interface[:id]}'];
@@ -171,6 +218,8 @@ $('\##{interface[:element]}').val(#{interface[:id]});
       EOS
     end
 
+    # var if01 = _msg['if01'];
+    # $('#messageLabel').text(if01);
     def set_text(interface)
       <<-EOS
 var #{interface[:id]} = _msg['#{interface[:id]}'];
@@ -178,6 +227,7 @@ $('\##{interface[:element]}').text(#{interface[:id]});
       EOS
     end
 
+    # $('#messageLabel').toggle();
     def change_element_visibility(interface, type)
       "$('\##{interface[:element]}')." << type.to_s << "();"
     end

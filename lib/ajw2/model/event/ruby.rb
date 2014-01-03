@@ -44,6 +44,10 @@ end
 
     private
 
+    # param[:type] == "integer" || "decimal" || "boolean":
+    #   42
+    # param[:type] == "string":
+    #   "42"
     def literal_value(param)
       case param[:type]
       when "integer", "decimal", "boolean"
@@ -102,6 +106,16 @@ end
         conditional(action) : always(action)
     end
 
+    # if (message == "hoge")
+    #   db01 = Message.new(
+    #     message: message
+    #   )
+    #   response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
+    #   response[:if01] = message
+    #   response[:result] = true
+    # else
+    #   response[:result] = false
+    # end
     def conditional(action)
       <<-EOS.strip
 if (#{condition(action[:condition])})
@@ -132,10 +146,15 @@ end
     alias conditional_then always
     alias conditional_else always
 
+    # message == "hoge"
     def condition(condition)
       "#{condition_left(condition[:left])} #{condition_operand(condition[:operand])} #{condition_right(condition[:right])}"
     end
 
+    # hand[:type] == "param":
+    #   42
+    # hand[:type] == "literal":
+    #   "42"
     def condition_hand(hand)
       case hand[:type]
       when "param" then hand[:value][:name]
@@ -170,6 +189,10 @@ end
       end
     end
 
+    # call01 = http_get(
+    #   "http://maps.googleapis.com/maps/api/geocode/json",
+    #   address: address, sensor: sensor
+    # )
     def call_url(call)
       <<-EOS
 #{call[:id]} = http_#{call[:method]}(
@@ -201,6 +224,10 @@ EOS
       end.join("\n")
     end
 
+    # db01 = Message.new(
+    #   message: message
+    # )
+    # response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
     def create(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.new(
@@ -210,6 +237,9 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
       EOS
     end
 
+    # db01 = Message.where(
+    #   message: message
+    # )
     def read(database)
       <<-EOS.chomp
 #{database[:id]} = #{database[:database].singularize.capitalize}.where(
@@ -218,6 +248,11 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
       EOS
     end
 
+    # db01 = Message.where(
+    #   message: message
+    # )
+    # db01.message = newMessage
+    # response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
     def update(database)
       <<-EOS.chomp
 #{read(database)}
@@ -226,6 +261,10 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
       EOS
     end
 
+    # db01 = Message.where(
+    #   message: message
+    # )
+    # db01.destroy
     def delete(database)
       <<-EOS.chomp
 #{read(database)}
@@ -233,6 +272,7 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
       EOS
     end
 
+    # response[:if01] = message
     def interface_set_params(interface)
       "response[:#{interface[:id]}] = #{set_value(interface[:value])}"
     end
