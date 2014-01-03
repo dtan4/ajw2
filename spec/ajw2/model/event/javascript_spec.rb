@@ -33,6 +33,27 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which hide element" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_hide_element.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which show element" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_show_element.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which toggle element visibility" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_show_element.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "with onload (ready) event" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_ready.yml"))) }
 

@@ -160,26 +160,52 @@ if (_msg['_db_errors'].length == 0) {
 
     def interface_js(interface)
       <<-EOS
-var #{interface[:id]} = _msg['#{interface[:id]}'];
 #{element_action(interface)}
       EOS
     end
 
-    def element_action(interface)
+    def set_value(interface)
+      <<-EOS
+var #{interface[:id]} = _msg['#{interface[:id]}'];
+$('\##{interface[:element]}').val(#{interface[:id]});
+      EOS
+    end
+
+    def set_text(interface)
+      <<-EOS
+var #{interface[:id]} = _msg['#{interface[:id]}'];
+$('\##{interface[:element]}').text(#{interface[:id]});
+      EOS
+    end
+
+    def change_element_visibility(interface, type)
+      "$('\##{interface[:element]}')." << type.to_s << "();"
+    end
+
+    def append_elements(interface)
+      interface[:params].inject([]) do |result, param|
+        result << "$('\##{interface[:element]}').append(#{append_element(param, interface[:id])});"
+        result
+      end.join("\n")
+    end
+
+    def interface_js(interface)
       case interface[:func]
       when "setValue"
-        <<-EOS
-$('\##{interface[:element]}').val(#{interface[:id]});
-        EOS
+        set_value(interface)
       when "setText"
-        <<-EOS
-$('\##{interface[:element]}').text(#{interface[:id]});
-        EOS
+        set_text(interface)
+      when "show"
+        change_element_visibility(interface, :show)
+      when "hide"
+        change_element_visibility(interface, :hide)
+      when "toggle"
+        toggle_element_visibility(interface, :toggle)
       when "appendElements"
-        interface[:params].inject([]) do |result, param|
-          result << "$('\##{interface[:element]}').append(#{append_element(param, interface[:id])});"
-          result
-        end.join("\n")
+        <<-EOS
+var #{interface[:id]} = _msg['#{interface[:id]}'];
+#{append_elements(interface)}
+        EOS
       else
         ""
       end
