@@ -84,13 +84,13 @@
         ]
     },
     "events": {
+        "id": "event01",
+        "realtime": true,
         "events": [
             {
                 "trigger": {
-                    "id": "event01",
                     "target": "submitBtn",
                     "type": "onClick",
-                    "realtime": true,
                     "params": [
                         {
                             "id": "message",

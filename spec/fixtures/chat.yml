@@ -49,12 +49,12 @@ databases:
       type: string
       'null': false
 events:
+  id: event01
+  realtime: false
   events:
   - trigger:
-      id: event01
       target: submitBtn
       type: onClick
-      realtime: false
       params:
       - id: message
         type: string

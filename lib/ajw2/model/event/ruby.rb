@@ -10,12 +10,11 @@ module Ajw2::Model::Event
       raise "event/trigger is not found" unless event[:trigger]
       raise "event/action is not found" unless event[:action]
 
-      trigger = event[:trigger]
       <<-EOS
-when "#{trigger[:id]}"
+when "#{event[:id]}"
   response[:_db_errors] = {}
-  response[:_event] = "#{trigger[:id]}"
-#{indent(params_rb(trigger[:params]), 1)}
+  response[:_event] = "#{event[:id]}"
+#{indent(params_rb(event[:trigger][:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   EventMachine.next_tick do
     settings.sockets.each { |s| s.send(response.to_json) }
@@ -30,12 +29,11 @@ when "#{trigger[:id]}"
       raise "event/trigger is not found" unless event[:trigger]
       raise "event/action is not found" unless event[:action]
 
-      trigger = event[:trigger]
       <<-EOS
-post "/#{trigger[:id]}" do
+post "/#{event[:id]}" do
   content_type :json
   response = { _db_errors: {} }
-#{indent(params_rb(trigger[:params]), 1)}
+#{indent(params_rb(event[:trigger][:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   response.to_json
 end

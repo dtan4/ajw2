@@ -1,9 +1,9 @@
 event:
+  id: event01
+  realtime: true
   trigger:
-    id: event01
     target: submitBtn
     type: onClick
-    realtime: true
     params:
     - id: message
       type: string

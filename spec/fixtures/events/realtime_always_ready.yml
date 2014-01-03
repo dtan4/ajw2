@@ -1,8 +1,8 @@
 event:
+  id: event01
+  realtime: true
   trigger:
-    id: event01
     type: ready
-    realtime: true
     params:
     - id: message
       type: string

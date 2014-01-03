@@ -11,14 +11,13 @@ module Ajw2::Model::Event
       raise "event/action is not found" unless event[:action]
 
       trigger = event[:trigger]
-      action = event[:action]
 
       if trigger[:type] == "ready"
-        js_body_ajax(trigger, action)
+        js_body_ajax(event)
       else
         <<-EOS
 $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
-#{indent(js_body_ajax(trigger, action), 1)}
+#{indent(js_body_ajax(event), 1)}
 });
         EOS
       end
@@ -32,14 +31,13 @@ $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
       raise "event/action is not found" unless event[:action]
 
       trigger = event[:trigger]
-      action = event[:action]
 
       if trigger[:type] == "ready"
-        js_body_realtime(trigger, action)
+        js_body_realtime(event)
       else
         <<-EOS
 $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
-#{indent(js_body_realtime(trigger, action), 1)}
+#{indent(js_body_realtime(event), 1)}
 });
         EOS
       end
@@ -53,7 +51,7 @@ $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
       raise "event/action is not found" unless event[:action]
 
       <<-EOS
-case '#{event[:trigger][:id]}':
+case '#{event[:id]}':
 #{indent(action_js(event[:action]), 1)}
   break;
       EOS
@@ -63,7 +61,7 @@ case '#{event[:trigger][:id]}':
 
     # var message = $('#messageTextBox').val();
     # $.ajax({
-    #   type: 'POST',
+    #   type: 'POSnT',
     #   url: '/event01',
     #   data: { 'message': message },
     #   beforeSend: function(_xhr) {
@@ -80,18 +78,18 @@ case '#{event[:trigger][:id]}':
     #     alert('XMLHttpRequest Error: ' + _msg);
     #   }
     # });
-    def js_body_ajax(trigger, action)
+    def js_body_ajax(event)
       <<-EOS
-#{params_js(trigger[:params])}
+#{params_js(event[:trigger][:params])}
 $.ajax({
   type: 'POST',
-  url: '/#{trigger[:id]}',
-  data: { #{params_json(trigger[:params])} },
+  url: '/#{event[:id]}',
+  data: { #{params_json(event[:trigger][:params])} },
   beforeSend: function(_xhr) {
     _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
   },
   success: function(_msg) {
-#{indent(action_js(action), 2)}
+#{indent(action_js(event[:action]), 2)}
   },
   error: function(_xhr, _msg) {
     alert('XMLHttpRequest Error: ' + _msg);
@@ -104,11 +102,11 @@ $.ajax({
     # var params = { 'message': message };
     # var request = { 'func': 'event01', 'params': params };
     # ws.send(JSON.stringify(request));
-    def js_body_realtime(trigger, action)
+    def js_body_realtime(event)
       <<-EOS
-#{params_js(trigger[:params])}
-var params = { #{params_json(trigger[:params])} };
-var request = { 'func': '#{trigger[:id]}', 'params': params };
+#{params_js(event[:trigger][:params])}
+var params = { #{params_json(event[:trigger][:params])} };
+var request = { 'func': '#{event[:id]}', 'params': params };
 ws.send(JSON.stringify(request));
       EOS
     end
