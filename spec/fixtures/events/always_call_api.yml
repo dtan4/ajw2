@@ -18,19 +18,10 @@ event:
         type: literal
   action:
     type: always
-    interfaces:
-    - id: if01
-      element: addressLabel
-      func: setValue
-      type: element
-      value:
-        type: call
-        id: call01
-        jsonpath: /results[0]/formatted_address
-    databases: []
-    call:
+    actions:
     - id: call01
-      type: url
+      type: call
+      call_type: url
       method: get
       endpoint: http://maps.googleapis.com/maps/api/geocode/json
       params:
@@ -42,18 +33,24 @@ event:
         value:
           type: param
           id: sensor
+    - id: if01
+      type: interface
+      element: addressLabel
+      func: setValue
+      value:
+        type: call
+        id: call01
+        jsonpath: /results[0]/formatted_address
 ruby: |
   post "/event01" do
     content_type :json
-    response = { _db_errors: [] }
+    response = { _db_errors: {} }
     address = params[:address]
     sensor = false
     call01 = http_get(
       "http://maps.googleapis.com/maps/api/geocode/json",
       address: address, sensor: sensor
     )
-    if response[:_db_errors].length == 0
-      response[:if01] = call01[:results][0][:formatted_address]
-    end
+    response[:if01] = call01[:results][0][:formatted_address]
     response.to_json
   end

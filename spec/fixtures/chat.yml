@@ -64,11 +64,11 @@ events:
           type: element
     action:
       type: always
-      interfaces:
+      actions:
       - id: if01
+        type: interface
         element: messageTableBody
         func: appendElements
-        type: element
         params:
         - tag: tr
           children:
@@ -76,8 +76,8 @@ events:
             text:
               type: param
               id: message
-      databases:
       - id: db01
+        type: database
         database: messages
         func: create
         where: []
@@ -86,4 +86,3 @@ events:
           value:
             type: param
             id: message
-      call: []

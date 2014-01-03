@@ -13,16 +13,9 @@ event:
         type: element
   action:
     type: always
-    interfaces:
-    - id: if01
-      element: messageLabel
-      func: setValue
-      type: element
-      value:
-        type: param
-        id: message
-    databases:
+    actions:
     - id: db01
+      type: database
       database: messages
       func: delete
       where:
@@ -30,19 +23,23 @@ event:
         value:
           type: param
           id: message
-      fields: []
-    call: []
+        fields: []
+    - id: if01
+      type: interface
+      element: messageLabel
+      func: setValue
+      value:
+        type: param
+        id: message
 ruby: |
   post "/event01" do
     content_type :json
-    response = { _db_errors: [] }
+    response = { _db_errors: {} }
     message = params[:message]
     db01 = Message.where(
       message: message
     )
     db01.destroy
-    if response[:_db_errors].length == 0
-      response[:if01] = message
-    end
+    response[:if01] = message
     response.to_json
   end

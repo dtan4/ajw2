@@ -125,20 +125,22 @@ ws.send(JSON.stringify(request));
 
     def action_js(action)
       action[:type] == "conditional" ?
-        conditional(action) : always(action[:interfaces])
+        conditional(action) : always(action)
     end
 
     def conditional(action)
       <<-EOS
 if (_msg['result']) {
-#{indent(conditional_then(action[:then][:interfaces]), 1)}
+#{indent(conditional_then(action[:then]), 1)}
 } else {
-#{indent(conditional_else(action[:else][:interfaces]), 1)}
+#{indent(conditional_else(action[:else]), 1)}
 }
       EOS
     end
 
-    def always(interfaces)
+    def always(action)
+      interfaces = action[:actions].select { |act| act[:type] == "interface" }
+
       <<-EOS
 if (_msg['_db_errors'].length == 0) {
 #{indent(interfaces_js(interfaces), 1)}
@@ -157,16 +159,9 @@ if (_msg['_db_errors'].length == 0) {
     end
 
     def interface_js(interface)
-      case interface[:type]
-      when "element"
-        set_values = element_action(interface)
-      else
-        raise "Undefined interface action target type!"
-      end
-
       <<-EOS
 var #{interface[:id]} = _msg['#{interface[:id]}'];
-#{set_values}
+#{element_action(interface)}
       EOS
     end
 

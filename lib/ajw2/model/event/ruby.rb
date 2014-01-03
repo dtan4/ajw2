@@ -13,7 +13,7 @@ module Ajw2::Model::Event
       trigger = event[:trigger]
       <<-EOS
 when "#{trigger[:id]}"
-  response[:_db_errors] = []
+  response[:_db_errors] = {}
   response[:_event] = "#{trigger[:id]}"
 #{indent(params_rb(trigger[:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
@@ -34,7 +34,7 @@ when "#{trigger[:id]}"
       <<-EOS
 post "/#{trigger[:id]}" do
   content_type :json
-  response = { _db_errors: [] }
+  response = { _db_errors: {} }
 #{indent(params_rb(trigger[:params]), 1)}
 #{indent(action_rb(event[:action]), 1)}
   response.to_json
@@ -65,6 +65,13 @@ end
                   end
         result
       end.join("\n")
+    end
+
+    def field_param(array)
+      array.inject([]) do |result, field|
+        result << "#{field[:field]}: #{set_value(field[:value])}"
+        result
+      end.join(", ")
     end
 
     def parse_jsonpath(jsonpath)
@@ -108,14 +115,22 @@ end
     end
 
     def always(action)
-      <<-EOS.strip
-#{call_rb(action[:call])}
-#{databases_rb(action[:databases])}
-if response[:_db_errors].length == 0
-#{indent(interfaces_rb(action[:interfaces]), 1)}
-end
-EOS
+      action[:actions].inject([]) do |result, act|
+        result << case act[:type]
+                  when "interface"
+                    interface_rb(act)
+                  when "database"
+                    database_rb(act)
+                  when "call"
+                    call_rb(act)
+                  else
+                  end
+        result
+      end.join("\n")
     end
+
+    alias conditional_then always
+    alias conditional_else always
 
     def condition(condition)
       "#{condition_left(condition[:left])} #{condition_operand(condition[:operand])} #{condition_right(condition[:right])}"
@@ -144,27 +159,15 @@ EOS
       end
     end
 
-    alias conditional_then always
-    alias conditional_else always
-
-    def field_param(array)
-      array.inject([]) do |result, field|
-        result << "#{field[:field]}: #{set_value(field[:value])}"
-        result
-      end.join(", ")
-    end
-
-    def call_rb(calls)
-      calls.inject([]) do |result, call|
-        result << case call[:type]
-                  when "url"
-                    call_url(call)
-                  when "function"
-                    call_function(call)
-                  else
-                    raise Exception
-                  end
-      end.join("\n")
+    def call_rb(call)
+      case call[:call_type]
+      when "url"
+        call_url(call)
+      when "function"
+        call_function(call)
+      else
+        raise Exception
+      end
     end
 
     def call_url(call)
@@ -178,12 +181,6 @@ EOS
 
     def call_function(call)
       # TODO: Not Implemented
-    end
-
-    def databases_rb(databases)
-      databases.inject([]) do |result, database|
-        result << database_rb(database)
-      end.join("\n")
     end
 
     def database_rb(database)
@@ -209,7 +206,7 @@ EOS
 #{database[:id]} = #{database[:database].singularize.capitalize}.new(
 #{indent(field_param(database[:fields]), 1)}
 )
-response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
+response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages unless #{database[:id]}.save
       EOS
     end
 
@@ -225,7 +222,7 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
       <<-EOS.chomp
 #{read(database)}
 #{update_record(database[:id], database[:fields])}
-response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messages } unless #{database[:id]}.save
+response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages unless #{database[:id]}.save
       EOS
     end
 
@@ -234,12 +231,6 @@ response[:_db_errors] << { #{database[:id]}: #{database[:id]}.errors.full_messag
 #{read(database)}
 #{database[:id]}.destroy
       EOS
-    end
-
-    def interfaces_rb(interfaces)
-      interfaces.inject([]) do |result, interface|
-        result << interface_rb(interface)
-      end.join("\n")
     end
 
     def interface_set_params(interface)

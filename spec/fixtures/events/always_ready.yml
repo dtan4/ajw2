@@ -12,16 +12,9 @@ event:
         type: element
   action:
     type: always
-    interfaces:
-    - id: if01
-      element: messageLabel
-      func: setValue
-      type: element
-      value:
-        type: param
-        id: message
-    databases:
+    actions:
     - id: db01
+      type: database
       database: messages
       func: create
       where: []
@@ -30,7 +23,13 @@ event:
         value:
           type: param
           id: message
-    call: []
+    - id: if01
+      type: interface
+      element: messageLabel
+      func: setValue
+      value:
+        type: param
+        id: message
 javascript: |
   var message = $('#messageTextBox').val();
   $.ajax({

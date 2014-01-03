@@ -12,16 +12,9 @@ event:
         type: literal
   action:
     type: always
-    interfaces:
-    - id: if01
-      element: messageLabel
-      func: setValue
-      type: element
-      value:
-        type: param
-        id: message
-    databases:
+    actions:
     - id: db01
+      type: database
       database: messages
       func: create
       where: []
@@ -30,18 +23,22 @@ event:
         value:
           type: param
           id: message
-    call: []
+    - id: if01
+      type: interface
+      element: messageLabel
+      func: setValue
+      value:
+        type: param
+        id: message
 ruby: |
   post "/event01" do
     content_type :json
-    response = { _db_errors: [] }
+    response = { _db_errors: {} }
     message = "rawValue"
     db01 = Message.new(
       message: message
     )
-    response[:_db_errors] << { db01: db01.errors.full_messages } unless db01.save
-    if response[:_db_errors].length == 0
-      response[:if01] = message
-    end
+    response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
+    response[:if01] = message
     response.to_json
   end
