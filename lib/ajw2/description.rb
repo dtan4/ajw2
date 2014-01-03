@@ -1,4 +1,3 @@
-require "active_support/core_ext/hash"
 require "json"
 require "yaml"
 require "ajw2/util"

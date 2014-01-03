@@ -4,7 +4,6 @@ module Ajw2
   describe Description do
     before(:all) do
       @description_path = fixture_path("chat.description")
-      @xml_path = fixture_path("chat.xml")
       @json_path = fixture_path("chat.json")
       @yaml_path = fixture_path("chat.yaml")
       @yml_path = fixture_path("chat.yml")

@@ -1,4 +1,3 @@
-require "active_support/inflector"
 require "ajw2/model/event/javascript"
 require "ajw2/model/event/ruby"
 
