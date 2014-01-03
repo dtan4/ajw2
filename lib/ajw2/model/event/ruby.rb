@@ -44,6 +44,19 @@ end
 
     private
 
+    def element_value(param)
+      case param[:type]
+      when "integer"
+        "params[:#{param[:id]}].to_i"
+      when "decimal"
+        "params[:#{param[:id]}].to_f"
+      when "datetime"
+        "Time.parse(params[:#{param[:id]}])"
+      else
+        "params[:#{param[:id]}]"
+      end
+    end
+
     # param[:type] == "integer" || "decimal" || "boolean":
     #   42
     # param[:type] == "string":
@@ -62,7 +75,7 @@ end
         result << case param[:value][:type]
                   when "element"
                     (hash ? "#{param[:id]}: #{param[:id]}" :
-                     "#{param[:id]} = params[:#{param[:id]}]")
+                     "#{param[:id]} = #{element_value(param)}")
                   when "literal"
                     (hash ? "#{param[:id]}: \"#{param[:value][:value]}\"" :
                      "#{param[:id]} = #{literal_value(param)}")

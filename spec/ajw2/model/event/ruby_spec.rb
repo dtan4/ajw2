@@ -27,6 +27,27 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which sets integer value" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_integer_value.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which sets decimal value" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_decimal_value.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which sets datetime value" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_datetime_value.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "which sets string literal" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_string_literal.yml"))) }
 

@@ -1,0 +1,24 @@
+event:
+  trigger:
+    id: event01
+    target: submitBtn
+    type: onClick
+    realtime: false
+    params:
+    - id: count
+      type: integer
+      value:
+        element: countTextBox
+        func: getValue
+        type: element
+  action:
+    type: always
+    actions: []
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: {} }
+    count = params[:count].to_i
+
+    response.to_json
+  end
