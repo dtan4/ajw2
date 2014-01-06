@@ -203,7 +203,7 @@ if (_msg['_db_errors'].length == 0) {
       end.join("\n")
     end
 
-    def call_js(database)
+    def call_js(call)
       case call[:call_type]
       when "url"
         call_url(call)

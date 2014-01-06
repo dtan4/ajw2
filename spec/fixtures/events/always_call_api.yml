@@ -54,3 +54,25 @@ ruby: |
     response[:if01] = call01[:results][0][:formatted_address]
     response.to_json
   end
+javascript: |
+  $('#submitBtn').click(function() {
+    var address = $('#addressTextBox').val();
+    $.ajax({
+      type: 'POST',
+      url: '/event01',
+      data: { 'address': address },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
+      success: function(_msg) {
+        if (_msg['_db_errors'].length == 0) {
+          var if01 = _msg['if01'];
+          $('#addressLabel').val(if01);
+        } else {
+        }
+      },
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
+      }
+    });
+  });
