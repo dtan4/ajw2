@@ -30,6 +30,18 @@ event:
       value:
         type: param
         id: message
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: {} }
+    message = params[:message]
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
+    response[:if01] = message
+    response.to_json
+  end
 javascript: |
   var message = $('#messageTextBox').val();
   $.ajax({

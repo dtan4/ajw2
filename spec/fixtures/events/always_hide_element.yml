@@ -28,6 +28,17 @@ event:
       type: interface
       element: messageLabel
       func: hide
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: {} }
+    message = params[:message]
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
+    response.to_json
+  end
 javascript: |
   $('#submitBtn').click(function() {
     var message = $('#messageTextBox').val();

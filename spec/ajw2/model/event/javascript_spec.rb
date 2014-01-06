@@ -26,6 +26,27 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which sets integer value" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_integer_value.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which sets decimal value" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_decimal_value.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which sets datetime value" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_datetime_value.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "which sets string literal" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_string_literal.yml"))) }
 
@@ -68,14 +89,14 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
-        context "which hide element" do
+        context "which hides element" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_hide_element.yml"))) }
 
           subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
           it_behaves_like "render successfully"
         end
 
-        context "which show element" do
+        context "which shows element" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_show_element.yml"))) }
 
           subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
@@ -105,10 +126,33 @@ module Ajw2::Model::Event
       end
 
       context "with conditional-execute source" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/conditional.yml"))) }
+        context "using equal" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/conditional.yml"))) }
 
-        subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
-        it_behaves_like "render successfully"
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "using not-equal" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/conditional_neq.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "using less-than" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/conditional_lt.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "using more-than" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/conditional_gt.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
       end
     end
 

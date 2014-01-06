@@ -90,6 +90,20 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which hides record" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_hide_element.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which shows record" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_show_element.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "which toggles element visibility" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_toggle_element.yml"))) }
 
@@ -99,6 +113,13 @@ module Ajw2::Model::Event
 
         context "which call Web API" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_call_api.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "with onload (ready) event" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_ready.yml"))) }
 
           subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
           it_behaves_like "render successfully"
@@ -146,6 +167,13 @@ module Ajw2::Model::Event
 
       describe "with conditional-execute source" do
         before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime_conditional.yml"))) }
+
+        subject { Ajw2::Model::Event::Ruby.new.render_realtime(@fixture[:event]) }
+        it_behaves_like "render successfully"
+      end
+
+      describe "with onload (ready) source" do
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime_always_ready.yml"))) }
 
         subject { Ajw2::Model::Event::Ruby.new.render_realtime(@fixture[:event]) }
         it_behaves_like "render successfully"

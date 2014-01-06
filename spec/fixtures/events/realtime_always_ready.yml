@@ -30,6 +30,19 @@ event:
       value:
         type: param
         id: message
+ruby: |
+  when "event01"
+    response[:_db_errors] = {}
+    response[:_event] = "event01"
+    message = params[:message]
+    db01 = Message.new(
+      message: message
+    )
+    response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
+    response[:if01] = message
+    EventMachine.next_tick do
+      settings.sockets.each { |s| s.send(response.to_json) }
+    end
 javascript: |
   var message = $('#messageTextBox').val();
   var params = { 'message': message };
