@@ -259,13 +259,6 @@ $('\##{interface[:element]}').text(#{interface[:id]});
       "$('\##{interface[:element]}')." << type.to_s << "();"
     end
 
-    def append_elements(interface)
-      interface[:params].inject([]) do |result, param|
-        result << "$('\##{interface[:element]}').append(#{append_element(param, interface[:id])});"
-        result
-      end.join("\n")
-    end
-
     def interface_js(interface)
       case interface[:func]
       when "setValue"
@@ -288,12 +281,19 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
       end
     end
 
-    def append_element(element, id)
+    def append_elements(interface)
+      interface[:params].inject([]) do |result, param|
+        result << "$('\##{interface[:element]}').append(#{append_child_element(param, interface[:id])});"
+        result
+      end.join("\n")
+    end
+
+    def append_child_element(element, id)
       result = "$('<#{element[:tag]}>')"
       result << ".val(#{id})" if element[:value]
       result << ".text(#{id})" if element[:text]
       element[:children].each do |elem|
-        result << ".append(#{append_element(elem, id)})"
+        result << ".append(#{append_child_element(elem, id)})"
       end if element[:children]
       result
     end
