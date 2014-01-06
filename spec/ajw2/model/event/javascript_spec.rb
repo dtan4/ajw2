@@ -26,8 +26,43 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which sets string literal" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_string_literal.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which sets integer literal" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_integer_literal.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "which appends elements" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_append.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which reads record" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_read.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which updates record" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_update.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "which deletes record" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_delete.yml"))) }
 
           subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
           it_behaves_like "render successfully"

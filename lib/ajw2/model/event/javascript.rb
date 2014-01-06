@@ -125,20 +125,16 @@ ws.send(JSON.stringify(request));
     #   var message = $('#messageTextBox').val();
     def params_js(params)
       params.inject([]) do |result, param|
-        case param[:value][:type]
-        when "element"
-          result << "var #{param[:id]} = #{get_element_value(param[:value])}"
-        else
-          raise "Undefined event value type!"
-        end
-
+        result << "var #{param[:id]} = #{get_element_value(param[:value])}" if param[:value][:type] == "element"
+        result
       end.join("\n")
     end
 
     def params_json(params)
       params.inject([]) do |result, param|
-        result << "'#{param[:id]}': #{param[:id]}"
-      end.join(" ")
+        result << "'#{param[:id]}': #{param[:id]}" if param[:value][:type] == "element"
+        result
+      end.join(", ")
     end
 
     # type == "onClick":

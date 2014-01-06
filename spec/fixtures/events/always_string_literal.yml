@@ -42,3 +42,24 @@ ruby: |
     response[:if01] = message
     response.to_json
   end
+javascript: |
+  $('#submitBtn').click(function() {
+    $.ajax({
+      type: 'POST',
+      url: '/event01',
+      data: {  },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
+      success: function(_msg) {
+        if (_msg['_db_errors'].length == 0) {
+          var if01 = _msg['if01'];
+          $('#messageLabel').val(if01);
+        } else {
+        }
+      },
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
+      }
+    });
+  });

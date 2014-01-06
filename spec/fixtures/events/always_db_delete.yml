@@ -24,13 +24,6 @@ event:
           type: param
           id: message
         fields: []
-    - id: if01
-      type: interface
-      element: messageLabel
-      func: setValue
-      value:
-        type: param
-        id: message
 ruby: |
   post "/event01" do
     content_type :json
@@ -40,6 +33,25 @@ ruby: |
       message: message
     )
     db01.destroy
-    response[:if01] = message
     response.to_json
   end
+javascript: |
+  $('#submitBtn').click(function() {
+    var message = $('#messageTextBox').val();
+    $.ajax({
+      type: 'POST',
+      url: '/event01',
+      data: { 'message': message },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
+      success: function(_msg) {
+        if (_msg['_db_errors'].length == 0) {
+        } else {
+        }
+      },
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
+      }
+    });
+  });
