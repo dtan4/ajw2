@@ -266,7 +266,7 @@ $('\##{interface[:element]}').text(#{interface[:id]});
       when "hide"
         change_element_visibility(interface, :hide)
       when "toggle"
-        toggle_element_visibility(interface, :toggle)
+        change_element_visibility(interface, :toggle)
       when "appendElements"
         <<-EOS
 var #{interface[:id]} = _msg['#{interface[:id]}'];

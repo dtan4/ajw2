@@ -90,6 +90,13 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which toggles element visibility" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_toggle_element.yml"))) }
+
+          subject { Ajw2::Model::Event::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "which call Web API" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_call_api.yml"))) }
 
