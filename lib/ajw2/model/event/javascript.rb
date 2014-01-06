@@ -61,7 +61,7 @@ case '#{event[:id]}':
 
     # var message = $('#messageTextBox').val();
     # $.ajax({
-    #   type: 'POSnT',
+    #   type: 'POST',
     #   url: '/event01',
     #   data: { 'message': message },
     #   beforeSend: function(_xhr) {
