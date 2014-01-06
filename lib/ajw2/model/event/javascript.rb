@@ -182,11 +182,9 @@ if (_msg['result']) {
     # } else {
     # }
     def always(action)
-      interfaces = action[:actions].select { |act| act[:type] == "interface" }
-
       <<-EOS
 if (_msg['_db_errors'].length == 0) {
-#{indent(interfaces_js(interfaces), 1)}
+#{indent(actions_js(action), 1)}
 } else {
 }
       EOS
@@ -195,10 +193,41 @@ if (_msg['_db_errors'].length == 0) {
     alias conditional_then always
     alias conditional_else always
 
-    def interfaces_js(interfaces)
-      interfaces.inject([]) do |result, interface|
-        result << interface_js(interface)
+    def actions_js(action)
+      action[:actions].inject([]) do |result, act|
+        result << case act[:type]
+                  when "interface"
+                    interface_js(act)
+                  when "database"
+                    database_js(act)
+                  when "call"
+                    call_js(act)
+                  else
+                  end
       end.join("\n")
+    end
+
+    def call_js(database)
+      case call[:call_type]
+      when "url"
+        call_url(call)
+      when "function"
+        call_function(call)
+      else
+        raise Exception
+      end
+    end
+
+    def call_url(call)
+      ""
+    end
+
+    def call_function(call)
+      # TODO: Not Implemented
+    end
+
+    def database_js(database)
+      ""
     end
 
     def interface_js(interface)
