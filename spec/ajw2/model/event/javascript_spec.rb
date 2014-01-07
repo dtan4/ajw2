@@ -117,6 +117,13 @@ module Ajw2::Model::Event
           it_behaves_like "render successfully"
         end
 
+        context "which calls JavaScript" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_call_script.yml"))) }
+
+          subject { Ajw2::Model::Event::JavaScript.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "with onload (ready) event" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_ready.yml"))) }
 

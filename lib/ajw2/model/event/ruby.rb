@@ -199,8 +199,8 @@ end
       case call[:call_type]
       when "url"
         call_url(call)
-      when "function"
-        call_function(call)
+      when "script"
+        call_script(call)
       else
         raise Exception
       end
@@ -219,8 +219,11 @@ end
 EOS
     end
 
-    def call_function(call)
-      # TODO: Not Implemented
+    def call_script(call)
+      call[:params].inject([]) do |result, param|
+        result << "response[:#{call[:id]}][:#{param[:field]}] = #{set_value(param[:value])}"
+        result
+      end.join("\n")
     end
 
     def database_rb(database)

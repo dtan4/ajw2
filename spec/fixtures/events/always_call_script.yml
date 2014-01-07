@@ -1,0 +1,85 @@
+event:
+  id: event01
+  realtime: false
+  trigger:
+    target: submitBtn
+    type: onClick
+    params:
+    - id: address
+      type: string
+      value:
+        element: addressTextBox
+        func: getValue
+        type: element
+    - id: sensor
+      type: boolean
+      value:
+        value: 'false'
+        type: literal
+  action:
+    type: always
+    actions:
+    - id: call01
+      type: call
+      call_type: url
+      method: get
+      endpoint: http://maps.googleapis.com/maps/api/geocode/json
+      params:
+      - field: address
+        value:
+          type: param
+          id: address
+      - field: sensor
+        value:
+          type: param
+          id: sensor
+    - id: call02
+      type: call
+      call_type: script
+      params:
+      - field: address
+        value:
+          type: call
+          id: call01
+          jsonpath: /results[0]/formatted_address
+      script: |
+        $('#calendar').fullCalendar(function() {
+          alert(call02.address);
+        });
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: {} }
+    address = params[:address]
+    sensor = false
+    call01 = http_get(
+      "http://maps.googleapis.com/maps/api/geocode/json",
+      address: address, sensor: sensor
+    )
+    response[:call02][:address] = call01[:results][0][:formatted_address]
+    response.to_json
+  end
+javascript: |
+  $('#submitBtn').click(function() {
+    var address = $('#addressTextBox').val();
+    $.ajax({
+      type: 'POST',
+      url: '/event01',
+      data: { 'address': address },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
+      success: function(_msg) {
+        if (_msg['_db_errors'].length == 0) {
+          var call02 = _msg['call02'];
+          $('#calendar').fullCalendar(function() {
+            alert(call02.address);
+          });
+        } else {
+        }
+      },
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
+      }
+    });
+  });

@@ -137,6 +137,11 @@ ws.send(JSON.stringify(request));
       end.join(", ")
     end
 
+    # var id = _msg['id'];
+    def set_action_variable(id)
+      "var #{id} = _msg['#{id}'];"
+    end
+
     # type == "onClick":
     #   click
     def trigger_function(type)
@@ -207,8 +212,8 @@ if (_msg['_db_errors'].length == 0) {
       case call[:call_type]
       when "url"
         call_url(call)
-      when "function"
-        call_function(call)
+      when "script"
+        call_script(call)
       else
         raise Exception
       end
@@ -218,25 +223,22 @@ if (_msg['_db_errors'].length == 0) {
       ""
     end
 
-    def call_function(call)
-      # TODO: Not Implemented
+    def call_script(call)
+      <<-EOS
+#{set_action_variable(call[:id])}
+#{call[:script]}
+EOS
     end
 
     def database_js(database)
       ""
     end
 
-    def interface_js(interface)
-      <<-EOS
-#{element_action(interface)}
-      EOS
-    end
-
     # var if01 = _msg['if01'];
     # $('#messageLabel').val(if01);
     def set_value(interface)
       <<-EOS
-var #{interface[:id]} = _msg['#{interface[:id]}'];
+#{set_action_variable(interface[:id])}
 $('\##{interface[:element]}').val(#{interface[:id]});
       EOS
     end
@@ -245,7 +247,7 @@ $('\##{interface[:element]}').val(#{interface[:id]});
     # $('#messageLabel').text(if01);
     def set_text(interface)
       <<-EOS
-var #{interface[:id]} = _msg['#{interface[:id]}'];
+#{set_action_variable(interface[:id])}
 $('\##{interface[:element]}').text(#{interface[:id]});
       EOS
     end
