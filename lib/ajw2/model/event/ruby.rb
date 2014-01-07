@@ -3,6 +3,24 @@ module Ajw2::Model::Event
   class Ruby
     include Ajw2::Util
 
+    # Generate Ruby code using Ajax
+    # @param [Hash] event Events model description
+    # @return [String] Ruby code
+    def render_ajax(event)
+      raise "event/trigger is not found" unless event[:trigger]
+      raise "event/action is not found" unless event[:action]
+
+      <<-EOS
+post "/#{event[:id]}" do
+  content_type :json
+  response = { _db_errors: {} }
+#{indent(params_rb(event[:trigger][:params]), 1)}
+#{indent(action_rb(event[:action]), 1)}
+  response.to_json
+end
+      EOS
+    end
+
     # Generate Ruby code using WebSocket
     # @param [Hash] event Events model description
     # @return [String] Ruby code
@@ -19,24 +37,6 @@ when "#{event[:id]}"
   EventMachine.next_tick do
     settings.sockets.each { |s| s.send(response.to_json) }
   end
-      EOS
-    end
-
-    # Generate Ruby code using Ajax
-    # @param [Hash] event Events model description
-    # @return [String] Ruby code
-    def render_ajax(event)
-      raise "event/trigger is not found" unless event[:trigger]
-      raise "event/action is not found" unless event[:action]
-
-      <<-EOS
-post "/#{event[:id]}" do
-  content_type :json
-  response = { _db_errors: {} }
-#{indent(params_rb(event[:trigger][:params]), 1)}
-#{indent(action_rb(event[:action]), 1)}
-  response.to_json
-end
       EOS
     end
 
@@ -68,27 +68,21 @@ end
       end
     end
 
-    def params_rb(params, hash = false)
+    # id01 = param01
+    # id02 = "literal02"
+    def params_rb(params)
       params.inject([]) do |result, param|
         result << case param[:value][:type]
                   when "element"
-                    (hash ? "#{param[:id]}: #{param[:id]}" :
-                     "#{param[:id]} = #{element_value(param)}")
-                  when "literal"
-                    (hash ? "#{param[:id]}: \"#{param[:value][:value]}\"" :
-                     "#{param[:id]} = #{literal_value(param)}")
+                    "#{param[:id]} = #{element_value(param)}"
+                  else
+                    "#{param[:id]} = #{literal_value(param)}"
                   end
         result
       end.join("\n")
     end
 
-    def field_param(array)
-      array.inject([]) do |result, field|
-        result << "#{field[:field]}: #{set_value(field[:value])}"
-        result
-      end.join(", ")
-    end
-
+    # /json[0]/path -> [:json][0][:path]
     def parse_jsonpath(jsonpath)
       jsonpath.split("/")[1..-1].inject("") do |result, key|
         if /^(?<k>[a-zA-Z]+)\[(?<i>\d+)\]$/ =~ key
@@ -101,6 +95,10 @@ end
       end
     end
 
+    # value[:type] == "database"
+    #   id.field
+    # value[:type] == "call"
+    #   id[:json][:path][0]
     def set_value(value)
       case value[:type]
       when "database"
@@ -110,6 +108,14 @@ end
       else
         value[:id]
       end
+    end
+
+    # field01: value01, field02: value02
+    def field_param(array)
+      array.inject([]) do |result, field|
+        result << "#{field[:field]}: #{set_value(field[:value])}"
+        result
+      end.join(", ")
     end
 
     def action_rb(action)
