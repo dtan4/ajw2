@@ -41,7 +41,7 @@ interface:
 database:
   _isDisplay: true
   dbType: sqlite
-  database:
+  databases:
   - tablename: messages
     type: server
     property:

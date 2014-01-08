@@ -17,17 +17,17 @@ module Ajw2::Model
     # Generate Ruby code which does database migration
     # @return [Array] collection of generated code
     def render_migration
-      raise "/database/database is not found" unless @source[:database]
+      raise "/database/databases is not found" unless @source[:databases]
 
-      @source[:database].inject([]) { |migration, table| migration << render_migration_table(table) }
+      @source[:databases].inject([]) { |migration, table| migration << render_migration_table(table) }
     end
 
     # Generate Ruby code which defines ActiveRecord model
     # @return [Array] collection of generated code
     def render_definition
-      raise "/database/database is not found" unless @source[:database]
+      raise "/database/databases is not found" unless @source[:databases]
 
-      @source[:database].inject([]) { |definition, table| definition << render_definition_table(table) }
+      @source[:databases].inject([]) { |definition, table| definition << render_definition_table(table) }
     end
 
     # Generate YAML which sets up database
@@ -70,7 +70,7 @@ timeout: 5000
     # Generate gem requirement of database adapter
     # @return [String] gem requirement
     def render_database_gem
-      raise "/databases/dbType is not found" unless @source[:dbType]
+      raise "/database/dbType is not found" unless @source[:dbType]
 
       case @source[:dbType]
       when "mysql"

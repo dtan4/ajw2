@@ -6,7 +6,7 @@ module Ajw2::Model
       {
         _isDisplay: true,
         dbType: "sqlite",
-        database:
+        databases:
         [
          {
            tablename: "users",
@@ -69,7 +69,7 @@ drop_table :users
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_migration }.to raise_error RuntimeError, "/database/database is not found"
+          expect { Ajw2::Model::Database.new({}).render_migration }.to raise_error RuntimeError, "/database/databases is not found"
         end
       end
     end
@@ -91,7 +91,7 @@ end
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_definition }.to raise_error RuntimeError, "/database/database is not found"
+          expect { Ajw2::Model::Database.new({}).render_definition }.to raise_error RuntimeError, "/database/databases is not found"
         end
       end
     end
