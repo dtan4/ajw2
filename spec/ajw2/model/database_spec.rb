@@ -1,7 +1,7 @@
 require "spec_helper"
 
 module Ajw2::Model
-  describe Databases do
+  describe Database do
     let(:source) {
       {
         _isDisplay: true,
@@ -29,23 +29,23 @@ module Ajw2::Model
       }
     }
 
-    describe "#initialize" do
+    describe "#iniialize" do
       context "with Hash" do
-        subject { Ajw2::Model::Databases.new(source) }
+        subject { Ajw2::Model::Database.new(source) }
         its(:source) { should be_instance_of Hash }
       end
 
       context "with non-Hash" do
         it "should to raise ArgumentError" do
-          expect { Ajw2::Model::Databases.new("a") }.to raise_error ArgumentError,
-            "Databases section must be a Hash"
+          expect { Ajw2::Model::Database.new("a") }.to raise_error ArgumentError,
+            "Database section must be a Hash"
         end
       end
     end
 
     describe "#render_migration" do
       context "with valid source" do
-        subject { Ajw2::Model::Databases.new(source).render_migration }
+        subject { Ajw2::Model::Database.new(source).render_migration }
         it { should be_an_instance_of Array }
         it { should have(2).items }
 
@@ -69,14 +69,14 @@ drop_table :users
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Databases.new({}).render_migration }.to raise_error RuntimeError, "/databases/database is not found"
+          expect { Ajw2::Model::Database.new({}).render_migration }.to raise_error RuntimeError, "/database/database is not found"
         end
       end
     end
 
     describe "#render_definition" do
       context "with valid source" do
-        subject { Ajw2::Model::Databases.new(source).render_definition }
+        subject { Ajw2::Model::Database.new(source).render_definition }
         it { should be_an_instance_of Array }
         it { should have(2).items }
 
@@ -91,7 +91,7 @@ end
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Databases.new({}).render_definition }.to raise_error RuntimeError, "/databases/database is not found"
+          expect { Ajw2::Model::Database.new({}).render_definition }.to raise_error RuntimeError, "/database/database is not found"
         end
       end
     end
@@ -102,7 +102,7 @@ end
       end
 
       context "when dbType is mysql" do
-        subject { Ajw2::Model::Databases.new({ dbType: "mysql" }).render_config(:development, @application) }
+        subject { Ajw2::Model::Database.new({ dbType: "mysql" }).render_config(:development, @application) }
         it { should be_an_instance_of String }
 
         it "should call Application#name" do
@@ -126,7 +126,7 @@ sock: /tmp/mysql.sock
       end
 
       context "when dbType is postgres" do
-        subject { Ajw2::Model::Databases.new({ dbType: "postgres" }).render_config(:development, @application) }
+        subject { Ajw2::Model::Database.new({ dbType: "postgres" }).render_config(:development, @application) }
         it { should be_an_instance_of String }
 
         it "should call Application#name" do
@@ -147,7 +147,7 @@ port: 5432
       end
 
       context "when dbType is sqlite" do
-        subject { Ajw2::Model::Databases.new({ dbType: "sqlite" }).render_config(:development, @application) }
+        subject { Ajw2::Model::Database.new({ dbType: "sqlite" }).render_config(:development, @application) }
         it { should be_an_instance_of String }
 
         it "should not call Application#name" do
@@ -166,7 +166,7 @@ timeout: 5000
       end
 
       context "when dbType is unknown" do
-        subject { Ajw2::Model::Databases.new({ dbType: "hogehoge" }).render_config(:development, @application) }
+        subject { Ajw2::Model::Database.new({ dbType: "hogehoge" }).render_config(:development, @application) }
         it { should be_an_instance_of String }
 
         it "should not call Application#name" do
@@ -186,7 +186,7 @@ timeout: 5000
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Databases.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/databases/dbType is not found"
+          expect { Ajw2::Model::Database.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/database/dbType is not found"
         end
       end
     end
@@ -197,7 +197,7 @@ timeout: 5000
       end
 
       context "when dbType is mysql" do
-        subject { Ajw2::Model::Databases.new({ dbType: "mysql" }).render_database_gem }
+        subject { Ajw2::Model::Database.new({ dbType: "mysql" }).render_database_gem }
         it { should be_an_instance_of String }
 
         it "should render gem requirement" do
@@ -206,7 +206,7 @@ timeout: 5000
       end
 
       context "when dbType is postgres" do
-        subject { Ajw2::Model::Databases.new({ dbType: "postgres" }).render_database_gem }
+        subject { Ajw2::Model::Database.new({ dbType: "postgres" }).render_database_gem }
         it { should be_an_instance_of String }
 
         it "should render gem requirement" do
@@ -215,7 +215,7 @@ timeout: 5000
       end
 
       context "when dbType is sqlite" do
-        subject { Ajw2::Model::Databases.new({ dbType: "sqlite" }).render_database_gem }
+        subject { Ajw2::Model::Database.new({ dbType: "sqlite" }).render_database_gem }
         it { should be_an_instance_of String }
 
         it "should render gem requirement" do
@@ -224,7 +224,7 @@ timeout: 5000
       end
 
       context "when dbType is unknown" do
-        subject { Ajw2::Model::Databases.new({ dbType: "hogehoge" }).render_database_gem }
+        subject { Ajw2::Model::Database.new({ dbType: "hogehoge" }).render_database_gem }
         it { should be_an_instance_of String }
 
         it "should render gem requirement" do
@@ -234,7 +234,7 @@ timeout: 5000
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Databases.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/databases/dbType is not found"
+          expect { Ajw2::Model::Database.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/database/dbType is not found"
         end
       end
     end

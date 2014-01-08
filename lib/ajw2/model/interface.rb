@@ -1,8 +1,8 @@
 require "cgi"
 
 module Ajw2::Model
-  # Generate source code from Interfaces model
-  class Interfaces
+  # Generate source code from Interface model
+  class Interface
     include Ajw2::Util
 
     INPUT_TYPE = %w{
@@ -15,14 +15,14 @@ module Ajw2::Model
     # Initializer
     # @param [Hash] source entire model description
     def initialize(source)
-      raise ArgumentError, "Interfaces section must be a Hash" unless source.class == Hash
+      raise ArgumentError, "Interface section must be a Hash" unless source.class == Hash
       @source = source
     end
 
     # Generate Slim template
     # @return [Array] collection of generated code
     def render
-      raise "/interfaces/elements is not found" unless @source[:elements]
+      raise "/interface/elements is not found" unless @source[:elements]
 
       @source[:elements].inject([]) { |result, el| result << indent(render_element(el), 0) }.join("\n") + "\n"
     end

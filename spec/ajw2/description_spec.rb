@@ -22,11 +22,11 @@ module Ajw2
         end
 
         it "should set interfaces" do
-          expect(@description.interfaces).to be_an_instance_of Ajw2::Model::Interfaces
+          expect(@description.interfaces).to be_an_instance_of Ajw2::Model::Interface
         end
 
         it "should set databases" do
-          expect(@description.databases).to be_an_instance_of Ajw2::Model::Databases
+          expect(@description.databases).to be_an_instance_of Ajw2::Model::Database
         end
 
         it "should set events" do

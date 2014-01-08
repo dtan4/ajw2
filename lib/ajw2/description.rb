@@ -35,8 +35,8 @@ module Ajw2
 
     def create_models(description)
       @application = Ajw2::Model::Application.new(description[:application])
-      @interfaces = Ajw2::Model::Interfaces.new(description[:interfaces])
-      @databases = Ajw2::Model::Databases.new(description[:databases])
+      @interfaces = Ajw2::Model::Interface.new(description[:interfaces])
+      @databases = Ajw2::Model::Database.new(description[:databases])
       @events = Ajw2::Model::Events.new(description[:events])
     end
   end

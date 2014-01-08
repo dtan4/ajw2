@@ -1,7 +1,7 @@
 require "spec_helper"
 
 module Ajw2::Model
-  describe Interfaces do
+  describe Interface do
     let(:source) {
       {
        type: "slim", pretty: true,
@@ -36,21 +36,21 @@ module Ajw2::Model
 
     describe "#initialize" do
       context "with Hash" do
-        subject { Ajw2::Model::Interfaces.new(source) }
+        subject { Ajw2::Model::Interface.new(source) }
         its(:source) { should be_instance_of Hash }
       end
 
       context "with non-Hash" do
         it "should raise ArgumentError" do
-          expect { Ajw2::Model::Interfaces.new("hoge") }.to raise_error ArgumentError,
-            "Interfaces section must be a Hash"
+          expect { Ajw2::Model::Interface.new("hoge") }.to raise_error ArgumentError,
+            "Interface section must be a Hash"
         end
       end
     end
 
     describe "#render" do
       context "with clean source" do
-        subject { Ajw2::Model::Interfaces.new(source).render }
+        subject { Ajw2::Model::Interface.new(source).render }
         it { should be_an_instance_of String }
 
         it "should return Slim template" do
@@ -66,7 +66,7 @@ EOS
       end
 
       context "with dirty source (include XSS)" do
-        subject { Ajw2::Model::Interfaces.new(dirty_source).render }
+        subject { Ajw2::Model::Interface.new(dirty_source).render }
         it { should be_an_instance_of String }
 
         it "should return escaped Slim template" do
@@ -84,8 +84,8 @@ EOS
       context "with invalid source" do
         it "should raise Exception" do
           expect {
-            puts Ajw2::Model::Interfaces.new({}).render
-          }.to raise_error RuntimeError, "/interfaces/elements is not found"
+            puts Ajw2::Model::Interface.new({}).render
+          }.to raise_error RuntimeError, "/interface/elements is not found"
         end
       end
     end
