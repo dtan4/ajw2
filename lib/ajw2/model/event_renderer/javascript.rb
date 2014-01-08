@@ -144,9 +144,18 @@ ws.send(JSON.stringify(request));
 
     # type == "onClick":
     #   click
+    # type == "onChange":
+    #   change
+    # type == "onFocus":
+    #   focus
+    # type == "onFocusOut":
+    #   blur
     def trigger_function(type)
       case type
       when "onClick" then "click"
+      when "onChange" then "change"
+      when "onFocus" then "focus"
+      when "onFocusOut" then "blur"
       else raise "Undefined trigger function!"
       end
     end

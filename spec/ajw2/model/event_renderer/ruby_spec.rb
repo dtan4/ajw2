@@ -131,6 +131,27 @@ module Ajw2::Model::EventRenderer
           subject { Ajw2::Model::EventRenderer::Ruby.new.render_ajax(@fixture[:event]) }
           it_behaves_like "render successfully"
         end
+
+        context "with onChange event" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_onchange.yml"))) }
+
+          subject { Ajw2::Model::EventRenderer::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "with onFocus event" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_onfocus.yml"))) }
+
+          subject { Ajw2::Model::EventRenderer::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
+        context "with onFocusOut event" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_onfocusout.yml"))) }
+
+          subject { Ajw2::Model::EventRenderer::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
       end
 
       context "with conditional-execute source" do

@@ -1,0 +1,44 @@
+event:
+  id: event01
+  realtime: false
+  trigger:
+    target: messageTextBox
+    type: onFocusOut
+    params:
+    - id: message
+      type: string
+      value:
+        element: messageTextBox
+        func: getValue
+        type: element
+  action:
+    type: always
+    actions: []
+ruby: |
+  post "/event01" do
+    content_type :json
+    response = { _db_errors: {} }
+    message = params[:message]
+
+    response.to_json
+  end
+javascript: |
+  $('#messageTextBox').blur(function() {
+    var message = $('#messageTextBox').val();
+    $.ajax({
+      type: 'POST',
+      url: '/event01',
+      data: { 'message': message },
+      beforeSend: function(_xhr) {
+        _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
+      },
+      success: function(_msg) {
+        if (_msg['_db_errors'].length == 0) {
+        } else {
+        }
+      },
+      error: function(_xhr, _msg) {
+        alert('XMLHttpRequest Error: ' + _msg);
+      }
+    });
+  });
