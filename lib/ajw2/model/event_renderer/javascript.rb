@@ -1,4 +1,4 @@
-module Ajw2::Model::Event
+module Ajw2::Model::EventRenderer
   # Generate Ruby code from Events model
   class JavaScript
     include Ajw2::Util

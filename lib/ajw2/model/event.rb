@@ -1,20 +1,20 @@
-require "ajw2/model/event/javascript"
-require "ajw2/model/event/ruby"
+require "ajw2/model/event_renderer/javascript"
+require "ajw2/model/event_renderer/ruby"
 
 module Ajw2::Model
   # Generate source code from Events model
-  class Events
+  class Event
     attr_reader :source
 
     # Initializer
     # @param [Hash] source entire model description
-    # @param [Ajw2::Model::Event::JavaScript] js JavaScript code generator
-    # @param [Ajw2::Model::Event::Ruby] rb Ruby code generator
+    # @param [Ajw2::Model::EventRenderer::JavaScript] js JavaScript code generator
+    # @param [Ajw2::Model::EventRenderer::Ruby] rb Ruby code generator
     def initialize(source, js = nil, rb = nil)
-      raise ArgumentError, "Events section must be a Hash" unless source.class == Hash
+      raise ArgumentError, "Event section must be a Hash" unless source.class == Hash
       @source = source
-      @js = js || Ajw2::Model::Event::JavaScript.new
-      @rb = rb || Ajw2::Model::Event::Ruby.new
+      @js = js || Ajw2::Model::EventRenderer::JavaScript.new
+      @rb = rb || Ajw2::Model::EventRenderer::Ruby.new
     end
 
     # Generate Ruby code using Ajax

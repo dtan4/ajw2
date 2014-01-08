@@ -1,7 +1,7 @@
 require "spec_helper"
 
 module Ajw2::Model
-  describe Events do
+  describe Event do
     before do
       @ajax_source = {
                       events: [{ id: "event01", realtime: false }]
@@ -77,21 +77,21 @@ EOS
 
     describe "#initialize" do
       context "with Hash" do
-        subject { Ajw2::Model::Events.new(@ajax_source) }
+        subject { Ajw2::Model::Event.new(@ajax_source) }
         its(:source) { should be_instance_of Hash }
       end
 
       context "with non-Hash" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Events.new("a") }.to raise_error ArgumentError,
-            "Events section must be a Hash"
+          expect { Ajw2::Model::Event.new("a") }.to raise_error ArgumentError,
+            "Event section must be a Hash"
         end
       end
     end
 
     describe "#render_rb_ajax" do
       context "with valid source" do
-        subject { Ajw2::Model::Events.new(@ajax_source, @js, @rb).render_rb_ajax }
+        subject { Ajw2::Model::Event.new(@ajax_source, @js, @rb).render_rb_ajax }
         it { should be_kind_of Array }
         it { should have(1).item }
 
@@ -114,14 +114,14 @@ end
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Events.new({}).render_rb_ajax }.to raise_error RuntimeError, "/events/events is not found"
+          expect { Ajw2::Model::Event.new({}).render_rb_ajax }.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_rb_realtime" do
       context "with valid source" do
-        subject { Ajw2::Model::Events.new(@realtime_source, @js, @rb).render_rb_realtime }
+        subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_rb_realtime }
         it { should be_kind_of Array }
         it { should have(1).item }
 
@@ -143,14 +143,14 @@ when "event01"
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Events.new({}).render_rb_realtime }.to raise_error RuntimeError, "/events/events is not found"
+          expect { Ajw2::Model::Event.new({}).render_rb_realtime }.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_js_ajax" do
       context "with valid source" do
-        subject { Ajw2::Model::Events.new(@ajax_source, @js, @rb).render_js_ajax }
+        subject { Ajw2::Model::Event.new(@ajax_source, @js, @rb).render_js_ajax }
         it { should be_kind_of Array }
         it { should have(1).item }
 
@@ -180,14 +180,14 @@ $('#submitBtn').click(function() {
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Events.new({}).render_js_ajax }.to raise_error RuntimeError, "/events/events is not found"
+          expect { Ajw2::Model::Event.new({}).render_js_ajax }.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_js_realtime" do
       context "with valid source" do
-        subject { Ajw2::Model::Events.new(@realtime_source, @js, @rb).render_js_realtime }
+        subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_js_realtime }
         it { should be_kind_of Array }
         it { should have(1).item }
 
@@ -205,14 +205,14 @@ $('#submitBtn').click(function() {
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Events.new({}).render_js_realtime }.to raise_error RuntimeError, "/events/events is not found"
+          expect { Ajw2::Model::Event.new({}).render_js_realtime }.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_js_onmessage" do
       context "with valid source" do
-        subject { Ajw2::Model::Events.new(@realtime_source, @js, @rb).render_js_onmessage }
+        subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_js_onmessage }
         it { should be_kind_of Array }
         it { should have(1).item }
 
@@ -229,7 +229,7 @@ case 'event01':
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Events.new({}).render_js_onmessage }.to raise_error RuntimeError, "/events/events is not found"
+          expect { Ajw2::Model::Event.new({}).render_js_onmessage }.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end

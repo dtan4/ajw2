@@ -7,7 +7,7 @@ module Ajw2
   class Description
     include Ajw2::Util
 
-    attr_reader :application, :interfaces, :databases, :events
+    attr_reader :application, :interface, :database, :event
 
     # Parse given file
     # @param [String] path path to model description (JSON or YAML)
@@ -35,9 +35,9 @@ module Ajw2
 
     def create_models(description)
       @application = Ajw2::Model::Application.new(description[:application])
-      @interfaces = Ajw2::Model::Interface.new(description[:interfaces])
-      @databases = Ajw2::Model::Database.new(description[:databases])
-      @events = Ajw2::Model::Events.new(description[:events])
+      @interface = Ajw2::Model::Interface.new(description[:interfaces])
+      @database = Ajw2::Model::Database.new(description[:databases])
+      @event = Ajw2::Model::Event.new(description[:events])
     end
   end
 end
