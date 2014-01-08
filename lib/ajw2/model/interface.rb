@@ -37,6 +37,10 @@ module Ajw2::Model
       raise ArgumentError unless element[:type] && element[:id]
       result = render_type(element)
 
+      if element[:hidden]
+        result << ' style="display: none"'
+      end
+
       if element[:value]
         result << "\n"
         result << "  | #{escape(element[:value])}"
@@ -54,12 +58,17 @@ module Ajw2::Model
       if element[:type] == "panel"
         result = "\##{escape(element[:id])}"
       elsif INPUT_TYPE.include? element[:type]
-        result = "input\##{element[:id]} type=\"#{element[:type]}\""
-        result << " placeholder=\"#{escape(element[:placeholder])}\"" if element[:placeholder]
+        result = render_input_tag(element)
       else
         result = "#{element[:type].to_s}\##{element[:id]}"
       end
 
+      result
+    end
+
+    def render_input_tag(element)
+      result = "input\##{element[:id]} type=\"#{element[:type]}\""
+      result << " placeholder=\"#{escape(element[:placeholder])}\"" if element[:placeholder]
       result
     end
   end

@@ -11,7 +11,8 @@ module Ajw2::Model
                    children: [
                               { type: "label", value: "Chat Application", id: "label0" },
                               { type: "text", id: "userIdTextbox", placeholder: "user name" },
-                              { type: "button", value: "Selection", id: "selectButton" }
+                              { type: "button", value: "Selection", id: "selectButton" },
+                              { type: "button", value: "hidden", id: "hiddenButton", hidden: true }
                              ]
                   }
                  ]
@@ -61,6 +62,8 @@ module Ajw2::Model
   input#userIdTextbox type="text" placeholder="user name"
   button#selectButton
     | Selection
+  button#hiddenButton style="display: none"
+    | hidden
 EOS
         end
       end
