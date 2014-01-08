@@ -3,7 +3,7 @@ application:
   name: sample
   css: []
   js: []
-interfaces:
+interface:
   type: slim
   pretty: true
   elements:
@@ -38,7 +38,7 @@ interfaces:
             value: message
       - type: tbody
         id: messageTableBody
-databases:
+database:
   _isDisplay: true
   dbType: sqlite
   database:
@@ -48,7 +48,7 @@ databases:
     - name: message
       type: string
       'null': false
-events:
+event:
   id: event01
   realtime: false
   events:

@@ -9,7 +9,7 @@
             { "type": "file", "src": "fullcalendar.js" }
         ]
     },
-    "interfaces": {
+    "interface": {
         "type": "slim",
         "pretty": true,
         "elements": [
@@ -21,7 +21,7 @@
             }
         ]
     },
-    "databases": {
+    "database": {
         "_isDisplay": true,
         "dbType": "sqlite",
         "database": [
@@ -38,7 +38,7 @@
             }
         ]
     },
-    "events": {
+    "event": {
         "id": "event01",
         "realtime": false,
         "events": [
