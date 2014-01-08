@@ -4,7 +4,7 @@
         "css": [],
         "js": []
     },
-    "interfaces": {
+    "interface": {
         "type": "slim",
         "pretty": true,
         "elements": [
@@ -66,10 +66,10 @@
             }
         ]
     },
-    "databases": {
+    "database": {
         "_isDisplay": true,
         "dbType": "sqlite",
-        "database": [
+        "databases": [
             {
                 "tablename": "messages",
                 "type": "server",
@@ -83,7 +83,7 @@
             }
         ]
     },
-    "events": {
+    "event": {
         "id": "event01",
         "realtime": true,
         "events": [
