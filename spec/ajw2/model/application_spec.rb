@@ -6,12 +6,12 @@ module Ajw2::Model
       {
        name: "sample",
        css: [
-             { type: "file", src: "application.css" },
-             { type: "url", src: "http://example.com/sample.css" }
+             { remote: false, src: "application.css" },
+             { remote: true, src: "http://example.com/sample.css" }
             ],
        js: [
-             { type: "file", src: "application.js" },
-             { type: "url", src: "http://example.com/sample.js" }
+             { remote: false, src: "application.js" },
+             { remote: true, src: "http://example.com/sample.js" }
            ]
       }
     }

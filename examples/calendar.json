@@ -2,11 +2,11 @@
     "application": {
         "name": "sample",
         "css": [
-            { "type": "file", "src": "fullcalendar.css" }
+            { "remote": false, "src": "fullcalendar.css" }
         ],
         "js": [
-            { "type": "file", "src": "main.js" },
-            { "type": "file", "src": "fullcalendar.js" }
+            { "remote": false, "src": "main.js" },
+            { "remote": false, "src": "fullcalendar.js" }
         ]
     },
     "interface": {

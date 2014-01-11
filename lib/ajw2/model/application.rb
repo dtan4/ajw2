@@ -29,7 +29,7 @@ title
       raise "/application/css is not found" unless @source[:css]
 
       @source[:css].inject([]) do |result, css|
-        href = (css[:type] == "file") ? "/css/#{File.basename(css[:src])}" : css[:src]
+        href = css[:remote] ? css[:src] : "/css/#{File.basename(css[:src])}"
         result << "link rel=\"stylesheet\" type=\"text/css\" href=\"#{href}\""
       end.join("\n") + "\n"
     end
@@ -40,7 +40,7 @@ title
       raise "/application/js is not found" unless @source[:js]
 
       @source[:js].inject([]) do |result, js|
-        src = (js[:type] == "file") ? "/js/#{File.basename(js[:src])}" : js[:src]
+        src = js[:remote] ?  js[:src] : "/js/#{File.basename(js[:src])}"
         result << "script src=\"#{src}\""
       end.join("\n") + "\n"
     end
@@ -50,7 +50,7 @@ title
     # @return [Array] collection of external files (type == "file")
     def external_files(type)
       raise ArgumentError unless [:css, :js].include? type
-      @source[type].select { |f| f[:type] == "file" }.map { |f| f[:src] }
+      @source[type].select { |f| not f[:remote] }.map { |f| f[:src] }
     end
   end
 end
