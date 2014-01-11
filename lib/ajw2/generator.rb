@@ -91,9 +91,7 @@ module Ajw2
       [:css, :js].each do |type|
         dir = File.expand_path("public/#{type.to_s}", outdir)
         FileUtils.mkdir_p(dir) unless Dir.exists?(dir)
-        FileUtils.cp(@application.external_files(type).map do |file|
-                       File.expand_path(file, external_file_dir)
-                     end, dir)
+        FileUtils.cp(@application.external_local_files(type, external_file_dir), dir)
       end
     end
   end

@@ -45,12 +45,13 @@ title
       end.join("\n") + "\n"
     end
 
-    # Return the list of external files
+    # Return the list of local external files
     # @param [Symbol] type external file type, :css or :js
+    # @param [Symbol] external_dir directory contains resource files
     # @return [Array] collection of external files (type == "file")
-    def external_files(type)
+    def external_local_files(type, external_dir)
       raise ArgumentError unless [:css, :js].include? type
-      @source[type].select { |f| not f[:remote] }.map { |f| f[:src] }
+      @source[type].select { |f| not f[:remote] }.map { |f| File.expand_path(f[:src], external_dir) }
     end
   end
 end

@@ -87,27 +87,27 @@ script src="http://example.com/sample.js"
       end
     end
 
-    describe "#external_files" do
+    describe "#external_local_files" do
       context "when type is :css" do
-        subject { Ajw2::Model::Application.new(source).external_files(:css) }
+        subject { Ajw2::Model::Application.new(source).external_local_files(:css, File.dirname(__FILE__)) }
         it { should be_kind_of Array }
 
         it "should return the list of external CSS files" do
-          expect(subject).to eq ["application.css"]
+          expect(subject).to eq [File.expand_path("application.css", File.dirname(__FILE__))]
         end
       end
 
       context "when type is :js" do
-        subject { Ajw2::Model::Application.new(source).external_files(:js) }
+        subject { Ajw2::Model::Application.new(source).external_local_files(:js, File.dirname(__FILE__)) }
         it { should be_kind_of Array }
 
         it "should return the list of external JavaScript files" do
-          expect(subject).to eq ["application.js"]
+          expect(subject).to eq [File.expand_path("application.js", File.dirname(__FILE__))]
         end
       end
 
       context "when type is unknown" do
-        subject { Ajw2::Model::Application.new(source).external_files(:hoge) }
+        subject { Ajw2::Model::Application.new(source).external_local_files(:hoge, File.dirname(__dir__)) }
 
         it "should raise ArgumentError" do
           expect { subject }.to raise_error ArgumentError

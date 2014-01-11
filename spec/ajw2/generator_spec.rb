@@ -13,13 +13,14 @@ module Ajw2
       end
 
       before do
+        @external_file_dir = File.expand_path("../ext_dir_tmp", __FILE__)
         @application = double("application",
                               render_header: "title sample",
                               render_css_include: RENDER_CSS_INCLUDE,
                               render_js_include: RENDER_JS_INCLUDE,
                               name: "sample")
-        @application.stub(:external_files).with(:js).and_return([])
-        @application.stub(:external_files).with(:css).and_return([])
+        @application.stub(:external_local_files).with(:js, @external_file_dir).and_return([])
+        @application.stub(:external_local_files).with(:css, @external_file_dir).and_return([])
 
         @interfaces = double("interfaces",
                              render: "h1 sample")
@@ -34,7 +35,6 @@ module Ajw2
         end
 
         @outdir = File.expand_path("../tmp", __FILE__)
-        @external_file_dir = File.expand_path("../ext_dir_tmp", __FILE__)
       end
 
       context "with non-existed outdir" do
@@ -195,8 +195,10 @@ module Ajw2
                                            render_css_include: RENDER_CSS_INCLUDE,
                                            render_js_include: RENDER_JS_INCLUDE,
                                            name: "sample")
-            @application_with_ext.stub(:external_files).with(:js).and_return(["external.js"])
-            @application_with_ext.stub(:external_files).with(:css).and_return(["external.css"])
+            @application_with_ext.stub(:external_local_files)
+              .with(:js, @external_file_dir).and_return([File.expand_path("external.js", @external_file_dir)])
+            @application_with_ext.stub(:external_local_files)
+              .with(:css, @external_file_dir).and_return([File.expand_path("external.css", @external_file_dir)])
 
             FileUtils.mkdir_p(@external_file_dir)
             open(File.expand_path("external.js", @external_file_dir), "w") { |f| f.puts "hoge" }
