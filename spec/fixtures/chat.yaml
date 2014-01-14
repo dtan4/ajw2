@@ -49,10 +49,10 @@ database:
       type: string
       'null': false
 event:
-  id: event01
-  realtime: false
   events:
-  - trigger:
+  - id: event01
+    realtime: false
+    trigger:
       target: submitBtn
       type: onClick
       params:

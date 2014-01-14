@@ -39,10 +39,10 @@
         ]
     },
     "event": {
-        "id": "event01",
-        "realtime": false,
         "events": [
             {
+                "id": "event01",
+                "realtime": false,
                 "trigger": {
                     "target": "submitBtn",
                     "type": "onClick",
