@@ -21,7 +21,7 @@ event:
     actions:
     - id: call01
       type: call
-      call_type: url
+      callType: url
       method: get
       endpoint: http://maps.googleapis.com/maps/api/geocode/json
       params:
@@ -35,7 +35,7 @@ event:
           id: sensor
     - id: call02
       type: call
-      call_type: script
+      callType: script
       params:
       - field: address
         value:

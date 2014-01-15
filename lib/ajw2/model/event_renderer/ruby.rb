@@ -196,7 +196,7 @@ end
     end
 
     def call_rb(call)
-      case call[:call_type]
+      case call[:callType]
       when "url"
         call_url(call)
       when "script"

@@ -218,7 +218,7 @@ if (_msg['_db_errors'].length == 0) {
     end
 
     def call_js(call)
-      case call[:call_type]
+      case call[:callType]
       when "url"
         call_url(call)
       when "script"
