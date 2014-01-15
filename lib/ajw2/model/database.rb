@@ -17,17 +17,17 @@ module Ajw2::Model
     # Generate Ruby code which does database migration
     # @return [Array] collection of generated code
     def render_migration
-      raise "/database/databases is not found" unless @source[:databases]
+      raise "/database/tables is not found" unless @source[:tables]
 
-      @source[:databases].inject([]) { |migration, table| migration << render_migration_table(table) }
+      @source[:tables].inject([]) { |migration, table| migration << render_migration_table(table) }
     end
 
     # Generate Ruby code which defines ActiveRecord model
     # @return [Array] collection of generated code
     def render_definition
-      raise "/database/databases is not found" unless @source[:databases]
+      raise "/database/tables is not found" unless @source[:tables]
 
-      @source[:databases].inject([]) { |definition, table| definition << render_definition_table(table) }
+      @source[:tables].inject([]) { |definition, table| definition << render_definition_table(table) }
     end
 
     # Generate YAML which sets up database
@@ -90,7 +90,7 @@ timeout: 5000
 
     def render_migration_table(table)
       {
-       tablename: table[:tablename],
+       name: table[:name],
        up: render_up_migration(table),
        down: render_down_migration(table)
       }
@@ -98,8 +98,8 @@ timeout: 5000
 
     def render_up_migration(table)
       <<-EOS
-create_table :#{table[:tablename]} do |t|
-#{indent(render_migration_fields(table[:property]), 1)}
+create_table :#{table[:name]} do |t|
+#{indent(render_migration_fields(table[:fields]), 1)}
 end
          EOS
     end
@@ -122,13 +122,13 @@ end
     end
 
     def render_down_migration(table)
-      "drop_table :#{table[:tablename]}\n"
+      "drop_table :#{table[:name]}\n"
     end
 
     def render_definition_table(table)
       <<-EOS
-class #{table[:tablename].singularize.capitalize} < ActiveRecord::Base
-#{indent(render_definition_fields(table[:property]), 1)}
+class #{table[:name].singularize.capitalize} < ActiveRecord::Base
+#{indent(render_definition_fields(table[:fields]), 1)}
 end
       EOS
     end
@@ -141,7 +141,7 @@ end
 
     def render_definition_field(field)
       field[:name] = add_encrypted_prefix(field[:name]) if field[:type] == "password"
-      !field[:null] ? "validates_presence_of :#{field[:name]}" :  ""
+      !field[:nullable] ? "validates_presence_of :#{field[:name]}" :  ""
     end
   end
 end

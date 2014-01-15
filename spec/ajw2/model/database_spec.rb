@@ -6,23 +6,23 @@ module Ajw2::Model
       {
         _isDisplay: true,
         dbType: "sqlite",
-        databases:
+        tables:
         [
          {
-           tablename: "users",
+           name: "users",
            type: "server",
-           property: [
-                      { name: "username", type: "string", null: false },
-                      { name: "password", type: "password", null: true },
-                      { name: "role", type: "role", null: true }
+           fields: [
+                      { name: "username", type: "string", nullable: false },
+                      { name: "password", type: "password", nullable: true },
+                      { name: "role", type: "role", nullable: true }
                      ]
          },
          {
-           tablename: "messages",
+           name: "messages",
            type: "server",
-           property: [
-                      { name: "user_id", type: "integer", null: false },
-                      { name: "content", type: "string", null: false }
+           fields: [
+                      { name: "user_id", type: "integer", nullable: false },
+                      { name: "content", type: "string", nullable: false }
                      ]
          }
         ]
@@ -69,7 +69,7 @@ drop_table :users
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_migration }.to raise_error RuntimeError, "/database/databases is not found"
+          expect { Ajw2::Model::Database.new({}).render_migration }.to raise_error RuntimeError, "/database/tables is not found"
         end
       end
     end
@@ -91,7 +91,7 @@ end
 
       context "with invalid source" do
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_definition }.to raise_error RuntimeError, "/database/databases is not found"
+          expect { Ajw2::Model::Database.new({}).render_definition }.to raise_error RuntimeError, "/database/tables is not found"
         end
       end
     end

@@ -8,7 +8,7 @@ EOS
 
 RENDER_MIGRATION = [
                     {
-                     tablename: "users",
+                     name: "users",
                      up: (<<-EOS),
 create_table :users do |t|
   t.string :name
@@ -18,7 +18,7 @@ end
                      down: "drop_table :users"
                     },
                     {
-                     tablename: "messages",
+                     name: "messages",
                      up: (<<-EOS),
 create_table :messages do |t|
   t.integer :user_id

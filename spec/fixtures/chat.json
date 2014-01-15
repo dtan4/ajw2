@@ -67,17 +67,15 @@
         ]
     },
     "database": {
-        "_isDisplay": true,
         "dbType": "sqlite",
-        "databases": [
+        "tables": [
             {
-                "tablename": "messages",
-                "type": "server",
-                "property": [
+                "name": "messages",
+                "fields": [
                     {
                         "name": "message",
                         "type": "string",
-                        "null": false
+                        "nullable": false
                     }
                 ]
             }

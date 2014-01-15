@@ -39,15 +39,13 @@ interface:
       - type: tbody
         id: messageTableBody
 database:
-  _isDisplay: true
   dbType: sqlite
-  databases:
-  - tablename: messages
-    type: server
-    property:
+  tables:
+  - name: messages
+    fields:
     - name: message
       type: string
-      'null': false
+      nullable: false
 event:
   events:
   - id: event01
