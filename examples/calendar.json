@@ -1,23 +1,50 @@
 {
     "application": {
-        "name": "sample",
+        "name": "Ajw2 Calendar",
         "css": [
-            { "remote": false, "src": "fullcalendar.css" }
+            {
+                "remote": false, "src": "fullcalendar.css"
+            }
         ],
         "js": [
-            { "remote": false, "src": "main.js" },
-            { "remote": false, "src": "fullcalendar.js" }
+            {
+                "remote": false, "src": "fullcalendar.js",
+                "remote": false, "src": "main.js"
+            }
         ]
     },
     "interface": {
-        "type": "slim",
-        "pretty": true,
         "elements": [
             {
                 "type": "panel",
-                "_isDisplay": true,
-                "id": "calendar",
-                "children": []
+                "id": "panel_1",
+                "children": [
+                    {
+                        "type": "datetime",
+                        "id": "eventDate",
+                        "children": [],
+                        "formVisible": false
+                    },
+                    {
+                        "type": "text",
+                        "id": "eventTitle",
+                        "children": [],
+                        "formVisible": false
+                    },
+                    {
+                        "type": "button",
+                        "id": "addEventBtn",
+                        "children": [],
+                        "formVisible": false
+                    }
+                ],
+                "formVisible": false
+            },
+            {
+                "type": "panel",
+                "id": "fullcalendar",
+                "children": [],
+                "formVisible": true
             }
         ]
     },
@@ -25,12 +52,15 @@
         "dbType": "sqlite",
         "tables": [
             {
-                "name": "messages",
+                "name": "events",
                 "fields": [
                     {
-                        "name": "message",
-                        "type": "string",
-                        "null": false
+                        "name": "title",
+                        "type": "string"
+                    },
+                    {
+                        "name": "date",
+                        "type": "datetime"
                     }
                 ]
             }
@@ -39,61 +69,78 @@
     "event": {
         "events": [
             {
-                "id": "event01",
-                "realtime": false,
+                "id": "events_1",
                 "trigger": {
-                    "target": "submitBtn",
+                    "target": "addEventBtn",
                     "type": "onClick",
                     "params": [
                         {
-                            "id": "message",
+                            "id": "eventDate",
+                            "type": "datetime",
+                            "value": {
+                                "type": "element",
+                                "element": "eventDate",
+                                "func": "getValue"
+                            }
+                        },
+                        {
+                            "id": "eventTitle",
                             "type": "string",
                             "value": {
-                                "element": "messageTextBox",
-                                "func": "getValue",
-                                "type": "element"
+                                "type": "element",
+                                "element": "eventTitle",
+                                "func": "getValue"
                             }
                         }
                     ]
                 },
-                "action": {
+                "action":{
                     "type": "always",
                     "actions": [
                         {
-                            "id": "if01",
-                            "type": "interface",
-                            "element": "messageTableBody",
-                            "func": "appendElements",
-                            "params": [
-                                {
-                                    "tag": "tr",
-                                    "children": [
-                                        {
-                                            "tag": "td",
-                                            "text": {
-                                                "type": "param",
-                                                "id": "message"
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
                             "id": "db01",
                             "type": "database",
-                            "database": "messages",
+                            "database": "events",
                             "func": "create",
                             "where": [],
                             "fields": [
                                 {
-                                    "field": "message",
+                                    "field": "title",
                                     "value":{
                                         "type": "param",
-                                        "id": "message"
+                                        "id": "eventTitle"
+                                    }
+                                },
+                                {
+                                    "field": "date",
+                                    "value":{
+                                        "type": "param",
+                                        "id": "eventDate"
                                     }
                                 }
                             ]
+                        },
+                        {
+                            "id": "callSc01",
+                            "type": "call",
+                            "callType": "script",
+                            "params": [
+                                {
+                                    "field": "title",
+                                    "value": {
+                                        "type": "param",
+                                        "id": "eventTitle"
+                                    }
+                                },
+                                {
+                                    "field": "date",
+                                    "value": {
+                                        "type": "param",
+                                        "id": "eventDate"
+                                    }
+                                }
+                            ],
+                            "script": "$('#fullcalendar').fullCalendar('renderEvent', {title: callSc01.title, start: callSc01.date})"
                         }
                     ]
                 }
