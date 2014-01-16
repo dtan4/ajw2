@@ -8,7 +8,9 @@
         ],
         "js": [
             {
-                "remote": false, "src": "fullcalendar.js",
+                "remote": false, "src": "fullcalendar.js"
+            },
+            {
                 "remote": false, "src": "main.js"
             }
         ]
@@ -20,7 +22,7 @@
                 "id": "panel_1",
                 "children": [
                     {
-                        "type": "datetime",
+                        "type": "date",
                         "id": "eventDate",
                         "children": [],
                         "formVisible": false
