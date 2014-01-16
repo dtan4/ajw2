@@ -56,6 +56,7 @@ ruby: |
       "http://maps.googleapis.com/maps/api/geocode/json",
       address: address, sensor: sensor
     )
+    response[:call02] = {}
     response[:call02][:address] = call01[:results][0][:formatted_address]
     response.to_json
   end

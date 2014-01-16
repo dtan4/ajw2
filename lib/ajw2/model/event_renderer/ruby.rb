@@ -220,7 +220,7 @@ EOS
     end
 
     def call_script(call)
-      call[:params].inject([]) do |result, param|
+      call[:params].inject(["response[:#{call[:id]}] = {}"]) do |result, param|
         result << "response[:#{call[:id]}][:#{param[:field]}] = #{set_value(param[:value])}"
         result
       end.join("\n")
