@@ -186,14 +186,14 @@ if (_msg['result']) {
       EOS
     end
 
-    # if (_msg['_db_errors'].length == 0) {
+    # if (Object.keys(_msg['_db_errors']).length == 0) {
     #   var if01 = _msg['if01'];
     #   $('#messageLabel').val(if01);
     # } else {
     # }
     def always(action)
       <<-EOS
-if (_msg['_db_errors'].length == 0) {
+if (Object.keys(_msg['_db_errors']).length == 0) {
 #{indent(actions_js(action), 1)}
 } else {
 }

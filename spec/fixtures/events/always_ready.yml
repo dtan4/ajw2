@@ -52,7 +52,7 @@ javascript: |
       _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
     },
     success: function(_msg) {
-      if (_msg['_db_errors'].length == 0) {
+      if (Object.keys(_msg['_db_errors']).length == 0) {
         var if01 = _msg['if01'];
         $('#messageLabel').val(if01);
       } else {
