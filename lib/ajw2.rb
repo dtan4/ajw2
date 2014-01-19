@@ -1,5 +1,5 @@
 require "ajw2/version"
-require "ajw2/description"
+require "ajw2/source"
 require "ajw2/cli"
 require "ajw2/generator"
 require "ajw2/util"

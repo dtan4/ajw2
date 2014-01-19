@@ -16,7 +16,7 @@ module Ajw2
         raise ArgumentError, "Invalid arguments count"
       end
 
-      description = Ajw2::Description.new
+      description = Ajw2::Source.new
       description.parse(source)
       generator = Ajw2::Generator.new(description.application, description.interface,
                                       description.database, description.event)

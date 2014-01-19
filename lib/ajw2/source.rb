@@ -3,8 +3,8 @@ require "yaml"
 require "ajw2/util"
 
 module Ajw2
-  # Model description
-  class Description
+  # Model source
+  class Source
     include Ajw2::Util
 
     attr_reader :application, :interface, :database, :event
@@ -33,11 +33,11 @@ module Ajw2
       create_models(symbolize_keys(YAML.load(yaml)))
     end
 
-    def create_models(description)
-      @application = Ajw2::Model::Application.new(description[:application])
-      @interface = Ajw2::Model::Interface.new(description[:interface])
-      @database = Ajw2::Model::Database.new(description[:database])
-      @event = Ajw2::Model::Event.new(description[:event])
+    def create_models(source)
+      @application = Ajw2::Model::Application.new(source[:application])
+      @interface = Ajw2::Model::Interface.new(source[:interface])
+      @database = Ajw2::Model::Database.new(source[:database])
+      @event = Ajw2::Model::Event.new(source[:event])
     end
   end
 end
