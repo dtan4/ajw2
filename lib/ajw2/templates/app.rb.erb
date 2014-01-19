@@ -1,4 +1,4 @@
-<%- @databases.render_definition.each do |definition| -%>
+<%- @database.render_definition.each do |definition| -%>
 <%= definition %>
 <%- end -%>
 class App < Sinatra::Base
@@ -47,9 +47,9 @@ class App < Sinatra::Base
           _ws_json = JSON.parse(msg, symbolize_names: true)
           params = _ws_json[:params]
           response = {}
-<%- if @events.render_rb_realtime.length > 0 -%>
+<%- if @event.render_rb_realtime.length > 0 -%>
           case _ws_json[:func]
-<%- @events.render_rb_realtime.each do |rb| -%>
+<%- @event.render_rb_realtime.each do |rb| -%>
 <%= indent(rb, 5) %>
 <%- end -%>
           else
@@ -64,7 +64,7 @@ class App < Sinatra::Base
     end
   end
 
-<%- @events.render_rb_ajax.each do |rb| -%>
+<%- @event.render_rb_ajax.each do |rb| -%>
 <%= indent(rb, 1) %>
 <%- end -%>
 end

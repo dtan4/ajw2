@@ -7,20 +7,20 @@ module Ajw2
   class Generator
     include Ajw2::Util
 
-    attr_reader :application, :interfaces, :databases, :events
+    attr_reader :application, :interface, :database, :event
 
     TEMPLATE_DIR = File.expand_path("../templates", __FILE__)
 
     # Initializer
     # @param [Ajw2::Model::Application] application Application settings generator
-    # @param [Ajw2::Model::Interfaces] interfaces Interfaces model generator
-    # @param [Ajw2::Model::Databases] databases Databases model generator
-    # @param [Ajw2::Model::Events] events Events settings generator
-    def initialize(application, interfaces, databases, events)
+    # @param [Ajw2::Model::Interfaces] interface Interfaces model generator
+    # @param [Ajw2::Model::Databases] database Databases model generator
+    # @param [Ajw2::Model::Events] event Events settings generator
+    def initialize(application, interface, database, event)
       @application = application
-      @interfaces = interfaces
-      @databases = databases
-      @events = events
+      @interface = interface
+      @database = database
+      @event = event
     end
 
     # Execute generation
@@ -80,7 +80,7 @@ module Ajw2
     def generate_migration_files(dir)
       FileUtils.mkdir_p(File.expand_path("db/migrate", dir))
 
-      @databases.render_migration.each_with_index do |migration, idx|
+      @database.render_migration.each_with_index do |migration, idx|
         erb = ERB.new(open(template_path("db/migrate/migration.rb.erb")).read)
         file = "db/migrate/" << "%.3d" % (idx + 1) << "_create_#{migration[:name]}.rb"
         open(destination_path(file, dir), "w") { |f| f.puts erb.result(binding) }

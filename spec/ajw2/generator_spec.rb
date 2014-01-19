@@ -22,16 +22,16 @@ module Ajw2
         @application.stub(:external_local_files).with(:js, @external_file_dir).and_return([])
         @application.stub(:external_local_files).with(:css, @external_file_dir).and_return([])
 
-        @interfaces = double("interfaces",
-                             render: "h1 sample")
+        @interface = double("interface",
+                            render: "h1 sample")
 
-        @databases = double("databases",
-                            render_migration: RENDER_MIGRATION,
-                            render_definition: RENDER_DEFINITION,
-                            render_database_gem: "sqlite")
+        @database = double("database",
+                           render_migration: RENDER_MIGRATION,
+                           render_definition: RENDER_DEFINITION,
+                           render_database_gem: "sqlite")
 
         [:development, :test, :production].each do |env|
-          @databases.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
+          @database.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
         end
 
         @outdir = File.expand_path("../tmp", __FILE__)
@@ -86,14 +86,14 @@ module Ajw2
           before do
             FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
-            @events = double("events",
-                             render_rb_ajax: RENDER_RB_AJAX,
-                             render_rb_realtime: RENDER_RB_REALTIME,
-                             render_js_ajax: RENDER_JS_AJAX,
-                             render_js_realtime: RENDER_JS_REALTIME,
-                             render_js_onmessage: RENDER_JS_ONMESSAGE)
+            @event = double("event",
+                            render_rb_ajax: RENDER_RB_AJAX,
+                            render_rb_realtime: RENDER_RB_REALTIME,
+                            render_js_ajax: RENDER_JS_AJAX,
+                            render_js_realtime: RENDER_JS_REALTIME,
+                            render_js_onmessage: RENDER_JS_ONMESSAGE)
             @generator =
-              Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+              Ajw2::Generator.new(@application, @interface, @database, @event)
             @generator.generate(@outdir, @external_file_dir)
           end
 
@@ -112,14 +112,14 @@ module Ajw2
           before do
             FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
-            @events = double("events",
-                             render_rb_ajax: RENDER_RB_AJAX,
-                             render_rb_realtime: [],
-                             render_js_ajax: RENDER_JS_AJAX,
-                             render_js_realtime: [],
-                             render_js_onmessage: [])
+            @event = double("event",
+                            render_rb_ajax: RENDER_RB_AJAX,
+                            render_rb_realtime: [],
+                            render_js_ajax: RENDER_JS_AJAX,
+                            render_js_realtime: [],
+                            render_js_onmessage: [])
             @generator =
-              Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+              Ajw2::Generator.new(@application, @interface, @database, @event)
             @generator.generate(@outdir, @external_file_dir)
           end
 
@@ -138,14 +138,14 @@ module Ajw2
           before do
             FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
-            @events = double("events",
-                             render_rb_ajax: [],
-                             render_rb_realtime: RENDER_RB_REALTIME,
-                             render_js_ajax: [],
-                             render_js_realtime: RENDER_JS_REALTIME,
-                             render_js_onmessage: RENDER_JS_ONMESSAGE)
+            @event = double("event",
+                            render_rb_ajax: [],
+                            render_rb_realtime: RENDER_RB_REALTIME,
+                            render_js_ajax: [],
+                            render_js_realtime: RENDER_JS_REALTIME,
+                            render_js_onmessage: RENDER_JS_ONMESSAGE)
             @generator =
-              Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+              Ajw2::Generator.new(@application, @interface, @database, @event)
             @generator.generate(@outdir, @external_file_dir)
           end
 
@@ -164,14 +164,14 @@ module Ajw2
           before do
             FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
-            @events = double("events",
-                             render_rb_ajax: [],
-                             render_rb_realtime: [],
-                             render_js_ajax: [],
-                             render_js_realtime: [],
-                             render_js_onmessage: [])
+            @event = double("event",
+                            render_rb_ajax: [],
+                            render_rb_realtime: [],
+                            render_js_ajax: [],
+                            render_js_realtime: [],
+                            render_js_onmessage: [])
             @generator =
-              Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+              Ajw2::Generator.new(@application, @interface, @database, @event)
             @generator.generate(@outdir, @external_file_dir)
           end
 
@@ -196,32 +196,32 @@ module Ajw2
                                            render_js_include: RENDER_JS_INCLUDE,
                                            name: "sample")
             @application_with_ext.stub(:external_local_files)
-              .with(:js, @external_file_dir).and_return([File.expand_path("external.js", @external_file_dir)])
+            .with(:js, @external_file_dir).and_return([File.expand_path("external.js", @external_file_dir)])
             @application_with_ext.stub(:external_local_files)
-              .with(:css, @external_file_dir).and_return([File.expand_path("external.css", @external_file_dir)])
+            .with(:css, @external_file_dir).and_return([File.expand_path("external.css", @external_file_dir)])
 
             FileUtils.mkdir_p(@external_file_dir)
             open(File.expand_path("external.js", @external_file_dir), "w") { |f| f.puts "hoge" }
             open(File.expand_path("external.css", @external_file_dir), "w") { |f| f.puts "hoge" }
 
-            @databases_with_ext = double("databases",
-                                         render_migration: RENDER_MIGRATION,
-                                         render_definition: RENDER_DEFINITION,
-                                         render_database_gem: "sqlite")
+            @database_with_ext = double("database",
+                                        render_migration: RENDER_MIGRATION,
+                                        render_definition: RENDER_DEFINITION,
+                                        render_database_gem: "sqlite")
 
             [:development, :test, :production].each do |env|
-              @databases_with_ext.stub(:render_config).with(env, @application_with_ext).and_return("database: sample_#{env}")
+              @database_with_ext.stub(:render_config).with(env, @application_with_ext).and_return("database: sample_#{env}")
             end
 
-            @events = double("events",
-                             render_rb_ajax: [],
-                             render_rb_realtime: [],
-                             render_js_ajax: [],
-                             render_js_realtime: [],
-                             render_js_onmessage: [])
+            @event = double("event",
+                            render_rb_ajax: [],
+                            render_rb_realtime: [],
+                            render_js_ajax: [],
+                            render_js_realtime: [],
+                            render_js_onmessage: [])
 
             @generator =
-              Ajw2::Generator.new(@application_with_ext, @interfaces, @databases_with_ext, @events)
+              Ajw2::Generator.new(@application_with_ext, @interface, @database_with_ext, @event)
             @generator.generate(@outdir, @external_file_dir)
           end
 
@@ -240,11 +240,11 @@ module Ajw2
           before do
             FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
 
-            @databases = double("databases",
-                                render_migration: "hoge",
-                                render_definition: "hoge")
+            @database = double("database",
+                               render_migration: "hoge",
+                               render_definition: "hoge")
             @generator =
-              Ajw2::Generator.new(@application, @interfaces, @databases, @events)
+              Ajw2::Generator.new(@application, @interface, @database, @event)
           end
 
           subject { @generator.generate(@outdir, @external_file_dir) }

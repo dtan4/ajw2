@@ -1,8 +1,8 @@
 development:
-<%= indent(@databases.render_config(:development, @application), 1) %>
+<%= indent(@database.render_config(:development, @application), 1) %>
 
 test:
-<%= indent(@databases.render_config(:test, @application), 1) %>
+<%= indent(@database.render_config(:test, @application), 1) %>
 
 production:
-<%= indent(@databases.render_config(:production, @application), 1) %>
+<%= indent(@database.render_config(:production, @application), 1) %>
