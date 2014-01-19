@@ -5,7 +5,7 @@ module Ajw2::Model
     attr_reader :source
 
     # Initializer
-    # @param [Hash] source entire model descriptionx
+    # @param [Hash] source entire model description
     def initialize(source)
       raise ArgumentError, "Application section must be a Hash" unless source.class == Hash
       @source = source
