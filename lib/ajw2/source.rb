@@ -12,7 +12,7 @@ module Ajw2
     # Parse given file
     # @param [String] path path to model description (JSON or YAML)
     # @return [Hash] Hash of model description created from given file
-    def parse(path)
+    def parse_file(path)
       case File.extname(path)
       when /^\.json$/i then parse_json(path)
       when /^\.ya?ml$/i then parse_yaml(path)

@@ -9,11 +9,11 @@ module Ajw2
       @invalid_path = fixture_path("chat.txt")
     end
 
-    describe "#parse" do
+    describe "#parse_file" do
       shared_context "with valid file" do
         before do
           @source = Ajw2::Source.new
-          @source.parse(path)
+          @source.parse_file(path)
         end
 
         it "should set application" do
@@ -55,7 +55,7 @@ module Ajw2
         it "should raise Exception" do
           expect {
             source = Ajw2::Source.new
-            source.parse(@invalid_source_path)
+            source.parse_file(@invalid_source_path)
           }.to raise_error
         end
       end
@@ -64,7 +64,7 @@ module Ajw2
         it "should raise Exception" do
           expect {
             source = Ajw2::Source.new
-            source.parse(@invalid_ext_path)
+            source.parse_file(@invalid_ext_path)
           }.to raise_error
         end
       end
@@ -73,7 +73,7 @@ module Ajw2
         it "should raise Exception" do
           expect {
             source = Ajw2::Source.new
-            source.parse(nil)
+            source.parse_file(nil)
           }.to raise_error
         end
       end
@@ -82,7 +82,7 @@ module Ajw2
         it "should raise Exception" do
           expect {
             source = Ajw2::Source.new
-            source.parse(@invalid_path + "hogehoge")
+            source.parse_file(@invalid_path + "hogehoge")
           }.to raise_error
         end
       end

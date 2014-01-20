@@ -17,7 +17,7 @@ module Ajw2
       end
 
       source = Ajw2::Source.new
-      source.parse(source_path)
+      source.parse_file(source_path)
       generator = Ajw2::Generator.new(source.application, source.interface,
                                       source.database, source.event)
       generator.generate(out_dir, external_file_dir)
