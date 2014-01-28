@@ -5,12 +5,9 @@
         "js": []
     },
     "interface": {
-        "type": "slim",
-        "pretty": true,
         "elements": [
             {
                 "type": "panel",
-                "_isDisplay": true,
                 "id": "rootPanel",
                 "children": [
                     {
@@ -32,7 +29,6 @@
             },
             {
                 "type": "panel",
-                "_isDisplay": true,
                 "id": "tablePanel",
                 "children": [
                     {
