@@ -144,7 +144,7 @@ class App < Sinatra::Base
     end
 
     def param_str(parameters)
-      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+      parameters.map { |key, value| key.to_s + "=" + CGI.escape(value.to_s) }.join("&")
     end
 
     def http_get(endpoint, parameters)
@@ -237,7 +237,7 @@ class App < Sinatra::Base
     end
 
     def param_str(parameters)
-      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+      parameters.map { |key, value| key.to_s + "=" + CGI.escape(value.to_s) }.join("&")
     end
 
     def http_get(endpoint, parameters)
@@ -317,7 +317,7 @@ class App < Sinatra::Base
     end
 
     def param_str(parameters)
-      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+      parameters.map { |key, value| key.to_s + "=" + CGI.escape(value.to_s) }.join("&")
     end
 
     def http_get(endpoint, parameters)
@@ -399,7 +399,7 @@ class App < Sinatra::Base
     end
 
     def param_str(parameters)
-      parameters.map { |key, value| key + "=" + CGI.escape(value.to_s) }.join("&")
+      parameters.map { |key, value| key.to_s + "=" + CGI.escape(value.to_s) }.join("&")
     end
 
     def http_get(endpoint, parameters)
