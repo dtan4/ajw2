@@ -1,5 +1,3 @@
-require "cgi"
-
 module Ajw2::Model
   # Generate source code from Interface model
   class Interface
