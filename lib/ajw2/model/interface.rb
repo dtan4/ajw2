@@ -56,18 +56,22 @@ module Ajw2::Model
 
     def render_type(element)
       if element[:type] == "panel"
-        result = "\##{escape(element[:id])}"
+        result = "#{render_class(element[:class])}\##{escape(element[:id])}"
       elsif INPUT_TYPE.include? element[:type]
         result = render_input_tag(element)
       else
-        result = "#{element[:type].to_s}\##{element[:id]}"
+        result = "#{element[:type].to_s}#{render_class(element[:class])}\##{element[:id]}"
       end
 
       result
     end
 
+    def render_class(element_class)
+      element_class ? "." + element_class.split(" ").join(".") :  ""
+    end
+
     def render_input_tag(element)
-      result = "input\##{element[:id]} type=\"#{element[:type]}\""
+      result = "input#{render_class(element[:class])}\##{element[:id]} type=\"#{element[:type]}\""
       result << " placeholder=\"#{escape(element[:placeholder])}\"" if element[:placeholder]
       result
     end

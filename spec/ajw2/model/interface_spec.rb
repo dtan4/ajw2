@@ -10,8 +10,8 @@ module Ajw2::Model
                    type: "panel", id: "rootPanel",
                    children: [
                               { type: "label", value: "Chat Application", id: "label0" },
-                              { type: "text", id: "userIdTextbox", placeholder: "user name" },
-                              { type: "button", value: "Selection", id: "selectButton" },
+                              { type: "text", id: "userIdTextbox", placeholder: "user name", class: "form-control" },
+                              { type: "button", value: "Selection", id: "selectButton", class: "form-control btn" },
                               { type: "button", value: "hidden", id: "hiddenButton", hidden: true }
                              ]
                   }
@@ -59,8 +59,8 @@ module Ajw2::Model
 #rootPanel
   label#label0
     | Chat Application
-  input#userIdTextbox type="text" placeholder="user name"
-  button#selectButton
+  input.form-control#userIdTextbox type="text" placeholder="user name"
+  button.form-control.btn#selectButton
     | Selection
   button#hiddenButton style="display: none"
     | hidden
