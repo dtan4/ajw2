@@ -20,33 +20,33 @@
             {
                 "type": "panel",
                 "id": "panel_1",
+                "class": "",
                 "children": [
                     {
                         "type": "date",
                         "id": "eventDate",
-                        "children": [],
-                        "formVisible": false
+                        "class": "",
+                        "children": []
                     },
                     {
                         "type": "text",
                         "id": "eventTitle",
-                        "children": [],
-                        "formVisible": false
+                        "class": "",
+                        "children": []
                     },
                     {
                         "type": "button",
                         "id": "addEventBtn",
-                        "children": [],
-                        "formVisible": false
+                        "class": "",
+                        "children": []
                     }
                 ],
-                "formVisible": false
             },
             {
                 "type": "panel",
                 "id": "fullcalendar",
-                "children": [],
-                "formVisible": true
+                "class": "",
+                "children": []
             }
         ]
     },

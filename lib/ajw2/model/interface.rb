@@ -69,7 +69,7 @@ module Ajw2::Model
     end
 
     def render_class(element_class)
-      element_class ? "." + element_class.split(" ").join(".") :  ""
+      (element_class == "") ? "" : "." + element_class.split(" ").join(".")
     end
 
     def render_attribute(attr, value)

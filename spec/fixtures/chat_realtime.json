@@ -5,51 +5,56 @@
         "js": []
     },
     "interface": {
-        "type": "slim",
-        "pretty": true,
         "elements": [
             {
                 "type": "panel",
-                "_isDisplay": true,
                 "id": "rootPanel",
+                "class": "",
                 "children": [
                     {
                         "type": "label",
                         "value": "Chat Application",
-                        "id": "label0"
+                        "id": "label0",
+                        "class": ""
                     },
                     {
                         "type": "text",
                         "id": "messageTextBox",
-                        "placeholder": "message"
+                        "placeholder": "message",
+                        "class": ""
                     },
                     {
                         "type": "button",
                         "value": "submit",
-                        "id": "submitBtn"
+                        "id": "submitBtn",
+                        "class": ""
                     }
                 ]
             },
             {
                 "type": "panel",
-                "_isDisplay": true,
                 "id": "tablePanel",
+                "class": "",
                 "children": [
                     {
                         "type": "table",
                         "id": "messageTable",
+                        "class": "",
                         "children": [
                             {
                                 "type": "thead",
                                 "id": "messageTableHead",
+                                "class": "",
                                 "children": [
                                     {
                                         "type": "tr",
                                         "id": "messageTableHeadRow",
+                                        "class": "",
                                         "children": [
                                             {
                                                 "type": "th",
                                                 "id": "messageTableHeadCol1",
+                                                "class": "",
                                                 "value": "message"
                                             }
                                         ]
@@ -58,7 +63,8 @@
                             },
                             {
                                 "type": "tbody",
-                                "id": "messageTableBody"
+                                "id": "messageTableBody",
+                                "class": ""
                             }
                         ]
                     }
@@ -75,7 +81,7 @@
                     {
                         "name": "message",
                         "type": "string",
-                        "null": false
+                        "nullable": false
                     }
                 ]
             }

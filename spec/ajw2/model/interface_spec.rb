@@ -4,15 +4,14 @@ module Ajw2::Model
   describe Interface do
     let(:source) {
       {
-       type: "slim", pretty: true,
        elements: [
                   {
-                   type: "panel", id: "rootPanel",
+                   type: "panel", id: "rootPanel", class: "",
                    children: [
-                              { type: "label", value: "Chat Application", id: "label0" },
+                              { type: "label", value: "Chat Application", id: "label0", class: "" },
                               { type: "text", id: "userIdTextbox", placeholder: "user name", class: "form-control" },
                               { type: "button", value: "Selection", id: "selectButton", class: "form-control btn" },
-                              { type: "button", value: "hidden", id: "hiddenButton", hidden: true }
+                              { type: "button", value: "hidden", id: "hiddenButton", class: "", hidden: true }
                              ]
                   }
                  ]
@@ -21,14 +20,13 @@ module Ajw2::Model
 
     let(:dirty_source) {
       {
-       type: "slim", pretty: true,
        elements: [
                   {
-                   type: "panel", id: "rootPanel",
+                   type: "panel", id: "rootPanel", class: "",
                    children: [
-                              { type: "label", value: "<script>alert('xss');</script>", id: "label0" },
-                              { type: "text", id: "userIdTextbox", placeholder: '<script>alert("xss");</script>' },
-                              { type: "button", value: "Selection", id: "selectButton" }
+                              { type: "label", value: "<script>alert('xss');</script>", id: "label0", class: "" },
+                              { type: "text", id: "userIdTextbox", class: "", placeholder: '<script>alert("xss");</script>' },
+                              { type: "button", value: "Selection", id: "selectButton", class: "" }
                              ]
                   }
                  ]

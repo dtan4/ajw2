@@ -9,38 +9,45 @@
             {
                 "type": "panel",
                 "id": "panel_1",
+                "class": "",
                 "children": [
                     {
                         "type": "text",
                         "id": "address",
+                        "class": "",
                         "placeholder": "address",
                         "children": [],
                     },
                     {
                         "type": "button",
                         "id": "submitBtn",
+                        "class": "",
                         "children": [],
                     },
                     {
                         "type": "label",
                         "id": "latNameLabel",
+                        "class": "",
                         "value": "lat: ",
                         "children": [],
                     },
                     {
                         "type": "label",
                         "id": "latLabel",
+                        "class": "",
                         "children": [],
                     },
                     {
                         "type": "label",
                         "id": "lngNameLabel",
+                        "class": "",
                         "value": "lng: ",
                         "children": [],
                     },
                     {
                         "type": "label",
                         "id": "lngLabel",
+                        "class": "",
                         "children": [],
                     }
                 ],
