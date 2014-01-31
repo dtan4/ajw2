@@ -36,7 +36,7 @@ module Ajw2
           before(:all) do
             @source = fixture_path("chat.json")
             @out_dir = "test_cli"
-            @args = [@source, @out_dir]
+            @args = "#{@source} -o #{@out_dir}".split(" ")
             FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
           end
 
@@ -48,7 +48,19 @@ module Ajw2
             @source = fixture_path("chat.json")
             @out_dir = "test_cli"
             @external_resource_dir = "test_ext_files"
-            @args = [@source, @out_dir, @external_resource_dir]
+            @args = "#{@source} -o #{@out_dir} -e #{@external_resource_dir}".split(" ")
+            FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
+          end
+
+          it_behaves_like "execute successfully"
+        end
+
+        context "long options" do
+          before(:all) do
+            @source = fixture_path("chat.json")
+            @out_dir = "test_cli"
+            @external_resource_dir = "test_ext_files"
+            @args = "#{@source} --output #{@out_dir} --external #{@external_resource_dir}".split(" ")
             FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
           end
 
@@ -69,8 +81,8 @@ module Ajw2
           before do
             @source = "hoge"
             @out_dir = "fuga"
-            @external_file_dir = "piyo"
-            @args = [@source, @out_dir, @external_file_dir]
+            @external_resource_dir = "piyo"
+            @args = "#{@source} -o #{@out_dir} -e #{@external_resource_dir}".split(" ")
           end
 
           it "should raise Exception" do
