@@ -18,7 +18,9 @@ Or install it yourself as:
 
 ## Usage
 ```
-$ ajw2 MODEL_DEFINITION_FILE OUTPUT_DIR
+$ ajw2 SOURCE_FILE [options]
+    -o, --output OUTPUT_DIR                output directory
+    -e, --external EXTERNAL_RESOURCE_DIR   external resource directory (optional)
 ```
 
 ## Contributing
