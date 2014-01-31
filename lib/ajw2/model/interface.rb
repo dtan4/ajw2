@@ -73,7 +73,7 @@ module Ajw2::Model
     end
 
     def render_attribute(attr, value)
-      " #{attr}=\"#{escape(value)}\""
+      " #{attr}=\"#{value}\""
     end
 
     def render_input_tag(element)

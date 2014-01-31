@@ -77,7 +77,7 @@ EOS
 #rootPanel
   label#label0
     | &lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;
-  input#userIdTextbox type="text" placeholder="&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;"
+  input#userIdTextbox type="text" placeholder="<script>alert("xss");</script>"
   button#selectButton
     | Selection
 EOS
