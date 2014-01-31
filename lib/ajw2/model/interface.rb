@@ -72,9 +72,13 @@ module Ajw2::Model
       element_class ? "." + element_class.split(" ").join(".") :  ""
     end
 
+    def render_attribute(attr, value)
+      " #{attr}=\"#{escape(value)}\""
+    end
+
     def render_input_tag(element)
-      result = "input#{render_class(element[:class])}#{render_id(element[:id])} type=\"#{element[:type]}\""
-      result << " placeholder=\"#{escape(element[:placeholder])}\"" if element[:placeholder]
+      result = "input#{render_class(element[:class])}#{render_id(element[:id])}#{render_attribute("type", element[:type])}"
+      result << render_attribute("placeholder", element[:placeholder]) if element[:placeholder]
       result
     end
   end
