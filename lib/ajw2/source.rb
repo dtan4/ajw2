@@ -25,7 +25,7 @@ module Ajw2
 
     def parse_json(path)
       json = open(path).read
-      create_models(symbolize_keys(JSON.parse(json)))
+      create_models(JSON.parse(json, symbolize_names: true))
     end
 
     def parse_yaml(path)
