@@ -149,14 +149,14 @@ class App < Sinatra::Base
 
     def http_get(endpoint, parameters)
       uri = URI.parse(endpoint + "?" + param_str(parameters))
-      JSON.parse(Net::HTTP.get_response(uri).body)
+      JSON.parse(Net::HTTP.get_response(uri).body, symbolize_names: true)
     rescue
       {}
     end
 
     def http_post(endpoint, parameters)
       uri = URI.parse(endpoint)
-      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body, symbolize_names: true)
     rescue
       {}
     end
@@ -242,14 +242,14 @@ class App < Sinatra::Base
 
     def http_get(endpoint, parameters)
       uri = URI.parse(endpoint + "?" + param_str(parameters))
-      JSON.parse(Net::HTTP.get_response(uri).body)
+      JSON.parse(Net::HTTP.get_response(uri).body, symbolize_names: true)
     rescue
       {}
     end
 
     def http_post(endpoint, parameters)
       uri = URI.parse(endpoint)
-      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body, symbolize_names: true)
     rescue
       {}
     end
@@ -322,14 +322,14 @@ class App < Sinatra::Base
 
     def http_get(endpoint, parameters)
       uri = URI.parse(endpoint + "?" + param_str(parameters))
-      JSON.parse(Net::HTTP.get_response(uri).body)
+      JSON.parse(Net::HTTP.get_response(uri).body, symbolize_names: true)
     rescue
       {}
     end
 
     def http_post(endpoint, parameters)
       uri = URI.parse(endpoint)
-      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body, symbolize_names: true)
     rescue
       {}
     end
@@ -404,14 +404,14 @@ class App < Sinatra::Base
 
     def http_get(endpoint, parameters)
       uri = URI.parse(endpoint + "?" + param_str(parameters))
-      JSON.parse(Net::HTTP.get_response(uri).body)
+      JSON.parse(Net::HTTP.get_response(uri).body, symbolize_names: true)
     rescue
       {}
     end
 
     def http_post(endpoint, parameters)
       uri = URI.parse(endpoint)
-      JSON.parse(Net::HTTP.post_form(uri, parameters).body)
+      JSON.parse(Net::HTTP.post_form(uri, parameters).body, symbolize_names: true)
     rescue
       {}
     end
