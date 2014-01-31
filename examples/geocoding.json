@@ -1,0 +1,134 @@
+{
+    "application": {
+        "name": "Ajw2 Geocoding",
+        "css": [],
+        "js": []
+    },
+    "interface": {
+        "elements": [
+            {
+                "type": "panel",
+                "id": "panel_1",
+                "children": [
+                    {
+                        "type": "text",
+                        "id": "address",
+                        "placeholder": "address",
+                        "children": [],
+                    },
+                    {
+                        "type": "button",
+                        "id": "submitBtn",
+                        "children": [],
+                    },
+                    {
+                        "type": "label",
+                        "id": "latNameLabel",
+                        "value": "lat: ",
+                        "children": [],
+                    },
+                    {
+                        "type": "label",
+                        "id": "latLabel",
+                        "children": [],
+                    },
+                    {
+                        "type": "label",
+                        "id": "lngNameLabel",
+                        "value": "lng: ",
+                        "children": [],
+                    },
+                    {
+                        "type": "label",
+                        "id": "lngLabel",
+                        "children": [],
+                    }
+                ],
+            }
+        ]
+    },
+    "database": {
+        "dbType": "sqlite",
+        "tables": []
+    },
+    "event": {
+        "events": [
+            {
+                "id": "events_1",
+                "trigger": {
+                    "target": "submitBtn",
+                    "type": "onClick",
+                    "params": [
+                        {
+                            "id": "address",
+                            "type": "string",
+                            "value": {
+                                "type": "element",
+                                "element": "address",
+                                "func": "getValue"
+                            }
+                        },
+                        {
+                            "id": "sensor",
+                            "type": "boolean",
+                            "value": {
+                                "type": "literal",
+                                "value": "false"
+                            }
+                        }
+                    ]
+                },
+                "action":{
+                    "type": "always",
+                    "actions": [
+                        {
+                            "id": "callApi01",
+                            "type": "call",
+                            "callType": "url",
+                            "method": "get",
+                            "endpoint": "http://maps.googleapis.com/maps/api/geocode/json",
+                            "params": [
+                                {
+                                    "field": "address",
+                                    "value": {
+                                        "type": "param",
+                                        "id": "address"
+                                    }
+                                },
+                                {
+                                    "field": "sensor",
+                                    "value": {
+                                        "type": "param",
+                                        "id": "sensor"
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "id": "if01",
+                            "type": "interface",
+                            "element": "latLabel",
+                            "func": "setText",
+                            "value":  {
+                                "type": "call",
+                                "id": "callApi01",
+                                "jsonpath": "/results[0]/geometry/location/lat"
+                            }
+                        },
+                        {
+                            "id": "if02",
+                            "type": "interface",
+                            "element": "lngLabel",
+                            "func": "setText",
+                            "value": {
+                                "type": "call",
+                                "id": "callApi01",
+                                "jsonpath": "/results[0]/geometry/location/lng"
+                            }
+                       }
+                    ]
+                }
+            }
+        ]
+    }
+}
