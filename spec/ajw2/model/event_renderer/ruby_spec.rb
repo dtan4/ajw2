@@ -69,6 +69,13 @@ module Ajw2::Model::EventRenderer
           it_behaves_like "render successfully"
         end
 
+        context "which appends elements with multiple values" do
+          before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_multiple_append.yml"))) }
+
+          subject { Ajw2::Model::EventRenderer::Ruby.new.render_ajax(@fixture[:event]) }
+          it_behaves_like "render successfully"
+        end
+
         context "which reads record" do
           before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_read.yml"))) }
 

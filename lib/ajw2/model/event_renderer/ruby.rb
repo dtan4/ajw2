@@ -312,7 +312,7 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
       elements.inject([]) do |result, el|
         [:value, :text].each do |attr|
           result <<
-            "response[:#{id}] = #{el[attr][:id]}" if el[attr]
+            "response[:#{id}][:#{el[attr][:id]}] = #{el[attr][:id]}" if el[attr]
         end
         result << interface_set_params_append(el[:children], id) if el[:children]
         result

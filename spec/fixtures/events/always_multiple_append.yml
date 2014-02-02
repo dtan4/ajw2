@@ -5,6 +5,12 @@ event:
     target: submitBtn
     type: onClick
     params:
+    - id: user_id
+      type: string
+      value:
+        element: userIdTextBox
+        func: getValue
+        type: element
     - id: message
       type: string
       value:
@@ -20,6 +26,10 @@ event:
       func: create
       where: []
       fields:
+      - field: user_id
+        value:
+          type: param
+          id: user_id
       - field: message
         value:
           type: param
@@ -32,6 +42,9 @@ event:
       - tag: tr
         children:
         - tag: td
+          value:
+            type: param
+            id: user_id
         - tag: td
           value:
             type: param
@@ -40,28 +53,31 @@ ruby: |
   post "/event01" do
     content_type :json
     response = { _db_errors: {} }
+    user_id = params[:user_id]
     message = params[:message]
     db01 = Message.new(
-      message: message
+      user_id: user_id, message: message
     )
     response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
+    response[:if01][:user_id] = user_id
     response[:if01][:message] = message
     response.to_json
   end
 javascript: |
   $('#submitBtn').click(function() {
+    var user_id = $('#userIdTextBox').val();
     var message = $('#messageTextBox').val();
     $.ajax({
       type: 'POST',
       url: '/event01',
-      data: { 'message': message },
+      data: { 'user_id': user_id, 'message': message },
       beforeSend: function(_xhr) {
         _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
       },
       success: function(_msg) {
         if (Object.keys(_msg['_db_errors']).length == 0) {
           var if01 = _msg['if01'];
-          $('#messageTable').append($('<tr>').append($('<td>')).append($('<td>').val(if01['message'])));
+          $('#messageTable').append($('<tr>').append($('<td>').val(if01['user_id'])).append($('<td>').val(if01['message'])));
         } else {
         }
       },
