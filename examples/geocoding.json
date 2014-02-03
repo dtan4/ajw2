@@ -16,41 +16,41 @@
                         "id": "address",
                         "class": "",
                         "placeholder": "address",
-                        "children": [],
+                        "children": []
                     },
                     {
                         "type": "button",
                         "id": "submitBtn",
                         "class": "",
-                        "children": [],
+                        "children": []
                     },
                     {
                         "type": "label",
                         "id": "latNameLabel",
                         "class": "",
                         "value": "lat: ",
-                        "children": [],
+                        "children": []
                     },
                     {
                         "type": "label",
                         "id": "latLabel",
                         "class": "",
-                        "children": [],
+                        "children": []
                     },
                     {
                         "type": "label",
                         "id": "lngNameLabel",
                         "class": "",
                         "value": "lng: ",
-                        "children": [],
+                        "children": []
                     },
                     {
                         "type": "label",
                         "id": "lngLabel",
                         "class": "",
-                        "children": [],
+                        "children": []
                     }
-                ],
+                ]
             }
         ]
     },
