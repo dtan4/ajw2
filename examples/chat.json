@@ -19,9 +19,15 @@
                     },
                     {
                         "type": "text",
+                        "id": "userIdTextBox",
+                        "class": "",
+                        "placeholder": "User ID"
+                    },
+                    {
+                        "type": "text",
                         "id": "messageTextBox",
                         "class": "",
-                        "placeholder": "message"
+                        "placeholder": "Message"
                     },
                     {
                         "type": "button",
@@ -55,7 +61,13 @@
                                                 "type": "th",
                                                 "id": "messageTableHeadCol1",
                                                 "class": "",
-                                                "value": "message"
+                                                "value": "User ID"
+                                            },
+                                            {
+                                                "type": "th",
+                                                "id": "messageTableHeadCol2",
+                                                "class": "",
+                                                "value": "Message"
                                             }
                                         ]
                                     }
@@ -79,6 +91,11 @@
                 "name": "messages",
                 "fields": [
                     {
+                        "name": "user_id",
+                        "type": "string",
+                        "nullable": false
+                    },
+                    {
                         "name": "message",
                         "type": "string",
                         "nullable": false
@@ -91,11 +108,20 @@
         "events": [
             {
                 "id": "event01",
-                "realtime": true,
+                "realtime": false,
                 "trigger": {
                     "target": "submitBtn",
                     "type": "onClick",
                     "params": [
+                        {
+                            "id": "user_id",
+                            "type": "string",
+                            "value": {
+                                "element": "userIdTextBox",
+                                "func": "getValue",
+                                "type": "element"
+                            }
+                        },
                         {
                             "id": "message",
                             "type": "string",
@@ -123,6 +149,13 @@
                                             "tag": "td",
                                             "text": {
                                                 "type": "param",
+                                                "id": "user_id"
+                                            }
+                                        },
+                                        {
+                                            "tag": "td",
+                                            "text": {
+                                                "type": "param",
                                                 "id": "message"
                                             }
                                         }
@@ -137,6 +170,13 @@
                             "func": "create",
                             "where": [],
                             "fields": [
+                                {
+                                    "field": "user_id",
+                                    "value": {
+                                        "type": "param",
+                                        "id": "user_id"
+                                    }
+                                },
                                 {
                                     "field": "message",
                                     "value": {
