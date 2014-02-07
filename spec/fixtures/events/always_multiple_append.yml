@@ -46,7 +46,7 @@ event:
             type: param
             id: user_id
         - tag: td
-          value:
+          text:
             type: param
             id: message
 ruby: |
@@ -78,7 +78,7 @@ javascript: |
       success: function(_msg) {
         if (Object.keys(_msg['_db_errors']).length == 0) {
           var if01 = _msg['if01'];
-          $('#messageTable').append($('<tr>').append($('<td>').val(if01['user_id'])).append($('<td>').val(if01['message'])));
+          $('#messageTable').append($('<tr>').append($('<td>').val(if01['user_id'])).append($('<td>').text(if01['message'])));
         } else {
         }
       },

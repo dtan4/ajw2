@@ -298,7 +298,7 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
     def append_child_element(element, id)
       result = "$('<#{element[:tag]}>')"
       result << ".val(#{id}['#{element[:value][:id]}'])" if element[:value]
-      result << ".text(#{id})" if element[:text]
+      result << ".text(#{id}['#{element[:text][:id]}'])" if element[:text]
       element[:children].each do |elem|
         result << ".append(#{append_child_element(elem, id)})"
       end if element[:children]
