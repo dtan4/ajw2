@@ -59,6 +59,7 @@ ruby: |
       user_id: user_id, message: message
     )
     response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
+    response[:if01] = {}
     response[:if01][:user_id] = user_id
     response[:if01][:message] = message
     response.to_json

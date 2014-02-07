@@ -300,11 +300,16 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
     def interface_rb(interface)
       case interface[:func]
       when "signup"
+        raise "Not implemented yet."
       when "signin"
+        raise "Not implemented yet."
       when "setValue", "setText"
         interface_set_params(interface)
       when "appendElements"
-        interface_set_params_append(interface[:params], interface[:id])
+        <<-EOS
+response[:#{interface[:id]}] = {}
+#{interface_set_params_append(interface[:params], interface[:id])}
+        EOS
       end
     end
 
@@ -314,6 +319,7 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
           result <<
             "response[:#{id}][:#{el[attr][:id]}] = #{el[attr][:id]}" if el[attr]
         end
+
         result << interface_set_params_append(el[:children], id) if el[:children]
         result
       end.join("\n")
