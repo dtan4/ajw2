@@ -21,9 +21,17 @@
                     {
                         "type": "button",
                         "id": "submitBtn",
+                        "value": "Get lat & lng",
                         "class": "",
                         "children": []
-                    },
+                    }
+                ]
+            },
+            {
+                "type": "panel",
+                "id": "panel_2",
+                "class": "",
+                "children": [
                     {
                         "type": "label",
                         "id": "latNameLabel",
@@ -36,7 +44,14 @@
                         "id": "latLabel",
                         "class": "",
                         "children": []
-                    },
+                    }
+                ]
+            },
+            {
+                "type": "panel",
+                "id": "panel_3",
+                "class": "",
+                "children": [
                     {
                         "type": "label",
                         "id": "lngNameLabel",

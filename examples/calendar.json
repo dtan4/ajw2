@@ -37,6 +37,7 @@
                     {
                         "type": "button",
                         "id": "addEventBtn",
+                        "value": "Add event",
                         "class": "",
                         "children": []
                     }
