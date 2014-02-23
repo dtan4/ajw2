@@ -450,7 +450,7 @@ html
     == csrf_meta_tag
     title sample
     link rel="stylesheet" type="text/css" href="/css/ext/application.css"
-  html
+  body
     == yield
     script src="/js/jquery.min.js"
     script src="/js/ext/application.js"

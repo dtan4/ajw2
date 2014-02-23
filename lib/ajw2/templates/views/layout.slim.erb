@@ -5,7 +5,7 @@ html
     == csrf_meta_tag
 <%= indent(@application.render_header, 2) %>
 <%= indent(@application.render_css_include, 2) %>
-  html
+  body
     == yield
     script src="/js/jquery.min.js"
 <%= indent(@application.render_js_include, 2) %>
