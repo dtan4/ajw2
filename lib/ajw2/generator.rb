@@ -79,11 +79,11 @@ module Ajw2
 
     def generate_migration_files(dir)
       FileUtils.mkdir_p(File.expand_path("db/migrate", dir))
+      erb = ERB.new(open(template_path("db/migrate/migration.rb.erb")).read)
 
       @database.render_migration.each_with_index do |migration, idx|
-        erb = ERB.new(open(template_path("db/migrate/migration.rb.erb")).read)
-        file = "db/migrate/" << "%.3d" % (idx + 1) << "_create_#{migration[:name]}.rb"
-        open(destination_path(file, dir), "w") { |f| f.puts erb.result(binding) }
+        filename = "db/migrate/" << "%.3d" % (idx + 1) << "_create_#{migration[:name]}.rb"
+        open(destination_path(filename, dir), "w") { |f| f.puts erb.result(binding) }
       end
     end
 
