@@ -7,40 +7,14 @@ module Ajw2::Model::EventRenderer
     # @param [Hash] event Events model description
     # @return [String] JavaScript code
     def render_ajax(event)
-      raise "event/trigger is not found" unless event[:trigger]
-      raise "event/action is not found" unless event[:action]
-
-      trigger = event[:trigger]
-
-      if trigger[:type] == "ready"
-        js_body_ajax(event)
-      else
-        <<-EOS
-$('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
-#{indent(js_body_ajax(event), 1)}
-});
-        EOS
-      end
+      render_event(event, :ajax)
     end
 
     # Generate JavaScript code using WebSocket
     # @param [Hash] event Events model description
     # @return [String] JavaScript code
     def render_realtime(event)
-      raise "event/trigger is not found" unless event[:trigger]
-      raise "event/action is not found" unless event[:action]
-
-      trigger = event[:trigger]
-
-      if trigger[:type] == "ready"
-        js_body_realtime(event)
-      else
-        <<-EOS
-$('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
-#{indent(js_body_realtime(event), 1)}
-});
-        EOS
-      end
+      render_event(event, :realtime)
     end
 
     # Generate JavaScript code which receives message via WebSocket
@@ -58,6 +32,23 @@ case '#{event[:id]}':
     end
 
     private
+
+    def render_event(event, type)
+      raise "event/trigger is not found" unless event[:trigger]
+      raise "event/action is not found" unless event[:action]
+
+      trigger = event[:trigger]
+
+      if trigger[:type] == "ready"
+        self.send("js_body_#{type.to_s}", event)
+      else
+        <<-EOS
+$('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
+#{indent(self.send("js_body_#{type.to_s}", event), 1)}
+});
+        EOS
+      end
+    end
 
     # var message = $('#messageTextBox').val();
     # $.ajax({
