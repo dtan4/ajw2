@@ -26,23 +26,13 @@ title
     # Generate Slim template which call external CSS
     # @return [String] collection of generated code
     def render_css_include
-      raise "/application/css is not found" unless @source[:css]
-
-      @source[:css].inject([]) do |result, css|
-        href = css[:remote] ? css[:src] : "/css/#{File.basename(css[:src])}"
-        result << "link rel=\"stylesheet\" type=\"text/css\" href=\"#{href}\""
-      end.join("\n") + "\n"
+      render_resource_include(:css)
     end
 
     # Generate Slim template which call external JavaScript
     # @return [Array] collection of generated code
     def render_js_include
-      raise "/application/js is not found" unless @source[:js]
-
-      @source[:js].inject([]) do |result, js|
-        src = js[:remote] ?  js[:src] : "/js/#{File.basename(js[:src])}"
-        result << "script src=\"#{src}\""
-      end.join("\n") + "\n"
+      render_resource_include(:js)
     end
 
     # Return the list of local external files
@@ -52,6 +42,24 @@ title
     def external_local_files(type, external_dir)
       raise ArgumentError unless [:css, :js].include? type
       @source[type].select { |f| not f[:remote] }.map { |f| File.expand_path(f[:src], external_dir) }
+    end
+
+    private
+
+    def render_resource_include(type)
+      raise "/application/#{type.to_s} is not found" unless @source[type]
+
+      @source[type].inject([]) do |result, resource|
+        src = resource[:remote] ? resource[:src] : "/#{type.to_s}/#{File.basename(resource[:src])}"
+        result << case type
+                  when :css
+                    "link rel=\"stylesheet\" type=\"text/css\" href=\"#{src}\""
+                  when :js
+                    "script src=\"#{src}\""
+                  else
+                    ""
+        end
+      end.join("\n") + "\n"
     end
   end
 end
