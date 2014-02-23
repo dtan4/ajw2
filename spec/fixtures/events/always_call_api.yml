@@ -20,8 +20,7 @@ event:
     type: always
     actions:
     - id: call01
-      type: call
-      callType: url
+      type: api
       method: get
       endpoint: http://maps.googleapis.com/maps/api/geocode/json
       params:
@@ -38,7 +37,7 @@ event:
       element: addressLabel
       func: setValue
       value:
-        type: call
+        type: api
         id: call01
         jsonpath: /results[0]/formatted_address
 ruby: |

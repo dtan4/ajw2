@@ -20,8 +20,7 @@ event:
     type: always
     actions:
     - id: call01
-      type: call
-      callType: url
+      type: api
       method: get
       endpoint: http://maps.googleapis.com/maps/api/geocode/json
       params:
@@ -34,12 +33,11 @@ event:
           type: param
           id: sensor
     - id: call02
-      type: call
-      callType: script
+      type: script
       params:
       - field: address
         value:
-          type: call
+          type: api
           id: call01
           jsonpath: /results[0]/formatted_address
       script: |

@@ -125,8 +125,7 @@
                         },
                         {
                             "id": "callSc01",
-                            "type": "call",
-                            "callType": "script",
+                            "type": "script",
                             "params": [
                                 {
                                     "field": "title",

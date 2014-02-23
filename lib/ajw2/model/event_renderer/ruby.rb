@@ -97,13 +97,13 @@ when "#{event[:id]}"
 
     # value[:type] == "database"
     #   id.field
-    # value[:type] == "call"
+    # value[:type] == "api"
     #   id[:json][:path][0]
     def set_value(value)
       case value[:type]
       when "database"
         "#{value[:id]}.#{value[:field]}"
-      when "call"
+      when "api"
         "#{value[:id]}#{parse_jsonpath(value[:jsonpath])}"
       else
         value[:id]
@@ -152,8 +152,10 @@ end
                     interface_rb(act)
                   when "database"
                     database_rb(act)
-                  when "call"
-                    call_rb(act)
+                  when "api"
+                    api_rb(act)
+                  when "script"
+                    script_rb(act)
                   else
                   end
         result
@@ -195,22 +197,11 @@ end
       end
     end
 
-    def call_rb(call)
-      case call[:callType]
-      when "url"
-        call_url(call)
-      when "script"
-        call_script(call)
-      else
-        raise Exception
-      end
-    end
-
     # call01 = http_get(
     #   "http://maps.googleapis.com/maps/api/geocode/json",
     #   address: address, sensor: sensor
     # )
-    def call_url(call)
+    def api_rb(call)
       <<-EOS
 #{call[:id]} = http_#{call[:method]}(
   "#{call[:endpoint]}",
@@ -219,7 +210,7 @@ end
 EOS
     end
 
-    def call_script(call)
+    def script_rb(call)
       call[:params].inject(["response[:#{call[:id]}] = {}"]) do |result, param|
         result << "response[:#{call[:id]}][:#{param[:field]}] = #{set_value(param[:value])}"
         result

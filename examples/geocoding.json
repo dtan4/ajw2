@@ -105,8 +105,7 @@
                     "actions": [
                         {
                             "id": "callApi01",
-                            "type": "call",
-                            "callType": "url",
+                            "type": "api",
                             "method": "get",
                             "endpoint": "http://maps.googleapis.com/maps/api/geocode/json",
                             "params": [
@@ -132,7 +131,7 @@
                             "element": "latLabel",
                             "func": "setText",
                             "value":  {
-                                "type": "call",
+                                "type": "api",
                                 "id": "callApi01",
                                 "jsonpath": "/results[0]/geometry/location/lat"
                             }
@@ -143,7 +142,7 @@
                             "element": "lngLabel",
                             "func": "setText",
                             "value": {
-                                "type": "call",
+                                "type": "api",
                                 "id": "callApi01",
                                 "jsonpath": "/results[0]/geometry/location/lng"
                             }

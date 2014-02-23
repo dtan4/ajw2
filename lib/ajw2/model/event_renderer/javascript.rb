@@ -210,29 +210,20 @@ if (Object.keys(_msg['_db_errors']).length == 0) {
                     interface_js(act)
                   when "database"
                     database_js(act)
-                  when "call"
-                    call_js(act)
+                  when "api"
+                    api_js(act)
+                  when "script"
+                    script_js(act)
                   else
                   end
       end.join("\n")
     end
 
-    def call_js(call)
-      case call[:callType]
-      when "url"
-        call_url(call)
-      when "script"
-        call_script(call)
-      else
-        raise Exception
-      end
-    end
-
-    def call_url(call)
+    def api_js(call)
       ""
     end
 
-    def call_script(call)
+    def script_js(call)
       <<-EOS
 #{set_action_variable(call[:id])}
 #{call[:script]}
