@@ -17,17 +17,13 @@ module Ajw2::Model
     # Generate Ruby code which does database migration
     # @return [Array] collection of generated code
     def render_migration
-      raise "/database/tables is not found" unless @source[:tables]
-
-      @source[:tables].inject([]) { |migration, table| migration << render_migration_table(table) }
+      render_rb(:migration)
     end
 
     # Generate Ruby code which defines ActiveRecord model
     # @return [Array] collection of generated code
     def render_definition
-      raise "/database/tables is not found" unless @source[:tables]
-
-      @source[:tables].inject([]) { |definition, table| definition << render_definition_table(table) }
+      render_rb(:definition)
     end
 
     # Generate YAML which sets up database
@@ -83,6 +79,12 @@ timeout: 5000
     end
 
     private
+
+    def render_rb(type)
+      raise "/database/tables is not found" unless @source[:tables]
+
+      @source[:tables].inject([]) { |definition, table| definition << self.send("render_#{type.to_s}_table", table) }
+    end
 
     def add_encrypted_prefix(name)
       "encrypted_#{name}"
