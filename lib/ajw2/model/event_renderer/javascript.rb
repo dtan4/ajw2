@@ -128,11 +128,6 @@ ws.send(JSON.stringify(request));
       end.join(", ")
     end
 
-    # var id = _msg['id'];
-    def set_action_variable(id)
-      "var #{id} = _msg['#{id}'];"
-    end
-
     # type == "onClick":
     #   click
     # type == "onChange":
@@ -157,46 +152,17 @@ ws.send(JSON.stringify(request));
     # } else {
     # }
     def action_js(action)
-      <<-EOS
-if (Object.keys(_msg['_db_errors']).length == 0) {
-#{indent(actions_js(action), 1)}
-} else {
-}
-      EOS
-    end
-
-    def actions_js(action)
-      action[:actions].inject([]) do |result, act|
+      actions = action[:actions].inject([]) do |result, act|
         result << self.send("#{act[:type]}_js", act)
         result
       end.join("\n")
-    end
 
-    def api_js(call)
-      ""
-    end
-
-    def script_js(call)
       <<-EOS
-#{set_action_variable(call[:id])}
-#{call[:script]}
-EOS
-    end
-
-    def database_js(database)
-      ""
-    end
-
-    def set_element_attribute(interface, type)
-      <<-EOS
-#{set_action_variable(interface[:id])}
-$('\##{interface[:element]}').#{type}(#{interface[:id]});
+if (Object.keys(_msg['_db_errors']).length == 0) {
+#{indent(actions, 1)}
+} else {
+}
       EOS
-    end
-
-    # $('#messageLabel').toggle();
-    def change_element_visibility(interface)
-      "$('\##{interface[:element]}')." << interface[:func] << "();"
     end
 
     def interface_js(interface)
@@ -217,6 +183,23 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
       end
     end
 
+    def set_element_attribute(interface, type)
+      <<-EOS
+#{set_action_variable(interface[:id])}
+$('\##{interface[:element]}').#{type}(#{interface[:id]});
+      EOS
+    end
+
+    # var id = _msg['id'];
+    def set_action_variable(id)
+      "var #{id} = _msg['#{id}'];"
+    end
+
+    # $('#messageLabel').toggle();
+    def change_element_visibility(interface)
+      "$('\##{interface[:element]}')." << interface[:func] << "();"
+    end
+
     def append_elements(interface)
       interface[:params].inject([]) do |result, param|
         result << "$('\##{interface[:element]}').append(#{append_child_element(param, interface[:id])});"
@@ -232,6 +215,21 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
         result << ".append(#{append_child_element(elem, id)})"
       end if element[:children]
       result
+    end
+
+    def database_js(database)
+      ""
+    end
+
+    def api_js(call)
+      ""
+    end
+
+    def script_js(call)
+      <<-EOS
+#{set_action_variable(call[:id])}
+#{call[:script]}
+EOS
     end
   end
 end
