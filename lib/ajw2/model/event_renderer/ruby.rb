@@ -42,6 +42,20 @@ when "#{event[:id]}"
 
     private
 
+    # id01 = param01
+    # id02 = "literal02"
+    def params_rb(params)
+      params.inject([]) do |result, param|
+        result << case param[:value][:type]
+                  when "element"
+                    "#{param[:id]} = #{element_value(param)}"
+                  else
+                    "#{param[:id]} = #{literal_value(param)}"
+                  end
+        result
+      end.join("\n")
+    end
+
     def element_value(param)
       case param[:type]
       when "integer"
@@ -68,16 +82,37 @@ when "#{event[:id]}"
       end
     end
 
-    # id01 = param01
-    # id02 = "literal02"
-    def params_rb(params)
-      params.inject([]) do |result, param|
-        result << case param[:value][:type]
-                  when "element"
-                    "#{param[:id]} = #{element_value(param)}"
-                  else
-                    "#{param[:id]} = #{literal_value(param)}"
-                  end
+    def action_rb(action)
+      action[:actions].inject([]) do |result, act|
+        result << self.send("#{act[:type]}_rb", act)
+        result
+      end.join("\n")
+    end
+
+    def interface_rb(interface)
+      case interface[:func]
+      when "signup"
+        raise "Not implemented yet."
+      when "signin"
+        raise "Not implemented yet."
+      when "setValue", "setText"
+        "response[:#{interface[:id]}] = #{set_value(interface[:value])}"
+      when "appendElements"
+        <<-EOS
+response[:#{interface[:id]}] = {}
+#{interface_set_params_append(interface[:params], interface[:id])}
+        EOS
+      end
+    end
+
+    def interface_set_params_append(elements, id)
+      elements.inject([]) do |result, el|
+        [:value, :text].each do |attr|
+          result <<
+            "response[:#{id}][:#{el[attr][:id]}] = #{el[attr][:id]}" if el[attr]
+        end
+
+        result << interface_set_params_append(el[:children], id) if el[:children]
         result
       end.join("\n")
     end
@@ -118,59 +153,8 @@ when "#{event[:id]}"
       end.join(", ")
     end
 
-    def action_rb(action)
-      action[:actions].inject([]) do |result, act|
-        result << case act[:type]
-                  when "interface"
-                    interface_rb(act)
-                  when "database"
-                    database_rb(act)
-                  when "api"
-                    api_rb(act)
-                  when "script"
-                    script_rb(act)
-                  else
-                  end
-        result
-      end.join("\n")
-    end
-
-    # call01 = http_get(
-    #   "http://maps.googleapis.com/maps/api/geocode/json",
-    #   address: address, sensor: sensor
-    # )
-    def api_rb(call)
-      <<-EOS
-#{call[:id]} = http_#{call[:method]}(
-  "#{call[:endpoint]}",
-  #{field_param(call[:params])}
-)
-EOS
-    end
-
-    def script_rb(call)
-      call[:params].inject(["response[:#{call[:id]}] = {}"]) do |result, param|
-        result << "response[:#{call[:id]}][:#{param[:field]}] = #{set_value(param[:value])}"
-        result
-      end.join("\n")
-    end
-
     def database_rb(database)
-      case database[:func]
-      when "create" then create(database)
-      when "read" then read(database)
-      when "update" then update(database)
-      when "delete" then delete(database)
-      else
-        raise Exception
-      end
-    end
-
-    def update_record(record, array)
-      array.inject([]) do |result, field|
-        result << "#{record}.#{field[:field]} = #{set_value(field[:value])}"
-        result
-      end.join("\n")
+      self.send(database[:func].to_s, database)
     end
 
     # db01 = Message.new(
@@ -203,9 +187,14 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
     # db01.message = newMessage
     # response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
     def update(database)
+      update_record = database[:fields].inject([]) do |result, field|
+        result << "#{database[:id]}.#{field[:field]} = #{set_value(field[:value])}"
+        result
+      end.join("\n")
+
       <<-EOS.chomp
 #{read(database)}
-#{update_record(database[:id], database[:fields])}
+#{update_record}
 response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages unless #{database[:id]}.save
       EOS
     end
@@ -221,35 +210,22 @@ response[:_db_errors][:#{database[:id]}] = #{database[:id]}.errors.full_messages
       EOS
     end
 
-    # response[:if01] = message
-    def interface_set_params(interface)
-      "response[:#{interface[:id]}] = #{set_value(interface[:value])}"
+    # call01 = http_get(
+    #   "http://maps.googleapis.com/maps/api/geocode/json",
+    #   address: address, sensor: sensor
+    # )
+    def api_rb(call)
+      <<-EOS
+#{call[:id]} = http_#{call[:method]}(
+  "#{call[:endpoint]}",
+  #{field_param(call[:params])}
+)
+EOS
     end
 
-    def interface_rb(interface)
-      case interface[:func]
-      when "signup"
-        raise "Not implemented yet."
-      when "signin"
-        raise "Not implemented yet."
-      when "setValue", "setText"
-        interface_set_params(interface)
-      when "appendElements"
-        <<-EOS
-response[:#{interface[:id]}] = {}
-#{interface_set_params_append(interface[:params], interface[:id])}
-        EOS
-      end
-    end
-
-    def interface_set_params_append(elements, id)
-      elements.inject([]) do |result, el|
-        [:value, :text].each do |attr|
-          result <<
-            "response[:#{id}][:#{el[attr][:id]}] = #{el[attr][:id]}" if el[attr]
-        end
-
-        result << interface_set_params_append(el[:children], id) if el[:children]
+    def script_rb(call)
+      call[:params].inject(["response[:#{call[:id]}] = {}"]) do |result, param|
+        result << "response[:#{call[:id]}][:#{param[:field]}] = #{set_value(param[:value])}"
         result
       end.join("\n")
     end
