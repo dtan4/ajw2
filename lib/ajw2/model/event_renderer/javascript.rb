@@ -196,21 +196,10 @@ EOS
       ""
     end
 
-    # var if01 = _msg['if01'];
-    # $('#messageLabel').val(if01);
-    def set_value(interface)
+    def set_element_attribute(interface, type)
       <<-EOS
 #{set_action_variable(interface[:id])}
-$('\##{interface[:element]}').val(#{interface[:id]});
-      EOS
-    end
-
-    # var if01 = _msg['if01'];
-    # $('#messageLabel').text(if01);
-    def set_text(interface)
-      <<-EOS
-#{set_action_variable(interface[:id])}
-$('\##{interface[:element]}').text(#{interface[:id]});
+$('\##{interface[:element]}').#{type}(#{interface[:id]});
       EOS
     end
 
@@ -222,9 +211,9 @@ $('\##{interface[:element]}').text(#{interface[:id]});
     def interface_js(interface)
       case interface[:func]
       when "setValue"
-        set_value(interface)
+        set_element_attribute(interface, :val)
       when "setText"
-        set_text(interface)
+        set_element_attribute(interface, :text)
       when "show"
         change_element_visibility(interface, :show)
       when "hide"
