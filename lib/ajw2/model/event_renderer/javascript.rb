@@ -167,17 +167,8 @@ if (Object.keys(_msg['_db_errors']).length == 0) {
 
     def actions_js(action)
       action[:actions].inject([]) do |result, act|
-        result << case act[:type]
-                  when "interface"
-                    interface_js(act)
-                  when "database"
-                    database_js(act)
-                  when "api"
-                    api_js(act)
-                  when "script"
-                    script_js(act)
-                  else
-                  end
+        result << self.send("#{act[:type]}_js", act)
+        result
       end.join("\n")
     end
 
@@ -204,8 +195,8 @@ $('\##{interface[:element]}').#{type}(#{interface[:id]});
     end
 
     # $('#messageLabel').toggle();
-    def change_element_visibility(interface, type)
-      "$('\##{interface[:element]}')." << type.to_s << "();"
+    def change_element_visibility(interface)
+      "$('\##{interface[:element]}')." << interface[:func] << "();"
     end
 
     def interface_js(interface)
@@ -214,12 +205,8 @@ $('\##{interface[:element]}').#{type}(#{interface[:id]});
         set_element_attribute(interface, :val)
       when "setText"
         set_element_attribute(interface, :text)
-      when "show"
-        change_element_visibility(interface, :show)
-      when "hide"
-        change_element_visibility(interface, :hide)
-      when "toggle"
-        change_element_visibility(interface, :toggle)
+      when "show", "hide", "toggle"
+        change_element_visibility(interface)
       when "appendElements"
         <<-EOS
 var #{interface[:id]} = _msg['#{interface[:id]}'];
