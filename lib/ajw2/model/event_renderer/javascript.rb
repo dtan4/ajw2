@@ -26,7 +26,10 @@ module Ajw2::Model::EventRenderer
 
       <<-EOS
 case '#{event[:id]}':
-#{indent(action_js(event[:action]), 1)}
+  if (Object.keys(_msg['_db_errors']).length == 0) {
+#{indent(action_js(event[:action]), 2)}
+  } else {
+  }
   break;
       EOS
     end
@@ -80,7 +83,10 @@ $.ajax({
     _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
   },
   success: function(_msg) {
-#{indent(action_js(event[:action]), 2)}
+    if (Object.keys(_msg['_db_errors']).length == 0) {
+#{indent(action_js(event[:action]), 3)}
+    } else {
+    }
   },
   error: function(_xhr, _msg) {
     alert('XMLHttpRequest Error: ' + _msg);
@@ -128,11 +134,6 @@ ws.send(JSON.stringify(request));
       end.join(", ")
     end
 
-    # var id = _msg['id'];
-    def set_action_variable(id)
-      "var #{id} = _msg['#{id}'];"
-    end
-
     # type == "onClick":
     #   click
     # type == "onChange":
@@ -157,80 +158,20 @@ ws.send(JSON.stringify(request));
     # } else {
     # }
     def action_js(action)
-      <<-EOS
-if (Object.keys(_msg['_db_errors']).length == 0) {
-#{indent(actions_js(action), 1)}
-} else {
-}
-      EOS
-    end
-
-    def actions_js(action)
       action[:actions].inject([]) do |result, act|
-        result << case act[:type]
-                  when "interface"
-                    interface_js(act)
-                  when "database"
-                    database_js(act)
-                  when "api"
-                    api_js(act)
-                  when "script"
-                    script_js(act)
-                  else
-                  end
+        result << self.send("#{act[:type]}_js", act)
+        result
       end.join("\n")
-    end
-
-    def api_js(call)
-      ""
-    end
-
-    def script_js(call)
-      <<-EOS
-#{set_action_variable(call[:id])}
-#{call[:script]}
-EOS
-    end
-
-    def database_js(database)
-      ""
-    end
-
-    # var if01 = _msg['if01'];
-    # $('#messageLabel').val(if01);
-    def set_value(interface)
-      <<-EOS
-#{set_action_variable(interface[:id])}
-$('\##{interface[:element]}').val(#{interface[:id]});
-      EOS
-    end
-
-    # var if01 = _msg['if01'];
-    # $('#messageLabel').text(if01);
-    def set_text(interface)
-      <<-EOS
-#{set_action_variable(interface[:id])}
-$('\##{interface[:element]}').text(#{interface[:id]});
-      EOS
-    end
-
-    # $('#messageLabel').toggle();
-    def change_element_visibility(interface, type)
-      "$('\##{interface[:element]}')." << type.to_s << "();"
     end
 
     def interface_js(interface)
       case interface[:func]
       when "setValue"
-        set_value(interface)
+        set_element_attribute(interface, :val)
       when "setText"
-        set_text(interface)
-      when "show"
-        change_element_visibility(interface, :show)
-      when "hide"
-        change_element_visibility(interface, :hide)
-      when "toggle"
-        change_element_visibility(interface, :toggle)
+        set_element_attribute(interface, :text)
+      when "show", "hide", "toggle"
+        change_element_visibility(interface)
       when "appendElements"
         <<-EOS
 var #{interface[:id]} = _msg['#{interface[:id]}'];
@@ -239,6 +180,23 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
       else
         ""
       end
+    end
+
+    def set_element_attribute(interface, type)
+      <<-EOS
+#{set_action_variable(interface[:id])}
+$('\##{interface[:element]}').#{type}(#{interface[:id]});
+      EOS
+    end
+
+    # var id = _msg['id'];
+    def set_action_variable(id)
+      "var #{id} = _msg['#{id}'];"
+    end
+
+    # $('#messageLabel').toggle();
+    def change_element_visibility(interface)
+      "$('\##{interface[:element]}')." << interface[:func] << "();"
     end
 
     def append_elements(interface)
@@ -256,6 +214,21 @@ var #{interface[:id]} = _msg['#{interface[:id]}'];
         result << ".append(#{append_child_element(elem, id)})"
       end if element[:children]
       result
+    end
+
+    def database_js(database)
+      ""
+    end
+
+    def api_js(call)
+      ""
+    end
+
+    def script_js(call)
+      <<-EOS
+#{set_action_variable(call[:id])}
+#{call[:script]}
+EOS
     end
   end
 end
