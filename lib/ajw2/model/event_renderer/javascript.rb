@@ -26,7 +26,10 @@ module Ajw2::Model::EventRenderer
 
       <<-EOS
 case '#{event[:id]}':
-#{indent(action_js(event[:action]), 1)}
+  if (Object.keys(_msg['_db_errors']).length == 0) {
+#{indent(action_js(event[:action]), 2)}
+  } else {
+  }
   break;
       EOS
     end
@@ -80,7 +83,10 @@ $.ajax({
     _xhr.setRequestHeader("X-CSRF-Token", _csrf_token);
   },
   success: function(_msg) {
-#{indent(action_js(event[:action]), 2)}
+    if (Object.keys(_msg['_db_errors']).length == 0) {
+#{indent(action_js(event[:action]), 3)}
+    } else {
+    }
   },
   error: function(_xhr, _msg) {
     alert('XMLHttpRequest Error: ' + _msg);
@@ -152,17 +158,10 @@ ws.send(JSON.stringify(request));
     # } else {
     # }
     def action_js(action)
-      actions = action[:actions].inject([]) do |result, act|
+      action[:actions].inject([]) do |result, act|
         result << self.send("#{act[:type]}_js", act)
         result
       end.join("\n")
-
-      <<-EOS
-if (Object.keys(_msg['_db_errors']).length == 0) {
-#{indent(actions, 1)}
-} else {
-}
-      EOS
     end
 
     def interface_js(interface)
