@@ -51,15 +51,16 @@ title
 
       @source[type].inject([]) do |result, resource|
         src = resource[:remote] ? resource[:src] : "/#{type.to_s}/#{File.basename(resource[:src])}"
-        result << case type
-                  when :css
-                    "link rel=\"stylesheet\" type=\"text/css\" href=\"#{src}\""
-                  when :js
-                    "script src=\"#{src}\""
-                  else
-                    ""
-        end
+        result << self.send("#{type}_include", src)
       end.join("\n") + "\n"
+    end
+
+    def css_include(src)
+      "link rel=\"stylesheet\" type=\"text/css\" href=\"#{src}\""
+    end
+
+    def js_include(src)
+      "script src=\"#{src}\""
     end
   end
 end
