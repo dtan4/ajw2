@@ -12,7 +12,7 @@ event:
         func: getValue
         type: element
   action:
-    type: always
+
     actions:
     - id: db01
       type: database

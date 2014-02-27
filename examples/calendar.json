@@ -98,7 +98,6 @@
                     ]
                 },
                 "action":{
-                    "type": "always",
                     "actions": [
                         {
                             "id": "db01",

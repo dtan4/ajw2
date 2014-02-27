@@ -67,7 +67,6 @@ event:
           func: getValue
           type: element
     action:
-      type: always
       actions:
       - id: if01
         type: interface
