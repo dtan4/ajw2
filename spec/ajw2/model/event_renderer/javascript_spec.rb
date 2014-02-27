@@ -12,147 +12,147 @@ module Ajw2::Model::EventRenderer
 
     describe "#render_ajax" do
       context "which sets element value" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/value.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which sets element text" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_text.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/text.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which sets integer value" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_integer_value.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/integer_value.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which sets decimal value" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_decimal_value.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/decimal_value.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which sets datetime value" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_datetime_value.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/datetime_value.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which sets string literal" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_string_literal.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/string_literal.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which sets integer literal" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_integer_literal.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/integer_literal.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which appends elements" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_append.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/append.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which appends elements with multiple values" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_multiple_append.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/multiple_append.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which reads record" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_read.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/db_read.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which updates record" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_update.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/db_update.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which deletes record" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_db_delete.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/db_delete.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which hides element" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_hide_element.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/hide_element.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which shows element" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_show_element.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/show_element.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which toggles element visibility" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_toggle_element.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/toggle_element.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which calls Web API" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_call_api.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/call_api.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "which calls JavaScript" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_call_script.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/call_script.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "with onload (ready) event" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_ready.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/ready.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "with onChange event" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_onchange.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/onchange.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "with onFocus event" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_onfocus.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/onfocus.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "with onFocusOut event" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/always_onfocusout.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/onfocusout.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_ajax(@fixture[:event]) }
         it_behaves_like "render successfully"
@@ -161,14 +161,14 @@ module Ajw2::Model::EventRenderer
 
     describe "#render_realtime" do
       context "with always-execute source" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime_always.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_realtime(@fixture[:event]) }
         it_behaves_like "render successfully"
       end
 
       context "with onload (ready) source" do
-        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime_always_ready.yml"))) }
+        before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime_onready.yml"))) }
 
         subject { Ajw2::Model::EventRenderer::JavaScript.new.render_realtime(@fixture[:event]) }
         it_behaves_like "render successfully"
@@ -176,7 +176,7 @@ module Ajw2::Model::EventRenderer
     end
 
     describe "#render_onmessage" do
-      before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime_always.yml"))) }
+      before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime.yml"))) }
 
       subject { Ajw2::Model::EventRenderer::JavaScript.new.render_onmessage(@fixture[:event]) }
       it { should be_an_instance_of String }
