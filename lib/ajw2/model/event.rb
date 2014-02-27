@@ -20,25 +20,25 @@ module Ajw2::Model
     # Generate Ruby code using Ajax
     # @return [Array] collection of generated code
     def render_rb_ajax
-      render_rb(:ajax)
+      render_code(@rb, :ajax)
     end
 
     # Generate Ruby code using WebSocket
     # @return [Array] collection of generated code
     def render_rb_realtime
-      render_rb(:realtime)
+      render_code(@rb, :realtime)
     end
 
     # Generate JavaScript code using Ajax
     # @return [Array] collection of generated code
     def render_js_ajax
-      render_js(:ajax)
+      render_code(@js, :ajax)
     end
 
     # Generate JavaScript code using WebSocket
     # @return [Array] collection of generated code
     def render_js_realtime
-      render_js(:realtime)
+      render_code(@js, :realtime)
     end
 
     # Generate JavaScript code which receives message via WebSocket
@@ -54,20 +54,11 @@ module Ajw2::Model
 
     private
 
-    def render_rb(type)
+    def render_code(renderer, event_type)
       raise "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
-        result << @rb.send("render_#{type}", event) if event[:type] == type.to_s
-        result
-      end
-    end
-
-    def render_js(type)
-      raise "/events/events is not found" unless @source[:events]
-
-      @source[:events].inject([]) do |result, event|
-        result << @js.send("render_#{type}", event) if event[:type] == type.to_s
+        result << renderer.send("render_#{event_type}", event) if event[:type] == event_type.to_s
         result
       end
     end
