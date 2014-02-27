@@ -4,10 +4,10 @@ module Ajw2::Model
   describe Event do
     before do
       @ajax_source = {
-                      events: [{ id: "event01", realtime: false }]
+                      events: [{ id: "event01", type: "ajax" }]
                      }
       @realtime_source = {
-                          events: [{ id: "event01", realtime: true }]
+                          events: [{ id: "event01", type: "realtime" }]
                          }
 
       @js = double("js",
