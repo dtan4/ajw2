@@ -46,27 +46,30 @@ when "#{event[:id]}"
     # id02 = "literal02"
     def params_rb(params)
       params.inject([]) do |result, param|
-        result << case param[:value][:type]
-                  when "element"
-                    "#{param[:id]} = #{element_value(param)}"
-                  else
-                    "#{param[:id]} = #{literal_value(param)}"
-                  end
+        value = self.send("#{param[:value][:type]}_value", param)
+        result << "#{param[:id]} = #{value}"
         result
       end.join("\n")
     end
 
     def element_value(param)
-      case param[:type]
-      when "integer"
-        "params[:#{param[:id]}].to_i"
-      when "decimal"
-        "params[:#{param[:id]}].to_f"
-      when "datetime"
-        "Time.parse(params[:#{param[:id]}])"
-      else
-        "params[:#{param[:id]}]"
-      end
+      self.send("element_#{param[:type]}_value", param[:id])
+    end
+
+    def element_integer_value(id)
+      "params[:#{id}].to_i"
+    end
+
+    def element_decimal_value(id)
+      "params[:#{id}].to_f"
+    end
+
+    def element_datetime_value(id)
+      "Time.parse(params[:#{id}])"
+    end
+
+    def element_string_value(id)
+      "params[:#{id}]"
     end
 
     # param[:type] == "integer" || "decimal" || "boolean":
@@ -135,14 +138,19 @@ response[:#{interface[:id]}] = {}
     # value[:type] == "api"
     #   id[:json][:path][0]
     def set_value(value)
-      case value[:type]
-      when "database"
-        "#{value[:id]}.#{value[:field]}"
-      when "api"
-        "#{value[:id]}#{parse_jsonpath(value[:jsonpath])}"
-      else
-        value[:id]
-      end
+      self.send("set_#{value[:type]}_value", value)
+    end
+
+    def set_database_value(value)
+      "#{value[:id]}.#{value[:field]}"
+    end
+
+    def set_api_value(value)
+      "#{value[:id]}#{parse_jsonpath(value[:jsonpath])}"
+    end
+
+    def set_param_value(value)
+      value[:id]
     end
 
     # field01: value01, field02: value02
