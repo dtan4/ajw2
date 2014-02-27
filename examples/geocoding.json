@@ -77,6 +77,7 @@
         "events": [
             {
                 "id": "events_1",
+                "type": "ajax",
                 "trigger": {
                     "target": "submitBtn",
                     "type": "onClick",

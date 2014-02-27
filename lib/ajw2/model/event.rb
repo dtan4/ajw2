@@ -20,45 +20,25 @@ module Ajw2::Model
     # Generate Ruby code using Ajax
     # @return [Array] collection of generated code
     def render_rb_ajax
-      raise "/events/events is not found" unless @source[:events]
-
-      @source[:events].inject([]) do |result, event|
-        result << @rb.render_ajax(event) unless event[:realtime]
-        result
-      end
+      render_rb(:ajax)
     end
 
     # Generate Ruby code using WebSocket
     # @return [Array] collection of generated code
     def render_rb_realtime
-      raise "/events/events is not found" unless @source[:events]
-
-      @source[:events].inject([]) do |result, event|
-        result << @rb.render_realtime(event) if event[:realtime]
-        result
-      end
+      render_rb(:realtime)
     end
 
     # Generate JavaScript code using Ajax
     # @return [Array] collection of generated code
     def render_js_ajax
-      raise "/events/events is not found" unless @source[:events]
-
-      @source[:events].inject([]) do |result, event|
-        result << @js.render_ajax(event) unless event[:realtime]
-        result
-      end
+      render_js(:ajax)
     end
 
     # Generate JavaScript code using WebSocket
     # @return [Array] collection of generated code
     def render_js_realtime
-      raise "/events/events is not found" unless @source[:events]
-
-      @source[:events].inject([]) do |result, event|
-        result << @js.render_realtime(event) if event[:realtime]
-        result
-      end
+      render_js(:realtime)
     end
 
     # Generate JavaScript code which receives message via WebSocket
@@ -67,7 +47,27 @@ module Ajw2::Model
       raise "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
-        result << @js.render_onmessage(event) if event[:realtime]
+        result << @js.render_onmessage(event) if event[:type] == "realtime"
+        result
+      end
+    end
+
+    private
+
+    def render_rb(type)
+      raise "/events/events is not found" unless @source[:events]
+
+      @source[:events].inject([]) do |result, event|
+        result << @rb.send("render_#{type}", event) if event[:type] == type.to_s
+        result
+      end
+    end
+
+    def render_js(type)
+      raise "/events/events is not found" unless @source[:events]
+
+      @source[:events].inject([]) do |result, event|
+        result << @js.send("render_#{type}", event) if event[:type] == type.to_s
         result
       end
     end

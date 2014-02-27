@@ -1,6 +1,6 @@
 event:
   id: event01
-  realtime: false
+  type: ajax
   trigger:
     target: messageTextBox
     type: onFocus

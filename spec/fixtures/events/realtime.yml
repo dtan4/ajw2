@@ -1,6 +1,6 @@
 event:
   id: event01
-  realtime: true
+  type: realtime
   trigger:
     target: submitBtn
     type: onClick

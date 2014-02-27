@@ -1,6 +1,6 @@
 event:
   id: event01
-  realtime: false
+  call: ajax
   trigger:
     target: submitBtn
     type: onClick

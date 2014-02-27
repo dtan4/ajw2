@@ -91,7 +91,7 @@
         "events": [
             {
                 "id": "event01",
-                "realtime": false,
+                "type": "realtime",
                 "trigger": {
                     "target": "submitBtn",
                     "type": "onClick",

@@ -73,6 +73,7 @@
         "events": [
             {
                 "id": "events_1",
+                "type": "ajax",
                 "trigger": {
                     "target": "addEventBtn",
                     "type": "onClick",
