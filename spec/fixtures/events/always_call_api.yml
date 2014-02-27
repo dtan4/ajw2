@@ -17,7 +17,6 @@ event:
         value: 'false'
         type: literal
   action:
-    type: always
     actions:
     - id: call01
       type: api

@@ -134,7 +134,6 @@
                     ]
                 },
                 "action": {
-                    "type": "always",
                     "actions": [
                         {
                             "id": "if01",

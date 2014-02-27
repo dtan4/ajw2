@@ -119,33 +119,6 @@ when "#{event[:id]}"
     end
 
     def action_rb(action)
-      action[:type] == "conditional" ?
-        conditional(action) : always(action)
-    end
-
-    # if (message == "hoge")
-    #   db01 = Message.new(
-    #     message: message
-    #   )
-    #   response[:_db_errors][:db01] = db01.errors.full_messages unless db01.save
-    #   response[:if01] = message
-    #   response[:result] = true
-    # else
-    #   response[:result] = false
-    # end
-    def conditional(action)
-      <<-EOS.strip
-if (#{condition(action[:condition])})
-#{indent(conditional_then(action[:then]), 1)}
-  response[:result] = true
-else
-#{indent(conditional_else(action[:else]), 1)}
-  response[:result] = false
-end
-      EOS
-    end
-
-    def always(action)
       action[:actions].inject([]) do |result, act|
         result << case act[:type]
                   when "interface"
@@ -160,41 +133,6 @@ end
                   end
         result
       end.join("\n")
-    end
-
-    alias conditional_then always
-    alias conditional_else always
-
-    # message == "hoge"
-    def condition(condition)
-      "#{condition_left(condition[:left])} #{condition_operand(condition[:operand])} #{condition_right(condition[:right])}"
-    end
-
-    # hand[:type] == "param":
-    #   42
-    # hand[:type] == "literal":
-    #   "42"
-    def condition_hand(hand)
-      case hand[:type]
-      when "param" then hand[:value][:name]
-      when "literal" then "\"#{hand[:value][:value]}\""
-      else
-        raise "Undefined hand type!"
-      end
-    end
-
-    alias condition_left condition_hand
-    alias condition_right condition_hand
-
-    def condition_operand(operand)
-      case operand
-      when "eq" then "=="
-      when "neq" then "!="
-      when "lt" then "<"
-      when "gt" then ">"
-      else
-        raise "Undefined operand!"
-      end
     end
 
     # call01 = http_get(

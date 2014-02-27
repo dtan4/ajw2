@@ -12,7 +12,7 @@ event:
         func: getValue
         type: element
   action:
-    type: always
+
     actions: []
 ruby: |
   post "/event01" do

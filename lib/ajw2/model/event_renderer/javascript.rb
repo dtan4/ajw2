@@ -151,38 +151,12 @@ ws.send(JSON.stringify(request));
       end
     end
 
-    def action_js(action)
-      action[:type] == "conditional" ?
-        conditional(action) : always(action)
-    end
-
-    # if (_msg['result']) {
-    #   if (_msg['_db_errors'].length == 0) {
-    #     var if01 = _msg['if01'];
-    #     $('#messageLabel').val(if01);
-    #   } else {
-    #   }
-    # } else {
-    #   if (_msg['_db_errors'].length == 0) {
-    #   } else {
-    #   }
-    # }
-    def conditional(action)
-      <<-EOS
-if (_msg['result']) {
-#{indent(conditional_then(action[:then]), 1)}
-} else {
-#{indent(conditional_else(action[:else]), 1)}
-}
-      EOS
-    end
-
     # if (Object.keys(_msg['_db_errors']).length == 0) {
     #   var if01 = _msg['if01'];
     #   $('#messageLabel').val(if01);
     # } else {
     # }
-    def always(action)
+    def action_js(action)
       <<-EOS
 if (Object.keys(_msg['_db_errors']).length == 0) {
 #{indent(actions_js(action), 1)}
@@ -190,9 +164,6 @@ if (Object.keys(_msg['_db_errors']).length == 0) {
 }
       EOS
     end
-
-    alias conditional_then always
-    alias conditional_else always
 
     def actions_js(action)
       action[:actions].inject([]) do |result, act|

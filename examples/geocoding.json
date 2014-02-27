@@ -101,7 +101,6 @@
                     ]
                 },
                 "action":{
-                    "type": "always",
                     "actions": [
                         {
                             "id": "callApi01",
