@@ -152,8 +152,8 @@ ws.send(JSON.stringify(request));
     end
 
     def action_js(action)
-      action[:type] == "conditional" ?
-        conditional(action) : always(action)
+      raise "event.action.type is deprecated!" if action[:type]
+      always(action)
     end
 
     # if (_msg['result']) {

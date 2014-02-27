@@ -11,7 +11,7 @@ event:
         value: '42'
         type: literal
   action:
-    type: always
+
     actions:
     - id: db01
       type: database
