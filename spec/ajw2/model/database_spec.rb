@@ -29,7 +29,7 @@ module Ajw2::Model
       }
     }
 
-    describe "#iniialize" do
+    describe "#initialize" do
       context "with Hash" do
         subject { Ajw2::Model::Database.new(source) }
         its(:source) { should be_instance_of Hash }
