@@ -3,10 +3,10 @@ module Ajw2::Model
   class Interface
     include Ajw2::Util
 
-    INPUT_TYPE = %w{
+    INPUT_TYPE = %w(
       text password hidden search tel url email datetime date month week time
       datetime-local number range color checkbox radio file submit image reset
-    }
+    )
 
     attr_reader :source
 
