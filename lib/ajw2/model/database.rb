@@ -83,7 +83,7 @@ timeout: 5000
     def render_rb(type)
       raise "/database/tables is not found" unless @source[:tables]
 
-      @source[:tables].inject([]) { |definition, table| definition << self.send("render_#{type.to_s}_table", table) }
+      @source[:tables].inject([]) { |definition, table| definition << send("render_#{type}_table", table) }
     end
 
     def add_encrypted_prefix(name)

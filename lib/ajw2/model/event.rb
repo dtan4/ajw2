@@ -103,11 +103,11 @@ case '#{event[:id]}':
         trigger = event[:trigger]
 
         if trigger[:type] == "ready"
-          self.send("js_body_#{type.to_s}", event)
+          send("js_body_#{type}", event)
         else
         <<-EOS
 $('\##{trigger[:target]}').#{trigger_function(trigger[:type])}(function() {
-#{indent(self.send("js_body_#{type.to_s}", event), 1)}
+#{indent(send("js_body_#{type}", event), 1)}
 });
         EOS
         end
@@ -219,7 +219,7 @@ ws.send(JSON.stringify(request));
       # }
       def action_js(action)
         action[:actions].inject([]) do |result, act|
-          result << self.send("#{act[:type]}_js", act)
+          result << send("#{act[:type]}_js", act)
           result
         end.join("\n")
       end
@@ -338,14 +338,14 @@ when "#{event[:id]}"
       # id02 = "literal02"
       def params_rb(params)
         params.inject([]) do |result, param|
-          value = self.send("#{param[:value][:type]}_value", param)
+          value = send("#{param[:value][:type]}_value", param)
           result << "#{param[:id]} = #{value}"
           result
         end.join("\n")
       end
 
       def element_value(param)
-        self.send("element_#{param[:type]}_value", param[:id])
+        send("element_#{param[:type]}_value", param[:id])
       end
 
       def element_integer_value(id)
@@ -379,7 +379,7 @@ when "#{event[:id]}"
 
       def action_rb(action)
         action[:actions].inject([]) do |result, act|
-          result << self.send("#{act[:type]}_rb", act)
+          result << send("#{act[:type]}_rb", act)
           result
         end.join("\n")
       end
@@ -430,7 +430,7 @@ response[:#{interface[:id]}] = {}
       # value[:type] == "api"
       #   id[:json][:path][0]
       def set_value(value)
-        self.send("set_#{value[:type]}_value", value)
+        send("set_#{value[:type]}_value", value)
       end
 
       def set_database_value(value)
@@ -454,7 +454,7 @@ response[:#{interface[:id]}] = {}
       end
 
       def database_rb(database)
-        self.send(database[:func].to_s, database)
+        send(database[:func].to_s, database)
       end
 
       # db01 = Message.new(

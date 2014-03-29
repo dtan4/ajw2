@@ -89,7 +89,7 @@ module Ajw2
 
     def copy_external_files(outdir, external_file_dir)
       [:css, :js].each do |type|
-        dir = File.expand_path("public/#{type.to_s}", outdir)
+        dir = File.expand_path("public/#{type}", outdir)
         FileUtils.mkdir_p(dir) unless Dir.exists?(dir)
         FileUtils.cp(@application.external_local_files(type, external_file_dir), dir)
       end

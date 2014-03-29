@@ -58,7 +58,7 @@ module Ajw2::Model
       elsif INPUT_TYPE.include? element[:type]
         result = render_input_tag(element)
       else
-        result = "#{element[:type].to_s}#{render_class(element[:class])}#{render_id(element[:id])}"
+        result = "#{element[:type]}#{render_class(element[:class])}#{render_id(element[:id])}"
       end
 
       result

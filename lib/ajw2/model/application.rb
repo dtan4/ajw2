@@ -47,11 +47,11 @@ title
     private
 
     def render_resource_include(type)
-      raise "/application/#{type.to_s} is not found" unless @source[type]
+      raise "/application/#{type} is not found" unless @source[type]
 
       @source[type].inject([]) do |result, resource|
-        src = resource[:remote] ? resource[:src] : "/#{type.to_s}/#{File.basename(resource[:src])}"
-        result << self.send("#{type}_include", src)
+        src = resource[:remote] ? resource[:src] : "/#{type}/#{File.basename(resource[:src])}"
+        result << send("#{type}_include", src)
       end.join("\n") + "\n"
     end
 

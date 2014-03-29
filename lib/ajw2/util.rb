@@ -50,6 +50,6 @@ module Ajw2::Util
 
     end
 
-    return true
+    true
   end
 end
