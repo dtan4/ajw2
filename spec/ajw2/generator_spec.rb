@@ -40,7 +40,7 @@ module Ajw2
       context "with non-existed outdir" do
         shared_examples_for "generates successfully" do
           it "should create outdir" do
-            expect(Dir.exists?(@outdir)).to be_true
+            expect(Dir.exist?(@outdir)).to be_true
           end
 
           [
@@ -57,7 +57,7 @@ module Ajw2
            "public/js/app.js"
           ].each do |path|
             it "should create #{path}" do
-              expect(File.exists?(File.expand_path(path, @outdir))).to be_true
+              expect(File.exist?(File.expand_path(path, @outdir))).to be_true
             end
           end
 
@@ -84,7 +84,7 @@ module Ajw2
 
         context "with Ajax event and Websocket event" do
           before do
-            FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+            FileUtils.rm_r(@outdir) if Dir.exist?(@outdir)
 
             @event = double("event",
                             render_rb_ajax: RENDER_RB_AJAX,
@@ -110,7 +110,7 @@ module Ajw2
 
         context "with Ajax event only" do
           before do
-            FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+            FileUtils.rm_r(@outdir) if Dir.exist?(@outdir)
 
             @event = double("event",
                             render_rb_ajax: RENDER_RB_AJAX,
@@ -136,7 +136,7 @@ module Ajw2
 
         context "with WebSocket event only" do
           before do
-            FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+            FileUtils.rm_r(@outdir) if Dir.exist?(@outdir)
 
             @event = double("event",
                             render_rb_ajax: [],
@@ -162,7 +162,7 @@ module Ajw2
 
         context "with no event" do
           before do
-            FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+            FileUtils.rm_r(@outdir) if Dir.exist?(@outdir)
 
             @event = double("event",
                             render_rb_ajax: [],
@@ -188,7 +188,7 @@ module Ajw2
 
         context "with external resource" do
           before do
-            FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+            FileUtils.rm_r(@outdir) if Dir.exist?(@outdir)
 
             @application_with_ext = double("application",
                                            render_header: "title sample",
@@ -228,17 +228,17 @@ module Ajw2
           it_behaves_like "generates successfully"
 
           it "should include external.js" do
-            expect(File.exists?(File.expand_path("public/js/external.js", @outdir))).to be_true
+            expect(File.exist?(File.expand_path("public/js/external.js", @outdir))).to be_true
           end
 
           it "should include external.css" do
-            expect(File.exists?(File.expand_path("public/css/external.css", @outdir))).to be_true
+            expect(File.exist?(File.expand_path("public/css/external.css", @outdir))).to be_true
           end
         end
 
         context "with invalid source" do
           before do
-            FileUtils.rm_r(@outdir) if Dir.exists?(@outdir)
+            FileUtils.rm_r(@outdir) if Dir.exist?(@outdir)
 
             @database = double("database",
                                render_migration: "hoge",
@@ -257,7 +257,7 @@ module Ajw2
             begin
               subject
             rescue
-              expect(Dir.exists? @outdir).to be_false
+              expect(Dir.exist? @outdir).to be_false
             end
           end
         end
@@ -273,8 +273,8 @@ module Ajw2
       end
 
       after do
-        FileUtils.rm_r(@outdir) if Dir.exists? @outdir
-        FileUtils.rm_r(@external_file_dir) if Dir.exists? @external_file_dir
+        FileUtils.rm_r(@outdir) if Dir.exist? @outdir
+        FileUtils.rm_r(@external_file_dir) if Dir.exist? @external_file_dir
       end
     end
   end

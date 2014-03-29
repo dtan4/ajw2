@@ -9,7 +9,7 @@ module Ajw2
           before(:all) { Ajw2::Cli.execute(@args) }
 
           it "should create out_dir" do
-            expect(Dir.exists?(@out_dir)).to be_true
+            expect(Dir.exist?(@out_dir)).to be_true
           end
 
           [
@@ -25,11 +25,11 @@ module Ajw2
            "public/js/app.js"
           ].each do |path|
             it "should create #{path}" do
-              expect(File.exists?(File.expand_path(path, @out_dir))).to be_true
+              expect(File.exist?(File.expand_path(path, @out_dir))).to be_true
             end
           end
 
-          after(:all) { FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir }
+          after(:all) { FileUtils.rm_r(@out_dir) if Dir.exist? @out_dir }
         end
 
         context "2 arguments" do
@@ -37,7 +37,7 @@ module Ajw2
             @source = fixture_path("chat.json")
             @out_dir = "test_cli"
             @args = "#{@source} -o #{@out_dir}".split(" ")
-            FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
+            FileUtils.rm_r(@out_dir) if Dir.exist? @out_dir
           end
 
           it_behaves_like "execute successfully"
@@ -49,7 +49,7 @@ module Ajw2
             @out_dir = "test_cli"
             @external_resource_dir = "test_ext_files"
             @args = "#{@source} -o #{@out_dir} -e #{@external_resource_dir}".split(" ")
-            FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
+            FileUtils.rm_r(@out_dir) if Dir.exist? @out_dir
           end
 
           it_behaves_like "execute successfully"
@@ -61,7 +61,7 @@ module Ajw2
             @out_dir = "test_cli"
             @external_resource_dir = "test_ext_files"
             @args = "#{@source} --output #{@out_dir} --external #{@external_resource_dir}".split(" ")
-            FileUtils.rm_r(@out_dir) if Dir.exists? @out_dir
+            FileUtils.rm_r(@out_dir) if Dir.exist? @out_dir
           end
 
           it_behaves_like "execute successfully"

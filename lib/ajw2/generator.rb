@@ -26,7 +26,7 @@ module Ajw2
     # Execute generation
     # @param [String] out_dir directory path to output files
     def generate(out_dir, external_file_dir)
-      raise Exception if Dir.exists? out_dir
+      raise Exception if Dir.exist? out_dir
 
       begin
         [
@@ -44,7 +44,7 @@ module Ajw2
         generate_migration_files(out_dir)
         copy_external_files(out_dir, external_file_dir)
       rescue Exception => e
-        FileUtils.rm_rf(out_dir) if Dir.exists?(out_dir)
+        FileUtils.rm_rf(out_dir) if Dir.exist?(out_dir)
         raise e
       end
     end
@@ -61,11 +61,11 @@ module Ajw2
 
     def generate_file(file, out_dir)
       dir = File.dirname(File.expand_path(file, out_dir))
-      FileUtils.mkdir_p(dir) unless Dir.exists?(dir)
+      FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
-      if File.exists?(template_path(file))
+      if File.exist?(template_path(file))
         FileUtils.copy(template_path(file), destination_path(file, out_dir))
-      elsif File.exists?(template_path(file + ".erb"))
+      elsif File.exist?(template_path(file + ".erb"))
         generate_from_erb(file, out_dir)
       else
         # TODO: raise Exception
@@ -90,7 +90,7 @@ module Ajw2
     def copy_external_files(outdir, external_file_dir)
       [:css, :js].each do |type|
         dir = File.expand_path("public/#{type}", outdir)
-        FileUtils.mkdir_p(dir) unless Dir.exists?(dir)
+        FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
         FileUtils.cp(@application.external_local_files(type, external_file_dir), dir)
       end
     end
