@@ -7,7 +7,7 @@ module Ajw2::Util
     fail ArgumentError, "Negative number is given" if depth < 0
 
     text.each_line.map do |line|
-      line = (line.strip == "") ? "" : "  " * depth + line
+      (line.strip == "") ? "" : "  " * depth + line
     end.join("").chomp
   end
 
@@ -43,9 +43,9 @@ module Ajw2::Util
     when String
       return false unless value =~ regexp
     when Hash
-      return false unless value.each_value.inject(true) { |res, val| res &= valid_value?(val, regexp) }
+      return false unless value.each_value.inject(true) { |res, val| res & valid_value?(val, regexp) }
     when Array
-      return false unless value.inject(true) { |res, val| res &= valid_value?(val, regexp) }
+      return false unless value.inject(true) { |res, val| res & valid_value?(val, regexp) }
     else
 
     end
