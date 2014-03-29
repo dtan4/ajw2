@@ -10,7 +10,7 @@ module Ajw2::Model
     # Initializer
     # @param [Hash] source entire model description
     def initialize(source)
-      raise ArgumentError, "Database section must be a Hash" unless source.class == Hash
+      fail ArgumentError, "Database section must be a Hash" unless source.class == Hash
       @source = source
     end
 
@@ -29,7 +29,7 @@ module Ajw2::Model
     # Generate YAML which sets up database
     # @return [String] YAML
     def render_config(env, application)
-      raise "/database/dbType is not found" unless @source[:dbType]
+      fail "/database/dbType is not found" unless @source[:dbType]
 
       case @source[:dbType]
       when "mysql"
@@ -66,7 +66,7 @@ timeout: 5000
     # Generate gem requirement of database adapter
     # @return [String] gem requirement
     def render_database_gem
-      raise "/database/dbType is not found" unless @source[:dbType]
+      fail "/database/dbType is not found" unless @source[:dbType]
 
       case @source[:dbType]
       when "mysql"
@@ -81,7 +81,7 @@ timeout: 5000
     private
 
     def render_rb(type)
-      raise "/database/tables is not found" unless @source[:tables]
+      fail "/database/tables is not found" unless @source[:tables]
 
       @source[:tables].inject([]) { |definition, table| definition << send("render_#{type}_table", table) }
     end

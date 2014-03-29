@@ -17,7 +17,7 @@ module Ajw2
       when /^\.json$/i then parse_json(path)
       when /^\.ya?ml$/i then parse_yaml(path)
       else
-        raise Exception
+        fail Exception
       end
     end
 

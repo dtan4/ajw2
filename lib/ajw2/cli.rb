@@ -18,7 +18,7 @@ module Ajw2
         opt.permute!(args)
       end
 
-      raise ArgumentError if args.length == 0
+      fail ArgumentError if args.length == 0
 
       source = Ajw2::Source.new
       source.parse_file(args.shift)

@@ -8,7 +8,7 @@ module Ajw2::Model
     # @param [Ajw2::Model::Event::JavaScript] js JavaScript code generator
     # @param [Ajw2::Model::Event::Ruby] rb Ruby code generator
     def initialize(source, js = nil, rb = nil)
-      raise ArgumentError, "Event section must be a Hash" unless source.class == Hash
+      fail ArgumentError, "Event section must be a Hash" unless source.class == Hash
       @source = source
       @js = js || Ajw2::Model::Event::JavaScript.new
       @rb = rb || Ajw2::Model::Event::Ruby.new
@@ -41,7 +41,7 @@ module Ajw2::Model
     # Generate JavaScript code which receives message via WebSocket
     # @return [Array] collection of generated code
     def render_js_onmessage
-      raise "/events/events is not found" unless @source[:events]
+      fail "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
         result << @js.render_onmessage(event) if event[:type] == "realtime"
@@ -52,7 +52,7 @@ module Ajw2::Model
     private
 
     def render_code(renderer, event_type)
-      raise "/events/events is not found" unless @source[:events]
+      fail "/events/events is not found" unless @source[:events]
 
       @source[:events].inject([]) do |result, event|
         result << renderer.send("render_#{event_type}", event) if event[:type] == event_type.to_s
@@ -81,8 +81,8 @@ module Ajw2::Model
       # @param [Hash] event Events model description
       # @return [String] JavaScript code
       def render_onmessage(event)
-        raise "event/trigger is not found" unless event[:trigger]
-        raise "event/action is not found" unless event[:action]
+        fail "event/trigger is not found" unless event[:trigger]
+        fail "event/action is not found" unless event[:action]
 
       <<-EOS
 case '#{event[:id]}':
@@ -97,8 +97,8 @@ case '#{event[:id]}':
       private
 
       def render_event(event, type)
-        raise "event/trigger is not found" unless event[:trigger]
-        raise "event/action is not found" unless event[:action]
+        fail "event/trigger is not found" unless event[:trigger]
+        fail "event/action is not found" unless event[:action]
 
         trigger = event[:trigger]
 
@@ -208,7 +208,7 @@ ws.send(JSON.stringify(request));
         when "onChange" then "change"
         when "onFocus" then "focus"
         when "onFocusOut" then "blur"
-        else raise "Undefined trigger function!"
+        else fail "Undefined trigger function!"
         end
       end
 
@@ -299,8 +299,8 @@ EOS
       # @param [Hash] event Events model description
       # @return [String] Ruby code
       def render_ajax(event)
-        raise "event/trigger is not found" unless event[:trigger]
-        raise "event/action is not found" unless event[:action]
+        fail "event/trigger is not found" unless event[:trigger]
+        fail "event/action is not found" unless event[:action]
 
       <<-EOS
 post "/#{event[:id]}" do
@@ -317,8 +317,8 @@ end
       # @param [Hash] event Events model description
       # @return [String] Ruby code
       def render_realtime(event)
-        raise "event/trigger is not found" unless event[:trigger]
-        raise "event/action is not found" unless event[:action]
+        fail "event/trigger is not found" unless event[:trigger]
+        fail "event/action is not found" unless event[:action]
 
       <<-EOS
 when "#{event[:id]}"
@@ -387,9 +387,9 @@ when "#{event[:id]}"
       def interface_rb(interface)
         case interface[:func]
         when "signup"
-          raise "Not implemented yet."
+          fail "Not implemented yet."
         when "signin"
-          raise "Not implemented yet."
+          fail "Not implemented yet."
         when "setValue", "setText"
           "response[:#{interface[:id]}] = #{set_value(interface[:value])}"
         when "appendElements"

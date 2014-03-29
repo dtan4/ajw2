@@ -13,14 +13,14 @@ module Ajw2::Model
     # Initializer
     # @param [Hash] source entire model description
     def initialize(source)
-      raise ArgumentError, "Interface section must be a Hash" unless source.class == Hash
+      fail ArgumentError, "Interface section must be a Hash" unless source.class == Hash
       @source = source
     end
 
     # Generate Slim template
     # @return [Array] collection of generated code
     def render
-      raise "/interface/elements is not found" unless @source[:elements]
+      fail "/interface/elements is not found" unless @source[:elements]
 
       @source[:elements].inject([]) { |result, el| result << indent(render_element(el), 0) }.join("\n") + "\n"
     end
@@ -32,7 +32,7 @@ module Ajw2::Model
     end
 
     def render_element(element)
-      raise ArgumentError unless element[:type] && element[:id]
+      fail ArgumentError unless element[:type] && element[:id]
       result = render_type(element)
 
       if element[:hidden]

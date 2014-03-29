@@ -26,7 +26,7 @@ module Ajw2
     # Execute generation
     # @param [String] out_dir directory path to output files
     def generate(out_dir, external_file_dir)
-      raise Exception if Dir.exist? out_dir
+      fail Exception if Dir.exist? out_dir
 
       begin
         [
@@ -45,7 +45,7 @@ module Ajw2
         copy_external_files(out_dir, external_file_dir)
       rescue Exception => e
         FileUtils.rm_rf(out_dir) if Dir.exist?(out_dir)
-        raise e
+        fail e
       end
     end
 
@@ -68,7 +68,7 @@ module Ajw2
       elsif File.exist?(template_path(file + ".erb"))
         generate_from_erb(file, out_dir)
       else
-        # TODO: raise Exception
+        # TODO: fail Exception
       end
     end
 

@@ -4,7 +4,7 @@ module Ajw2::Util
   # @param [Integer] depth depth of indentation
   # @return [String] text which indentation is inserted
   def indent(text, depth)
-    raise ArgumentError, "Negative number is given" if depth < 0
+    fail ArgumentError, "Negative number is given" if depth < 0
 
     text.each_line.map do |line|
       line = (line.strip == "") ? "" : "  " * depth + line
@@ -16,7 +16,7 @@ module Ajw2::Util
   # @param [RegExp] regexp regular-expression pattern to judge validatation
   # @return [Boolean] whether given Hash is valid
   def valid_hash?(hash, regexp = /\A[^'"]+\z/)
-    raise ArgumentError, "Non-Hash argument is given" unless hash.kind_of? Hash
+    fail ArgumentError, "Non-Hash argument is given" unless hash.kind_of? Hash
     valid_value?(hash, regexp)
   end
 

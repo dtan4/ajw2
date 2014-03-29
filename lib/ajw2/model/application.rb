@@ -7,14 +7,14 @@ module Ajw2::Model
     # Initializer
     # @param [Hash] source entire model description
     def initialize(source)
-      raise ArgumentError, "Application section must be a Hash" unless source.class == Hash
+      fail ArgumentError, "Application section must be a Hash" unless source.class == Hash
       @source = source
     end
 
     # Generate Slim template of HTML header
     # @return [String] Slim template
     def render_header
-      raise "/application/name is not found" unless @source[:name]
+      fail "/application/name is not found" unless @source[:name]
 
       <<-EOS
 meta charset="utf-8"
@@ -40,14 +40,14 @@ title
     # @param [Symbol] external_dir directory contains resource files
     # @return [Array] collection of external files (type == "file")
     def external_local_files(type, external_dir)
-      raise ArgumentError unless [:css, :js].include? type
+      fail ArgumentError unless [:css, :js].include? type
       @source[type].select { |f| not f[:remote] }.map { |f| File.expand_path(f[:src], external_dir) }
     end
 
     private
 
     def render_resource_include(type)
-      raise "/application/#{type} is not found" unless @source[type]
+      fail "/application/#{type} is not found" unless @source[type]
 
       @source[type].inject([]) do |result, resource|
         src = resource[:remote] ? resource[:src] : "/#{type}/#{File.basename(resource[:src])}"
