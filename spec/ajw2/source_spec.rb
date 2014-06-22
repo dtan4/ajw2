@@ -23,9 +23,13 @@ module Ajw2
     end
 
     describe "#parse_file" do
-      shared_context "with valid file" do
+      let(:parse_file) do
+        source.parse_file(path)
+      end
+
+      shared_examples_for "parse successfully" do
         before do
-          source.parse_file(path)
+          parse_file
         end
 
         it "should set application" do
@@ -45,58 +49,68 @@ module Ajw2
         end
       end
 
-      context "with .json" do
-        include_context "with valid file" do
-          let(:path) { json_path }
+      shared_examples_for "fail to parse" do
+        it "should raise Exception" do
+          expect do
+            parse_file
+          end.to raise_error
         end
+      end
+
+      context "with .json" do
+        let(:path) do
+          json_path
+        end
+
+        it_behaves_like "parse successfully"
       end
 
       context "with .yaml" do
-        include_context "with valid file" do
-          let(:path) { yaml_path }
+        let(:path) do
+          yaml_path
         end
+
+        it_behaves_like "parse successfully"
       end
 
       context "with .yml" do
-        include_context "with valid file" do
-          let(:path) { yml_path }
+        let(:path) do
+          yml_path
         end
+
+        it_behaves_like "parse successfully"
       end
 
       context "with invalid file" do
-        it "should raise Exception" do
-          expect {
-            source = Ajw2::Source.new
-            source.parse_file(invalid_source_path)
-          }.to raise_error
+        let(:path) do
+          invalid_source_path
         end
+
+        it_behaves_like "fail to parse"
       end
 
       context "with invalid file extension" do
-        it "should raise Exception" do
-          expect {
-            source = Ajw2::Source.new
-            source.parse_file(invalid_ext_path)
-          }.to raise_error
+        let(:path) do
+          invalid_ext_path
         end
+
+        it_behaves_like "fail to parse"
       end
 
       context "with file is nil" do
-        it "should raise Exception" do
-          expect {
-            source = Ajw2::Source.new
-            source.parse_file(nil)
-          }.to raise_error
+        let(:path) do
+          nil
         end
+
+        it_behaves_like "fail to parse"
       end
 
       context "with file which does not exist" do
-        it "should raise Exception" do
-          expect {
-            source = Ajw2::Source.new
-            source.parse_file(invalid_path + "hogehoge")
-          }.to raise_error
+        let(:path) do
+          invalid_path + "hogehoge"
         end
+
+        it_behaves_like "fail to parse"
       end
     end
   end
