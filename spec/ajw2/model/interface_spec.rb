@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Ajw2::Model
   describe Interface do
-    let(:source) {
+    let(:source) do
       {
        elements: [
                   {
@@ -16,9 +16,9 @@ module Ajw2::Model
                   }
                  ]
       }
-    }
+    end
 
-    let(:dirty_source) {
+    let(:dirty_source) do
       {
        elements: [
                   {
@@ -31,33 +31,48 @@ module Ajw2::Model
                   }
                  ]
       }
-    }
+    end
+
+    let(:interface) do
+      described_class.new(source)
+    end
 
     describe "#initialize" do
-      context "with Hash" do
-        subject { Ajw2::Model::Interface.new(source) }
+      let(:interface) do
+        described_class.new(arg)
+      end
 
-        describe '#source' do
-          subject { super().source }
-          it { is_expected.to be_instance_of Hash }
+      context "with Hash" do
+        let(:arg) do
+          source
+        end
+
+        it "should an instance of Interface" do
+          expect(interface).to be_a described_class
         end
       end
 
       context "with non-Hash" do
+        let(:arg) do
+          "hoge"
+        end
+
         it "should raise ArgumentError" do
-          expect { Ajw2::Model::Interface.new("hoge") }.to raise_error ArgumentError,
-            "Interface section must be a Hash"
+          expect do
+            interface
+          end.to raise_error ArgumentError, "Interface section must be a Hash"
         end
       end
     end
 
     describe "#render" do
-      context "with clean source" do
-        subject { Ajw2::Model::Interface.new(source).render }
-        it { is_expected.to be_an_instance_of String }
+      let(:render) do
+        interface.render
+      end
 
+      context "with clean source" do
         it "should return Slim template" do
-          expect(subject).to eq(<<-EOS)
+          expect(render).to eq(<<-EOS)
 #rootPanel
   label#label0
     | Chat Application
@@ -71,11 +86,12 @@ EOS
       end
 
       context "with dirty source (include XSS)" do
-        subject { Ajw2::Model::Interface.new(dirty_source).render }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          dirty_source
+        end
 
         it "should return escaped Slim template" do
-          expect(subject).to eq(<<-EOS)
+          expect(render).to eq(<<-EOS)
 #rootPanel
   label#label0
     | &lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;
@@ -87,10 +103,14 @@ EOS
       end
 
       context "with invalid source" do
+        let(:source) do
+          {}
+        end
+
         it "should raise Exception" do
-          expect {
-            puts Ajw2::Model::Interface.new({}).render
-          }.to raise_error RuntimeError, "/interface/elements is not found"
+          expect do
+            render
+          end.to raise_error RuntimeError, "/interface/elements is not found"
         end
       end
     end
