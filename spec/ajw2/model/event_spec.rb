@@ -2,16 +2,21 @@ require "spec_helper"
 
 module Ajw2::Model
   describe Event do
-    before do
-      @ajax_source = {
-                      events: [{ id: "event01", type: "ajax" }]
-                     }
-      @realtime_source = {
-                          events: [{ id: "event01", type: "realtime" }]
-                         }
+    let(:ajax_source) do
+      { events: [{ id: "event01", type: "ajax" }] }
+    end
 
-      @js = double("js",
-                   render_ajax: (<<-EOS),
+    let(:realtime_source) do
+      { events: [{ id: "event01", type: "realtime" }] }
+    end
+
+    let(:invalid_source) do
+      {}
+    end
+
+    let(:js) do
+      double("js",
+             render_ajax: (<<-EOS),
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   $.ajax({
@@ -31,7 +36,7 @@ $('#submitBtn').click(function() {
   });
 });
 EOS
-                   render_realtime: (<<-EOS),
+             render_realtime: (<<-EOS),
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   var params = { 'message': message };
@@ -39,16 +44,18 @@ $('#submitBtn').click(function() {
   ws.send(JSON.stringify(request));
 });
 EOS
-                   render_onmessage: (<<-EOS))
+render_onmessage: (<<-EOS))
 case 'event01':
   var _response = _ws_json['msg'];
   var if01 = _response['if01'];
   $('#messageLabel').val(if01['message']);
   break;
 EOS
+    end
 
-      @rb = double("rb",
-                   render_ajax: (<<-EOS),
+    let(:rb) do
+      double("rb",
+             render_ajax: (<<-EOS),
 post "/event01" do
   content_type :json
   response = {}
@@ -61,7 +68,7 @@ post "/event01" do
   response.to_json
 end
 EOS
-                   render_realtime: (<<-EOS))
+             render_realtime: (<<-EOS))
 when "event01"
   message = params[:message]
   db01 = Message.new(
@@ -75,34 +82,54 @@ when "event01"
 EOS
     end
 
-    describe "#initialize" do
-      context "with Hash" do
-        subject { Ajw2::Model::Event.new(@ajax_source) }
+    let(:event) do
+      described_class.new(source, js, rb)
+    end
 
-        describe '#source' do
-          subject { super().source }
-          it { is_expected.to be_instance_of Hash }
+    describe "#initialize" do
+      let(:event) do
+        described_class.new(arg, js, rb)
+      end
+
+      context "with Hash" do
+        let(:arg) do
+          ajax_source
+        end
+
+        it "should be an instance of Event" do
+          expect(event).to be_a described_class
         end
       end
 
       context "with non-Hash" do
+        let(:arg) do
+          "a"
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Event.new("a") }.to raise_error ArgumentError,
-            "Event section must be a Hash"
+          expect do
+            event
+          end.to raise_error ArgumentError, "Event section must be a Hash"
         end
       end
     end
 
     describe "#render_rb_ajax" do
+      let(:render_rb_ajax) do
+        event.render_rb_ajax
+      end
+
       context "with valid source" do
-        subject { Ajw2::Model::Event.new(@ajax_source, @js, @rb).render_rb_ajax }
-        it { is_expected.to be_kind_of Array }
-        it 'has 1 item' do
-          expect(subject.size).to eq(1)
+        let(:source) do
+          ajax_source
+        end
+
+        it "has 1 item" do
+          expect(render_rb_ajax.size).to eq(1)
         end
 
         it "should render Ruby code" do
-          expect(subject[0]).to eq <<-EOS
+          expect(render_rb_ajax[0]).to eq <<-EOS
 post "/event01" do
   content_type :json
   response = {}
@@ -119,22 +146,34 @@ end
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Event.new({}).render_rb_ajax }.to raise_error RuntimeError, "/events/events is not found"
+          expect do
+            render_rb_ajax
+          end.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_rb_realtime" do
+      let(:render_rb_realtime) do
+        event.render_rb_realtime
+      end
+
       context "with valid source" do
-        subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_rb_realtime }
-        it { is_expected.to be_kind_of Array }
-        it 'has 1 item' do
-          expect(subject.size).to eq(1)
+        let(:source) do
+          realtime_source
+        end
+
+        it "has 1 item" do
+          expect(render_rb_realtime.size).to eq(1)
         end
 
         it "should render Ruby code" do
-          expect(subject[0]).to eq <<-EOS
+          expect(render_rb_realtime[0]).to eq <<-EOS
 when "event01"
   message = params[:message]
   db01 = Message.new(
@@ -150,22 +189,34 @@ when "event01"
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Event.new({}).render_rb_realtime }.to raise_error RuntimeError, "/events/events is not found"
+          expect do
+            render_rb_realtime
+          end.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_js_ajax" do
+      let(:render_js_ajax) do
+        event.render_js_ajax
+      end
+
       context "with valid source" do
-        subject { Ajw2::Model::Event.new(@ajax_source, @js, @rb).render_js_ajax }
-        it { is_expected.to be_kind_of Array }
-        it 'has 1 item' do
-          expect(subject.size).to eq(1)
+        let(:source) do
+          ajax_source
+        end
+
+        it "has 1 item" do
+          expect(render_js_ajax.size).to eq(1)
         end
 
         it "should render JavaScript code" do
-          expect(subject[0]).to eq <<-EOS
+          expect(render_js_ajax[0]).to eq <<-EOS
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   $.ajax({
@@ -189,22 +240,34 @@ $('#submitBtn').click(function() {
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Event.new({}).render_js_ajax }.to raise_error RuntimeError, "/events/events is not found"
+          expect do
+            render_js_ajax
+          end.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_js_realtime" do
+      let(:render_js_realtime) do
+        event.render_js_realtime
+      end
+
       context "with valid source" do
-        subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_js_realtime }
-        it { is_expected.to be_kind_of Array }
-        it 'has 1 item' do
-          expect(subject.size).to eq(1)
+        let(:source) do
+          realtime_source
+        end
+
+        it "has 1 item" do
+          expect(render_js_realtime.size).to eq(1)
         end
 
         it "should render JavaScript code" do
-          expect(subject[0]).to eq <<-EOS
+          expect(render_js_realtime[0]).to eq <<-EOS
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   var params = { 'message': message };
@@ -216,22 +279,34 @@ $('#submitBtn').click(function() {
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Event.new({}).render_js_realtime }.to raise_error RuntimeError, "/events/events is not found"
+          expect do
+            render_js_realtime
+          end.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
 
     describe "#render_js_onmessage" do
+      let(:render_js_onmessage) do
+        event.render_js_onmessage
+      end
+
       context "with valid source" do
-        subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_js_onmessage }
-        it { is_expected.to be_kind_of Array }
-        it 'has 1 item' do
-          expect(subject.size).to eq(1)
+        let(:source) do
+          realtime_source
+        end
+
+        it "has 1 item" do
+          expect(render_js_onmessage.size).to eq(1)
         end
 
         it "should render JavaScript code" do
-          expect(subject[0]).to eq <<-EOS
+          expect(render_js_onmessage[0]).to eq <<-EOS
 case 'event01':
   var _response = _ws_json['msg'];
   var if01 = _response['if01'];
@@ -242,8 +317,14 @@ case 'event01':
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Event.new({}).render_js_onmessage }.to raise_error RuntimeError, "/events/events is not found"
+          expect do
+            render_js_onmessage
+          end.to raise_error RuntimeError, "/events/events is not found"
         end
       end
     end
