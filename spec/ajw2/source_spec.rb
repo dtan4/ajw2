@@ -19,7 +19,7 @@ module Ajw2
     end
 
     let(:source) do
-      Ajw2::Source.new
+      described_class.new
     end
 
     describe "#parse_file" do

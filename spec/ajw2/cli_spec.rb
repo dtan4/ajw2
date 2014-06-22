@@ -5,7 +5,7 @@ module Ajw2
   describe Cli do
     describe "#execute" do
       let(:execute) do
-        Ajw2::Cli.execute(args)
+        described_class.execute(args)
       end
 
       context "with valid argument" do

@@ -37,7 +37,7 @@ module Ajw2
       end
 
       let(:generator) do
-        Ajw2::Generator.new(application, interface, database, event)
+        described_class.new(application, interface, database, event)
       end
 
       let(:generate) do
@@ -134,7 +134,7 @@ module Ajw2
           end
 
           let(:generator) do
-            Ajw2::Generator.new(application, interface, database, event)
+            described_class.new(application, interface, database, event)
           end
 
           before do
