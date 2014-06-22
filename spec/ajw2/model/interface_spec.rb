@@ -33,6 +33,10 @@ module Ajw2::Model
       }
     end
 
+    let(:invalid_source) do
+      {}
+    end
+
     let(:interface) do
       described_class.new(source)
     end
@@ -104,7 +108,7 @@ EOS
 
       context "with invalid source" do
         let(:source) do
-          {}
+          invalid_source
         end
 
         it "should raise Exception" do
