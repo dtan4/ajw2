@@ -40,7 +40,7 @@ module Ajw2
       context "with non-existed outdir" do
         shared_examples_for "generates successfully" do
           it "should create outdir" do
-            expect(Dir.exist?(@outdir)).to be_truthy
+            expect(Dir.exist?(@outdir)).to be true
           end
 
           [
@@ -57,7 +57,7 @@ module Ajw2
            "public/js/app.js"
           ].each do |path|
             it "should create #{path}" do
-              expect(File.exist?(File.expand_path(path, @outdir))).to be_truthy
+              expect(File.exist?(File.expand_path(path, @outdir))).to be true
             end
           end
 
@@ -228,11 +228,11 @@ module Ajw2
           it_behaves_like "generates successfully"
 
           it "should include external.js" do
-            expect(File.exist?(File.expand_path("public/js/external.js", @outdir))).to be_truthy
+            expect(File.exist?(File.expand_path("public/js/external.js", @outdir))).to be true
           end
 
           it "should include external.css" do
-            expect(File.exist?(File.expand_path("public/css/external.css", @outdir))).to be_truthy
+            expect(File.exist?(File.expand_path("public/css/external.css", @outdir))).to be true
           end
         end
 

@@ -9,7 +9,7 @@ module Ajw2
           before(:all) { Ajw2::Cli.execute(@args) }
 
           it "should create out_dir" do
-            expect(Dir.exist?(@out_dir)).to be_truthy
+            expect(Dir.exist?(@out_dir)).to be true
           end
 
           [
@@ -25,7 +25,7 @@ module Ajw2
            "public/js/app.js"
           ].each do |path|
             it "should create #{path}" do
-              expect(File.exist?(File.expand_path(path, @out_dir))).to be_truthy
+              expect(File.exist?(File.expand_path(path, @out_dir))).to be true
             end
           end
 
