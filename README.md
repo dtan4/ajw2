@@ -1,8 +1,5 @@
 # Ajw2
-[![Build Status](https://travis-ci.org/dtan4/ajw2.png?branch=master)](https://travis-ci.org/dtan4/ajw2)
-[![Coverage Status](https://coveralls.io/repos/dtan4/ajw2/badge.png?branch=master)](https://coveralls.io/r/dtan4/ajw2?branch=master)
-[![Code Climate](https://codeclimate.com/github/dtan4/ajw2.png)](https://codeclimate.com/github/dtan4/ajw2)
-[![Dependency Status](https://gemnasium.com/dtan4/ajw2.png)](https://gemnasium.com/dtan4/ajw2)
+[![wercker status](https://app.wercker.com/status/78b9a07a73b1ccb5e2d6eb9b00372b0c/m "wercker status")](https://app.wercker.com/project/bykey/78b9a07a73b1ccb5e2d6eb9b00372b0c)
 
 One-Page Modern Web Application Generator using Client-Side Centric Model
 
