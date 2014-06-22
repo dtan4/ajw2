@@ -52,58 +52,6 @@ describe Ajw2::Util do
     end
   end
 
-  describe "#valid_hash?" do
-    context "with valid Hash" do
-      context "contains only ascii-char" do
-        subject { dummy.valid_hash?({ hoge: "fuga", foo: "bar" }) }
-        it { is_expected.to be true }
-      end
-
-      context "contains breakline" do
-        subject { dummy.valid_hash?({ hoge: "fuga\npiyo", foo: "bar" }) }
-        it { is_expected.to be true }
-      end
-
-      context "contains Unicode char" do
-        subject { dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }) }
-        it { is_expected.to be true }
-      end
-
-      context "contains Array" do
-        subject { dummy.valid_hash?({ hoge: "fuga", foo: [{ foo: "bar" }, { baz: "moo" }] }) }
-        it { is_expected.to be true }
-      end
-
-      context "contains Hash" do
-        subject { dummy.valid_hash?({ hoge: "fuga", foo: { bar: "baz" } }) }
-        it { is_expected.to be true }
-      end
-    end
-
-    context "with invalid hash" do
-      context "contains only String" do
-        subject { dummy.valid_hash?({ hoge: "fu'ga", foo: "bar" }) }
-        it { is_expected.to be false }
-      end
-
-      context "contains hash" do
-        subject { dummy.valid_hash?({ hoge: "fuga", foo: { bar: "ba'z" } }) }
-        it { is_expected.to be false }
-      end
-    end
-
-    context "with regexp" do
-      subject { dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }, /^[a-zA-Z0-9]+$/) }
-      it { is_expected.to be false }
-    end
-
-    context "with non-Hash" do
-      it "should raise Exception" do
-        expect { dummy.valid_hash?("hoge") }.to raise_error ArgumentError, "Non-Hash argument is given"
-      end
-    end
-  end
-
   describe "#symbolize_keys" do
     let(:symbolize_keys) do
       dummy.symbolize_keys(hash)
