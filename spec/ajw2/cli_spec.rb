@@ -4,6 +4,10 @@ require "fileutils"
 module Ajw2
   describe Cli do
     describe "#execute" do
+      let(:execute) do
+        Ajw2::Cli.execute(args)
+      end
+
       context "with valid argument" do
         let(:source) do
           fixture_path("chat.json")
@@ -18,7 +22,10 @@ module Ajw2
         end
 
         shared_examples_for "execute successfully" do
-          before { Ajw2::Cli.execute(args) }
+          before do
+            FileUtils.rm_r(out_dir) if Dir.exist? out_dir
+            execute
+          end
 
           it "should create out_dir" do
             expect(Dir.exist?(out_dir)).to be true
@@ -41,16 +48,14 @@ module Ajw2
             end
           end
 
-          after { FileUtils.rm_r(out_dir) if Dir.exist? out_dir }
+          after do
+            FileUtils.rm_r(out_dir) if Dir.exist? out_dir
+          end
         end
 
         context "2 arguments" do
           let(:args) do
             "#{source} -o #{out_dir}".split(" ")
-          end
-
-          before do
-            FileUtils.rm_r(out_dir) if Dir.exist? out_dir
           end
 
           it_behaves_like "execute successfully"
@@ -61,20 +66,12 @@ module Ajw2
             "#{source} -o #{out_dir} -e #{external_resource_dir}".split(" ")
           end
 
-          before do
-            FileUtils.rm_r(out_dir) if Dir.exist? out_dir
-          end
-
           it_behaves_like "execute successfully"
         end
 
         context "long options" do
           let(:args) do
             "#{source} --output #{out_dir} --external #{external_resource_dir}".split(" ")
-          end
-
-          before do
-            FileUtils.rm_r(out_dir) if Dir.exist? out_dir
           end
 
           it_behaves_like "execute successfully"
@@ -88,7 +85,9 @@ module Ajw2
           end
 
           it "should raise ArgumentError" do
-            expect { Ajw2::Cli.execute(args) }.to raise_error ArgumentError
+            expect do
+              execute
+            end.to raise_error ArgumentError
           end
         end
 
@@ -110,7 +109,9 @@ module Ajw2
           end
 
           it "should raise Exception" do
-            expect { Ajw2::Cli.execute(args) }.to raise_error
+            expect do
+              execute
+            end.to raise_error
           end
         end
       end
