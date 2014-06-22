@@ -21,7 +21,8 @@ module Ajw2
       end
 
       let(:interface) do
-        double("interface", render: "h1 sample")
+        double("interface",
+               render: "h1 sample")
       end
 
       let(:database) do
@@ -33,6 +34,14 @@ module Ajw2
 
       let(:outdir) do
         File.expand_path("../tmp", __FILE__)
+      end
+
+      let(:generator) do
+        Ajw2::Generator.new(application, interface, database, event)
+      end
+
+      let(:generate) do
+        generator.generate(outdir, external_file_dir)
       end
 
       before do
@@ -99,13 +108,8 @@ module Ajw2
                    render_js_onmessage: RENDER_JS_ONMESSAGE)
           end
 
-          let(:generator) do
-            Ajw2::Generator.new(application, interface, database, event)
-          end
-
           before do
-            FileUtils.rm_r(outdir) if Dir.exist?(outdir)
-            generator.generate(outdir, external_file_dir)
+            generate
           end
 
           it_behaves_like "generates successfully"
@@ -134,8 +138,7 @@ module Ajw2
           end
 
           before do
-            FileUtils.rm_r(outdir) if Dir.exist?(outdir)
-            generator.generate(outdir, external_file_dir)
+            generate
           end
 
           it_behaves_like "generates successfully"
@@ -159,13 +162,8 @@ module Ajw2
                    render_js_onmessage: RENDER_JS_ONMESSAGE)
           end
 
-          let(:generator) do
-            Ajw2::Generator.new(application, interface, database, event)
-          end
-
           before do
-            FileUtils.rm_r(outdir) if Dir.exist?(outdir)
-            generator.generate(outdir, external_file_dir)
+            generate
           end
 
           it_behaves_like "generates successfully"
@@ -189,13 +187,8 @@ module Ajw2
                    render_js_onmessage: [])
           end
 
-          let(:generator) do
-            Ajw2::Generator.new(application, interface, database, event)
-          end
-
           before do
-            FileUtils.rm_r(outdir) if Dir.exist?(outdir)
-            generator.generate(outdir, external_file_dir)
+            generate
           end
 
           it_behaves_like "generates successfully"
@@ -210,7 +203,7 @@ module Ajw2
         end
 
         context "with external resource" do
-          let(:application_with_ext) do
+          let(:application) do
             double("application",
                    render_header: "title sample",
                    render_css_include: RENDER_CSS_INCLUDE,
@@ -218,7 +211,7 @@ module Ajw2
                    name: "sample")
           end
 
-          let(:database_with_ext) do
+          let(:database) do
             double("database",
                    render_migration: RENDER_MIGRATION,
                    render_definition: RENDER_DEFINITION,
@@ -234,16 +227,10 @@ module Ajw2
                    render_js_onmessage: [])
           end
 
-          let(:generator) do
-            Ajw2::Generator.new(application_with_ext, interface, database_with_ext, event)
-          end
-
           before do
-            FileUtils.rm_r(outdir) if Dir.exist?(outdir)
-
-            allow(application_with_ext).to receive(:external_local_files)
+            allow(application).to receive(:external_local_files)
             .with(:js, external_file_dir).and_return([File.expand_path("external.js", external_file_dir)])
-            allow(application_with_ext).to receive(:external_local_files)
+            allow(application).to receive(:external_local_files)
             .with(:css, external_file_dir).and_return([File.expand_path("external.css", external_file_dir)])
 
             FileUtils.mkdir_p(external_file_dir)
@@ -251,10 +238,10 @@ module Ajw2
             open(File.expand_path("external.css", external_file_dir), "w") { |f| f.puts "hoge" }
 
             [:development, :test, :production].each do |env|
-              allow(database_with_ext).to receive(:render_config).with(env, application_with_ext).and_return("database: sample_#{env}")
+              allow(database).to receive(:render_config).with(env, application).and_return("database: sample_#{env}")
             end
 
-            generator.generate(outdir, external_file_dir)
+            generate
           end
 
           it_behaves_like "generates successfully"
@@ -275,21 +262,16 @@ module Ajw2
                    render_definition: "hoge")
           end
 
-          let(:generator) do
-            Ajw2::Generator.new(application, interface, database, event)
-          end
-
-          before do
-            FileUtils.rm_r(outdir) if Dir.exist?(outdir)
-          end
-
           it "should raise Exception" do
-            expect { generator.generate(outdir, external_file_dir) }.to raise_error
+            expect do
+              generate
+            end.to raise_error
           end
 
           it "should not create outdir" do
             begin
-              generator.generate(outdir, external_file_dir)
+              generate
+              fail
             rescue
               expect(Dir.exist? outdir).to be false
             end
@@ -298,11 +280,14 @@ module Ajw2
       end
 
       context "with existed outdir" do
-        it "should raise Exception" do
+        before do
           FileUtils.mkdir_p(outdir)
-          expect {
-            generator.generate(outdir, external_file_dir)
-          }.to raise_error
+        end
+
+        it "should raise Exception" do
+          expect do
+            generate
+          end.to raise_error
         end
       end
 
