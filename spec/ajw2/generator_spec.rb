@@ -257,7 +257,7 @@ module Ajw2
             begin
               subject
             rescue
-              expect(Dir.exist? @outdir).to be_falsey
+              expect(Dir.exist? @outdir).to be false
             end
           end
         end

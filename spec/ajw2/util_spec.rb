@@ -67,18 +67,18 @@ describe Ajw2::Util do
     context "with invalid hash" do
       context "contains only String" do
         subject { @dummy.valid_hash?({ hoge: "fu'ga", foo: "bar" }) }
-        it { is_expected.to be_falsey }
+        it { is_expected.to be false }
       end
 
       context "contains hash" do
         subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "ba'z" } }) }
-        it { is_expected.to be_falsey }
+        it { is_expected.to be false }
       end
     end
 
     context "with regexp" do
       subject { @dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }, /^[a-zA-Z0-9]+$/) }
-      it { is_expected.to be_falsey }
+      it { is_expected.to be false }
     end
 
     context "with non-Hash" do
