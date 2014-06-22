@@ -11,27 +11,43 @@ describe Ajw2::Util do
   end
 
   describe "#indent" do
+    let(:indent) do
+      dummy.indent(text, level)
+    end
+
+    let(:text) do
+      "hoge"
+    end
+
     context "with 0" do
-      subject { dummy.indent("hoge", 0) }
-      it { is_expected.to be_kind_of String }
+      let(:level) do
+        0
+      end
 
       it "should add no indent" do
-        expect(subject).to eq "hoge"
+        expect(indent).to eq "hoge"
       end
     end
 
     context "with positive number" do
-      subject { dummy.indent("hoge", 2) }
-      it { is_expected.to be_kind_of String }
+      let(:level) do
+        2
+      end
 
       it "should add indent" do
-        expect(subject).to eq "    hoge"
+        expect(indent).to eq "    hoge"
       end
     end
 
     context "with negative number" do
+      let(:level) do
+        -2
+      end
+
       it "should raise Exception" do
-        expect { dummy.indent("hoge", -2) }.to raise_error ArgumentError, "Negative number is given"
+        expect do
+          indent
+        end.to raise_error ArgumentError, "Negative number is given"
       end
     end
   end
@@ -89,19 +105,27 @@ describe Ajw2::Util do
   end
 
   describe "#symbolize_keys" do
+    let(:symbolize_keys) do
+      dummy.symbolize_keys(hash)
+    end
+
     context "with flat Hash" do
-      subject { dummy.symbolize_keys({ "hoge" => "fuga", "foo" => "bar" }) }
+      let(:hash) do
+        { "hoge" => "fuga", "foo" => "bar" }
+      end
 
       it "shuold return Hash with symbolized keys" do
-        expect(subject).to eq({ hoge: "fuga", foo: "bar" })
+        expect(symbolize_keys).to eq({ hoge: "fuga", foo: "bar" })
       end
     end
 
     context "with deep Hash" do
-      subject { dummy.symbolize_keys({ "hoge" => "fuga", "foo" => { "bar" => "baz" } }) }
+      let(:hash) do
+        { "hoge" => "fuga", "foo" => { "bar" => "baz" } }
+      end
 
       it "should return Hash with symbolized keys" do
-        expect(subject).to eq({ hoge: "fuga", foo: { bar: "baz" } })
+        expect(symbolize_keys).to eq({ hoge: "fuga", foo: { bar: "baz" } })
       end
     end
   end
