@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Ajw2::Model
   describe Application do
-    let(:source) {
+    let(:source) do
       {
        name: "sample",
        css: [
@@ -14,33 +14,62 @@ module Ajw2::Model
              { remote: true, src: "http://example.com/sample.js" }
            ]
       }
-    }
+    end
+
+    let(:dirty_source) do
+      {
+       name: "<script>alert('xss');</script>",
+       css: [
+             { remote: false, src: "application.css" },
+             { remote: true, src: "http://example.com/sample.css" }
+            ],
+       js: [
+             { remote: false, src: "application.js" },
+             { remote: true, src: "http://example.com/sample.js" }
+           ]
+      }
+    end
+
+    let(:application) do
+      described_class.new(source)
+    end
 
     describe "#initialize" do
-      context "with Hash" do
-        subject { Ajw2::Model::Application.new(source) }
+      let(:application) do
+        described_class.new(arg)
+      end
 
-        describe '#source' do
-          subject { super().source }
-          it { is_expected.to be_instance_of Hash }
+      context "with Hash" do
+        let(:arg) do
+          source
+        end
+
+        it "should an instance of Application" do
+          expect(application).to be_a described_class
         end
       end
 
       context "with non-Hash" do
+        let(:arg) do
+          "a"
+        end
+
         it "should raise ArgumentError" do
-          expect { Ajw2::Model::Application.new("a") }.to raise_error ArgumentError,
-            "Application section must be a Hash"
+          expect do
+            application
+          end.to raise_error ArgumentError, "Application section must be a Hash"
         end
       end
     end
 
     describe "#render_header" do
-      context "with clean source" do
-        subject { Ajw2::Model::Application.new(source).render_header }
-        it { is_expected.to be_an_instance_of String }
+      let(:render_header) do
+        application.render_header
+      end
 
+      context "with clean source" do
         it "should return Slim template" do
-          expect(subject).to eq(<<-EOS)
+          expect(render_header).to eq(<<-EOS)
 meta charset="utf-8"
 title
   | sample
@@ -49,16 +78,12 @@ EOS
       end
 
       context "with dirty source (include XSS)" do
-        before do
-          @dirty_source = source
-          @dirty_source[:name] = "<script>alert('xss');</script>"
+        let(:source) do
+          dirty_source
         end
 
-        subject { Ajw2::Model::Application.new(source).render_header }
-        it { is_expected.to be_an_instance_of String }
-
         it "should return Slim template" do
-          expect(subject).to eq(<<-EOS)
+          expect(render_header).to eq(<<-EOS)
 meta charset="utf-8"
 title
   | &lt;script&gt;alert(&#39;xss&#39;);&lt;/script&gt;
@@ -68,11 +93,12 @@ EOS
     end
 
     describe "#render_css_include" do
-      subject { Ajw2::Model::Application.new(source).render_css_include }
-      it { is_expected.to be_kind_of String }
+      let(:render_css_include) do
+        application.render_css_include
+      end
 
       it "should render Slim template" do
-        expect(subject).to eq(<<-EOS)
+        expect(render_css_include).to eq(<<-EOS)
 link rel="stylesheet" type="text/css" href="/css/application.css"
 link rel="stylesheet" type="text/css" href="http://example.com/sample.css"
                               EOS
@@ -80,11 +106,12 @@ link rel="stylesheet" type="text/css" href="http://example.com/sample.css"
     end
 
     describe "#render_js_include" do
-      subject { Ajw2::Model::Application.new(source).render_js_include }
-      it { is_expected.to be_kind_of String }
+      let(:render_js_include) do
+        application.render_js_include
+      end
 
       it "should render Slim template" do
-        expect(subject).to eq(<<-EOS)
+        expect(render_js_include).to eq(<<-EOS)
 script src="/js/application.js"
 script src="http://example.com/sample.js"
                               EOS
@@ -92,29 +119,41 @@ script src="http://example.com/sample.js"
     end
 
     describe "#external_local_files" do
+      let(:external_local_files) do
+        application.external_local_files(type, dir)
+      end
+
+      let(:dir) do
+        File.dirname(__FILE__)
+      end
+
       context "when type is :css" do
-        subject { Ajw2::Model::Application.new(source).external_local_files(:css, File.dirname(__FILE__)) }
-        it { is_expected.to be_kind_of Array }
+        let(:type) do
+          :css
+        end
 
         it "should return the list of external CSS files" do
-          expect(subject).to eq [File.expand_path("application.css", File.dirname(__FILE__))]
+          expect(external_local_files).to match_array [File.expand_path("application.css", File.dirname(__FILE__))]
         end
       end
 
       context "when type is :js" do
-        subject { Ajw2::Model::Application.new(source).external_local_files(:js, File.dirname(__FILE__)) }
-        it { is_expected.to be_kind_of Array }
+        let(:type) do
+          :js
+        end
 
-        it "should return the list of external JavaScript files" do
-          expect(subject).to eq [File.expand_path("application.js", File.dirname(__FILE__))]
+        it "should return the list of external CSS files" do
+          expect(external_local_files).to match_array [File.expand_path("application.js", File.dirname(__FILE__))]
         end
       end
 
       context "when type is unknown" do
-        subject { Ajw2::Model::Application.new(source).external_local_files(:hoge, File.dirname(__dir__)) }
+        let(:type) do
+          :hoge
+        end
 
         it "should raise ArgumentError" do
-          expect { subject }.to raise_error ArgumentError
+          expect { external_local_files }.to raise_error ArgumentError
         end
       end
     end
