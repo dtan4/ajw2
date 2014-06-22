@@ -2,7 +2,7 @@ require "spec_helper"
 
 module Ajw2::Model
   describe Database do
-    let(:source) {
+    let(:source) do
       {
         _isDisplay: true,
         dbType: "sqlite",
@@ -27,36 +27,56 @@ module Ajw2::Model
          }
         ]
       }
-    }
+    end
+
+    let(:invalid_source) do
+      {}
+    end
+
+    let(:database) do
+      described_class.new(source)
+    end
 
     describe "#initialize" do
-      context "with Hash" do
-        subject { Ajw2::Model::Database.new(source) }
+      let(:database) do
+        described_class.new(arg)
+      end
 
-        describe '#source' do
-          subject { super().source }
-          it { is_expected.to be_instance_of Hash }
+      context "with Hash" do
+        let(:arg) do
+          source
+        end
+
+        it "should be an instance of Database" do
+          expect(database).to be_a described_class
         end
       end
 
       context "with non-Hash" do
+        let(:arg) do
+          "a"
+        end
+
         it "should to raise ArgumentError" do
-          expect { Ajw2::Model::Database.new("a") }.to raise_error ArgumentError,
-            "Database section must be a Hash"
+          expect do
+            database
+          end.to raise_error ArgumentError, "Database section must be a Hash"
         end
       end
     end
 
     describe "#render_migration" do
+      let(:render_migration) do
+        database.render_migration
+      end
+
       context "with valid source" do
-        subject { Ajw2::Model::Database.new(source).render_migration }
-        it { is_expected.to be_an_instance_of Array }
-        it 'has 2 items' do
-          expect(subject.size).to eq(2)
+        it "has 2 items" do
+          expect(render_migration.size).to eq(2)
         end
 
         it "should render the setup migration" do
-          expect(subject[0][:up]).to eq(<<-EOS)
+          expect(render_migration[0][:up]).to eq(<<-EOS)
 create_table :users do |t|
   t.string :username
   t.string :encrypted_password
@@ -67,29 +87,37 @@ end
         end
 
         it "should render the teardown migration" do
-          expect(subject[0][:down]).to eq(<<-EOS)
+          expect(render_migration[0][:down]).to eq(<<-EOS)
 drop_table :users
                                              EOS
         end
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_migration }.to raise_error RuntimeError, "/database/tables is not found"
+          expect do
+            render_migration
+          end.to raise_error RuntimeError, "/database/tables is not found"
         end
       end
     end
 
     describe "#render_definition" do
+      let(:render_definition) do
+        database.render_definition
+      end
+
       context "with valid source" do
-        subject { Ajw2::Model::Database.new(source).render_definition }
-        it { is_expected.to be_an_instance_of Array }
-        it 'has 2 items' do
-          expect(subject.size).to eq(2)
+        it "has 2 items" do
+          expect(render_definition.size).to eq(2)
         end
 
         it "should render the definition" do
-          expect(subject[0]).to eq(<<-EOS)
+          expect(render_definition[0]).to eq(<<-EOS)
 class User < ActiveRecord::Base
   validates_presence_of :username
 end
@@ -98,28 +126,43 @@ end
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_definition }.to raise_error RuntimeError, "/database/tables is not found"
+          expect do
+            render_definition
+          end.to raise_error RuntimeError, "/database/tables is not found"
         end
       end
     end
 
     describe "#render_config" do
-      before do
-        @application = double("application", name: "sample")
+      let(:application) do
+        double("application", name: "sample")
+      end
+
+      let(:type) do
+        :development
+      end
+
+      let(:render_config) do
+        database.render_config(type, application)
       end
 
       context "when dbType is mysql" do
-        subject { Ajw2::Model::Database.new({ dbType: "mysql" }).render_config(:development, @application) }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "mysql" }
+        end
 
         it "should call Application#name" do
-          expect(@application).to receive(:name)
-          subject
+          expect(application).to receive(:name)
+          render_config
         end
 
         it "should render the config" do
-          expect(subject).to eq <<-EOS
+          expect(render_config).to eq <<-EOS
 adapter: mysql2
 encoding: utf8
 reconnect: true
@@ -134,16 +177,17 @@ sock: /tmp/mysql.sock
       end
 
       context "when dbType is postgres" do
-        subject { Ajw2::Model::Database.new({ dbType: "postgres" }).render_config(:development, @application) }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "postgres" }
+        end
 
         it "should call Application#name" do
-          expect(@application).to receive(:name)
-          subject
+          expect(application).to receive(:name)
+          render_config
         end
 
         it "should render the config" do
-          expect(subject).to eq <<-EOS
+          expect(render_config).to eq <<-EOS
 adapter: postgresql
 database: sample_development
 username: root
@@ -155,16 +199,17 @@ port: 5432
       end
 
       context "when dbType is sqlite" do
-        subject { Ajw2::Model::Database.new({ dbType: "sqlite" }).render_config(:development, @application) }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "sqlite" }
+        end
 
         it "should not call Application#name" do
-          expect(@application).not_to receive(:name)
-          subject
+          expect(application).not_to receive(:name)
+          render_config
         end
 
         it "should render the config" do
-          expect(subject).to eq <<-EOS
+          expect(render_config).to eq <<-EOS
 adapter: sqlite3
 database: db/development.sqlite3
 pool: 5
@@ -174,16 +219,17 @@ timeout: 5000
       end
 
       context "when dbType is unknown" do
-        subject { Ajw2::Model::Database.new({ dbType: "hogehoge" }).render_config(:development, @application) }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "hogehoge" }
+        end
 
         it "should not call Application#name" do
-          expect(@application).not_to receive(:name)
-          subject
+          expect(application).not_to receive(:name)
+          render_config
         end
 
         it "should render the config" do
-          expect(subject).to eq <<-EOS
+          expect(render_config).to eq <<-EOS
 adapter: sqlite3
 database: db/development.sqlite3
 pool: 5
@@ -193,56 +239,76 @@ timeout: 5000
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/database/dbType is not found"
+          expect do
+            render_config
+          end.to raise_error RuntimeError, "/database/dbType is not found"
         end
       end
     end
 
     describe "#render_database_gem" do
-      before do
-        @application = double("application", name: "sample")
+      let(:application) do
+        double("application", name: "sample")
+      end
+
+      let(:render_database_gem) do
+        database.render_database_gem
       end
 
       context "when dbType is mysql" do
-        subject { Ajw2::Model::Database.new({ dbType: "mysql" }).render_database_gem }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "mysql" }
+        end
 
         it "should render gem requirement" do
-          expect(subject).to be == 'gem "mysql2"'
+          expect(render_database_gem).to be == 'gem "mysql2"'
         end
       end
 
       context "when dbType is postgres" do
-        subject { Ajw2::Model::Database.new({ dbType: "postgres" }).render_database_gem }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "postgres" }
+        end
 
         it "should render gem requirement" do
-          expect(subject).to be == 'gem "pg"'
+          expect(render_database_gem).to be == 'gem "pg"'
         end
       end
 
       context "when dbType is sqlite" do
-        subject { Ajw2::Model::Database.new({ dbType: "sqlite" }).render_database_gem }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "sqlite" }
+        end
 
         it "should render gem requirement" do
-          expect(subject).to be == 'gem "sqlite3"'
+          expect(render_database_gem).to be == 'gem "sqlite3"'
         end
       end
 
       context "when dbType is unknown" do
-        subject { Ajw2::Model::Database.new({ dbType: "hogehoge" }).render_database_gem }
-        it { is_expected.to be_an_instance_of String }
+        let(:source) do
+          { dbType: "hoge" }
+        end
 
         it "should render gem requirement" do
-          expect(subject).to be == 'gem "sqlite3"'
+          expect(render_database_gem).to be == 'gem "sqlite3"'
         end
       end
 
       context "with invalid source" do
+        let(:source) do
+          invalid_source
+        end
+
         it "should raise Exception" do
-          expect { Ajw2::Model::Database.new({}).render_config(:development, @application) }.to raise_error RuntimeError, "/database/dbType is not found"
+          expect do
+            render_database_gem
+          end.to raise_error RuntimeError, "/database/dbType is not found"
         end
       end
     end
