@@ -19,7 +19,11 @@ module Ajw2::Model
     describe "#initialize" do
       context "with Hash" do
         subject { Ajw2::Model::Application.new(source) }
-        its(:source) { should be_instance_of Hash }
+
+        describe '#source' do
+          subject { super().source }
+          it { is_expected.to be_instance_of Hash }
+        end
       end
 
       context "with non-Hash" do
@@ -33,7 +37,7 @@ module Ajw2::Model
     describe "#render_header" do
       context "with clean source" do
         subject { Ajw2::Model::Application.new(source).render_header }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should return Slim template" do
           expect(subject).to eq(<<-EOS)
@@ -51,7 +55,7 @@ EOS
         end
 
         subject { Ajw2::Model::Application.new(source).render_header }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should return Slim template" do
           expect(subject).to eq(<<-EOS)
@@ -65,7 +69,7 @@ EOS
 
     describe "#render_css_include" do
       subject { Ajw2::Model::Application.new(source).render_css_include }
-      it { should be_kind_of String }
+      it { is_expected.to be_kind_of String }
 
       it "should render Slim template" do
         expect(subject).to eq(<<-EOS)
@@ -77,7 +81,7 @@ link rel="stylesheet" type="text/css" href="http://example.com/sample.css"
 
     describe "#render_js_include" do
       subject { Ajw2::Model::Application.new(source).render_js_include }
-      it { should be_kind_of String }
+      it { is_expected.to be_kind_of String }
 
       it "should render Slim template" do
         expect(subject).to eq(<<-EOS)
@@ -90,7 +94,7 @@ script src="http://example.com/sample.js"
     describe "#external_local_files" do
       context "when type is :css" do
         subject { Ajw2::Model::Application.new(source).external_local_files(:css, File.dirname(__FILE__)) }
-        it { should be_kind_of Array }
+        it { is_expected.to be_kind_of Array }
 
         it "should return the list of external CSS files" do
           expect(subject).to eq [File.expand_path("application.css", File.dirname(__FILE__))]
@@ -99,7 +103,7 @@ script src="http://example.com/sample.js"
 
       context "when type is :js" do
         subject { Ajw2::Model::Application.new(source).external_local_files(:js, File.dirname(__FILE__)) }
-        it { should be_kind_of Array }
+        it { is_expected.to be_kind_of Array }
 
         it "should return the list of external JavaScript files" do
           expect(subject).to eq [File.expand_path("application.js", File.dirname(__FILE__))]

@@ -36,7 +36,11 @@ module Ajw2::Model
     describe "#initialize" do
       context "with Hash" do
         subject { Ajw2::Model::Interface.new(source) }
-        its(:source) { should be_instance_of Hash }
+
+        describe '#source' do
+          subject { super().source }
+          it { is_expected.to be_instance_of Hash }
+        end
       end
 
       context "with non-Hash" do
@@ -50,7 +54,7 @@ module Ajw2::Model
     describe "#render" do
       context "with clean source" do
         subject { Ajw2::Model::Interface.new(source).render }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should return Slim template" do
           expect(subject).to eq(<<-EOS)
@@ -68,7 +72,7 @@ EOS
 
       context "with dirty source (include XSS)" do
         subject { Ajw2::Model::Interface.new(dirty_source).render }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should return escaped Slim template" do
           expect(subject).to eq(<<-EOS)

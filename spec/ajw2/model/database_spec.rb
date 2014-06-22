@@ -32,7 +32,11 @@ module Ajw2::Model
     describe "#initialize" do
       context "with Hash" do
         subject { Ajw2::Model::Database.new(source) }
-        its(:source) { should be_instance_of Hash }
+
+        describe '#source' do
+          subject { super().source }
+          it { is_expected.to be_instance_of Hash }
+        end
       end
 
       context "with non-Hash" do
@@ -46,8 +50,10 @@ module Ajw2::Model
     describe "#render_migration" do
       context "with valid source" do
         subject { Ajw2::Model::Database.new(source).render_migration }
-        it { should be_an_instance_of Array }
-        it { should have(2).items }
+        it { is_expected.to be_an_instance_of Array }
+        it 'has 2 items' do
+          expect(subject.size).to eq(2)
+        end
 
         it "should render the setup migration" do
           expect(subject[0][:up]).to eq(<<-EOS)
@@ -77,8 +83,10 @@ drop_table :users
     describe "#render_definition" do
       context "with valid source" do
         subject { Ajw2::Model::Database.new(source).render_definition }
-        it { should be_an_instance_of Array }
-        it { should have(2).items }
+        it { is_expected.to be_an_instance_of Array }
+        it 'has 2 items' do
+          expect(subject.size).to eq(2)
+        end
 
         it "should render the definition" do
           expect(subject[0]).to eq(<<-EOS)
@@ -103,7 +111,7 @@ end
 
       context "when dbType is mysql" do
         subject { Ajw2::Model::Database.new({ dbType: "mysql" }).render_config(:development, @application) }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should call Application#name" do
           expect(@application).to receive(:name)
@@ -127,7 +135,7 @@ sock: /tmp/mysql.sock
 
       context "when dbType is postgres" do
         subject { Ajw2::Model::Database.new({ dbType: "postgres" }).render_config(:development, @application) }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should call Application#name" do
           expect(@application).to receive(:name)
@@ -148,7 +156,7 @@ port: 5432
 
       context "when dbType is sqlite" do
         subject { Ajw2::Model::Database.new({ dbType: "sqlite" }).render_config(:development, @application) }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should not call Application#name" do
           expect(@application).not_to receive(:name)
@@ -167,7 +175,7 @@ timeout: 5000
 
       context "when dbType is unknown" do
         subject { Ajw2::Model::Database.new({ dbType: "hogehoge" }).render_config(:development, @application) }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should not call Application#name" do
           expect(@application).not_to receive(:name)
@@ -198,7 +206,7 @@ timeout: 5000
 
       context "when dbType is mysql" do
         subject { Ajw2::Model::Database.new({ dbType: "mysql" }).render_database_gem }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should render gem requirement" do
           expect(subject).to be == 'gem "mysql2"'
@@ -207,7 +215,7 @@ timeout: 5000
 
       context "when dbType is postgres" do
         subject { Ajw2::Model::Database.new({ dbType: "postgres" }).render_database_gem }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should render gem requirement" do
           expect(subject).to be == 'gem "pg"'
@@ -216,7 +224,7 @@ timeout: 5000
 
       context "when dbType is sqlite" do
         subject { Ajw2::Model::Database.new({ dbType: "sqlite" }).render_database_gem }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should render gem requirement" do
           expect(subject).to be == 'gem "sqlite3"'
@@ -225,7 +233,7 @@ timeout: 5000
 
       context "when dbType is unknown" do
         subject { Ajw2::Model::Database.new({ dbType: "hogehoge" }).render_database_gem }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should render gem requirement" do
           expect(subject).to be == 'gem "sqlite3"'

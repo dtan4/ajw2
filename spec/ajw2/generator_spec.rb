@@ -19,8 +19,8 @@ module Ajw2
                               render_css_include: RENDER_CSS_INCLUDE,
                               render_js_include: RENDER_JS_INCLUDE,
                               name: "sample")
-        @application.stub(:external_local_files).with(:js, @external_file_dir).and_return([])
-        @application.stub(:external_local_files).with(:css, @external_file_dir).and_return([])
+        allow(@application).to receive(:external_local_files).with(:js, @external_file_dir).and_return([])
+        allow(@application).to receive(:external_local_files).with(:css, @external_file_dir).and_return([])
 
         @interface = double("interface",
                             render: "h1 sample")
@@ -31,7 +31,7 @@ module Ajw2
                            render_database_gem: "sqlite")
 
         [:development, :test, :production].each do |env|
-          @database.stub(:render_config).with(env, @application).and_return("database: sample_#{env}")
+          allow(@database).to receive(:render_config).with(env, @application).and_return("database: sample_#{env}")
         end
 
         @outdir = File.expand_path("../tmp", __FILE__)
@@ -40,7 +40,7 @@ module Ajw2
       context "with non-existed outdir" do
         shared_examples_for "generates successfully" do
           it "should create outdir" do
-            expect(Dir.exist?(@outdir)).to be_true
+            expect(Dir.exist?(@outdir)).to be_truthy
           end
 
           [
@@ -57,7 +57,7 @@ module Ajw2
            "public/js/app.js"
           ].each do |path|
             it "should create #{path}" do
-              expect(File.exist?(File.expand_path(path, @outdir))).to be_true
+              expect(File.exist?(File.expand_path(path, @outdir))).to be_truthy
             end
           end
 
@@ -195,9 +195,9 @@ module Ajw2
                                            render_css_include: RENDER_CSS_INCLUDE,
                                            render_js_include: RENDER_JS_INCLUDE,
                                            name: "sample")
-            @application_with_ext.stub(:external_local_files)
+            allow(@application_with_ext).to receive(:external_local_files)
             .with(:js, @external_file_dir).and_return([File.expand_path("external.js", @external_file_dir)])
-            @application_with_ext.stub(:external_local_files)
+            allow(@application_with_ext).to receive(:external_local_files)
             .with(:css, @external_file_dir).and_return([File.expand_path("external.css", @external_file_dir)])
 
             FileUtils.mkdir_p(@external_file_dir)
@@ -210,7 +210,7 @@ module Ajw2
                                         render_database_gem: "sqlite")
 
             [:development, :test, :production].each do |env|
-              @database_with_ext.stub(:render_config).with(env, @application_with_ext).and_return("database: sample_#{env}")
+              allow(@database_with_ext).to receive(:render_config).with(env, @application_with_ext).and_return("database: sample_#{env}")
             end
 
             @event = double("event",
@@ -228,11 +228,11 @@ module Ajw2
           it_behaves_like "generates successfully"
 
           it "should include external.js" do
-            expect(File.exist?(File.expand_path("public/js/external.js", @outdir))).to be_true
+            expect(File.exist?(File.expand_path("public/js/external.js", @outdir))).to be_truthy
           end
 
           it "should include external.css" do
-            expect(File.exist?(File.expand_path("public/css/external.css", @outdir))).to be_true
+            expect(File.exist?(File.expand_path("public/css/external.css", @outdir))).to be_truthy
           end
         end
 
@@ -257,7 +257,7 @@ module Ajw2
             begin
               subject
             rescue
-              expect(Dir.exist? @outdir).to be_false
+              expect(Dir.exist? @outdir).to be_falsey
             end
           end
         end

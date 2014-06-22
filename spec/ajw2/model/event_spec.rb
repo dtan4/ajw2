@@ -78,7 +78,11 @@ EOS
     describe "#initialize" do
       context "with Hash" do
         subject { Ajw2::Model::Event.new(@ajax_source) }
-        its(:source) { should be_instance_of Hash }
+
+        describe '#source' do
+          subject { super().source }
+          it { is_expected.to be_instance_of Hash }
+        end
       end
 
       context "with non-Hash" do
@@ -92,8 +96,10 @@ EOS
     describe "#render_rb_ajax" do
       context "with valid source" do
         subject { Ajw2::Model::Event.new(@ajax_source, @js, @rb).render_rb_ajax }
-        it { should be_kind_of Array }
-        it { should have(1).item }
+        it { is_expected.to be_kind_of Array }
+        it 'has 1 item' do
+          expect(subject.size).to eq(1)
+        end
 
         it "should render Ruby code" do
           expect(subject[0]).to eq <<-EOS
@@ -122,8 +128,10 @@ end
     describe "#render_rb_realtime" do
       context "with valid source" do
         subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_rb_realtime }
-        it { should be_kind_of Array }
-        it { should have(1).item }
+        it { is_expected.to be_kind_of Array }
+        it 'has 1 item' do
+          expect(subject.size).to eq(1)
+        end
 
         it "should render Ruby code" do
           expect(subject[0]).to eq <<-EOS
@@ -151,8 +159,10 @@ when "event01"
     describe "#render_js_ajax" do
       context "with valid source" do
         subject { Ajw2::Model::Event.new(@ajax_source, @js, @rb).render_js_ajax }
-        it { should be_kind_of Array }
-        it { should have(1).item }
+        it { is_expected.to be_kind_of Array }
+        it 'has 1 item' do
+          expect(subject.size).to eq(1)
+        end
 
         it "should render JavaScript code" do
           expect(subject[0]).to eq <<-EOS
@@ -188,8 +198,10 @@ $('#submitBtn').click(function() {
     describe "#render_js_realtime" do
       context "with valid source" do
         subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_js_realtime }
-        it { should be_kind_of Array }
-        it { should have(1).item }
+        it { is_expected.to be_kind_of Array }
+        it 'has 1 item' do
+          expect(subject.size).to eq(1)
+        end
 
         it "should render JavaScript code" do
           expect(subject[0]).to eq <<-EOS
@@ -213,8 +225,10 @@ $('#submitBtn').click(function() {
     describe "#render_js_onmessage" do
       context "with valid source" do
         subject { Ajw2::Model::Event.new(@realtime_source, @js, @rb).render_js_onmessage }
-        it { should be_kind_of Array }
-        it { should have(1).item }
+        it { is_expected.to be_kind_of Array }
+        it 'has 1 item' do
+          expect(subject.size).to eq(1)
+        end
 
         it "should render JavaScript code" do
           expect(subject[0]).to eq <<-EOS
@@ -236,7 +250,7 @@ case 'event01':
 
     describe Event::JavaScript do
       shared_examples_for "render successfully" do
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should render JavaScript code" do
           expect(subject).to eq @fixture[:javascript]
@@ -412,7 +426,7 @@ case 'event01':
         before(:all) { @fixture = symbolize_keys(YAML.load_file(fixture_path("events/realtime.yml"))) }
 
         subject { Ajw2::Model::Event::JavaScript.new.render_onmessage(@fixture[:event]) }
-        it { should be_an_instance_of String }
+        it { is_expected.to be_an_instance_of String }
 
         it "should render JavaScript code" do
           expect(subject).to eq @fixture[:onmessage]
@@ -422,7 +436,7 @@ case 'event01':
 
   describe Event::Ruby do
     shared_examples_for "render successfully" do
-      it { should be_an_instance_of String }
+      it { is_expected.to be_an_instance_of String }
 
       it "should render Ruby code" do
         expect(subject).to eq @fixture[:ruby]

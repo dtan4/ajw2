@@ -13,7 +13,7 @@ describe Ajw2::Util do
   describe "#indent" do
     context "with 0" do
       subject { @dummy.indent("hoge", 0) }
-      it { should be_kind_of String }
+      it { is_expected.to be_kind_of String }
 
       it "should add no indent" do
         expect(subject).to eq "hoge"
@@ -22,7 +22,7 @@ describe Ajw2::Util do
 
     context "with positive number" do
       subject { @dummy.indent("hoge", 2) }
-      it { should be_kind_of String }
+      it { is_expected.to be_kind_of String }
 
       it "should add indent" do
         expect(subject).to eq "    hoge"
@@ -40,45 +40,45 @@ describe Ajw2::Util do
     context "with valid Hash" do
       context "contains only ascii-char" do
         subject { @dummy.valid_hash?({ hoge: "fuga", foo: "bar" }) }
-        it { should be_true }
+        it { is_expected.to be_truthy }
       end
 
       context "contains breakline" do
         subject { @dummy.valid_hash?({ hoge: "fuga\npiyo", foo: "bar" }) }
-        it { should be_true }
+        it { is_expected.to be_truthy }
       end
 
       context "contains Unicode char" do
         subject { @dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }) }
-        it { should be_true }
+        it { is_expected.to be_truthy }
       end
 
       context "contains Array" do
         subject { @dummy.valid_hash?({ hoge: "fuga", foo: [{ foo: "bar" }, { baz: "moo" }] }) }
-        it { should be_true }
+        it { is_expected.to be_truthy }
       end
 
       context "contains Hash" do
         subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "baz" } }) }
-        it { should be_true }
+        it { is_expected.to be_truthy }
       end
     end
 
     context "with invalid hash" do
       context "contains only String" do
         subject { @dummy.valid_hash?({ hoge: "fu'ga", foo: "bar" }) }
-        it { should be_false }
+        it { is_expected.to be_falsey }
       end
 
       context "contains hash" do
         subject { @dummy.valid_hash?({ hoge: "fuga", foo: { bar: "ba'z" } }) }
-        it { should be_false }
+        it { is_expected.to be_falsey }
       end
     end
 
     context "with regexp" do
       subject { @dummy.valid_hash?({ hoge: "ふが", foo: "ばー" }, /^[a-zA-Z0-9]+$/) }
-      it { should be_false }
+      it { is_expected.to be_falsey }
     end
 
     context "with non-Hash" do
