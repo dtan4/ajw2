@@ -4,32 +4,32 @@ module Ajw2::Model
   describe Interface do
     let(:source) do
       {
-       elements: [
-                  {
-                   type: "panel", id: "rootPanel", class: "",
-                   children: [
-                              { type: "label", value: "Chat Application", id: "label0", class: "" },
-                              { type: "text", id: "userIdTextbox", placeholder: "user name", class: "form-control" },
-                              { type: "button", value: "Selection", id: "selectButton", class: "form-control btn" },
-                              { type: "button", value: "hidden", id: "hiddenButton", class: "", hidden: true }
-                             ]
-                  }
-                 ]
+        elements: [
+          {
+            type: "panel", id: "rootPanel", class: "",
+            children: [
+              { type: "label", value: "Chat Application", id: "label0", class: "" },
+              { type: "text", id: "userIdTextbox", placeholder: "user name", class: "form-control" },
+              { type: "button", value: "Selection", id: "selectButton", class: "form-control btn" },
+              { type: "button", value: "hidden", id: "hiddenButton", class: "", hidden: true }
+            ]
+          }
+        ]
       }
     end
 
     let(:dirty_source) do
       {
-       elements: [
-                  {
-                   type: "panel", id: "rootPanel", class: "",
-                   children: [
-                              { type: "label", value: "<script>alert('xss');</script>", id: "label0", class: "" },
-                              { type: "text", id: "userIdTextbox", class: "", placeholder: '<script>alert("xss");</script>' },
-                              { type: "button", value: "Selection", id: "selectButton", class: "" }
-                             ]
-                  }
-                 ]
+        elements: [
+          {
+            type: "panel", id: "rootPanel", class: "",
+            children: [
+              { type: "label", value: "<script>alert('xss');</script>", id: "label0", class: "" },
+              { type: "text", id: "userIdTextbox", class: "", placeholder: '<script>alert("xss");</script>' },
+              { type: "button", value: "Selection", id: "selectButton", class: "" }
+            ]
+          }
+        ]
       }
     end
 

@@ -32,16 +32,16 @@ module Ajw2
           end
 
           [
-           "app.rb",
-           "config.ru",
-           "Rakefile",
-           "Gemfile",
-           "views/layout.slim",
-           "views/index.slim",
-           "config/database.yml",
-           "db/migrate/001_create_messages.rb",
-           "public/js/jquery.min.js",
-           "public/js/app.js"
+            "app.rb",
+            "config.ru",
+            "Rakefile",
+            "Gemfile",
+            "views/layout.slim",
+            "views/index.slim",
+            "config/database.yml",
+            "db/migrate/001_create_messages.rb",
+            "public/js/jquery.min.js",
+            "public/js/app.js"
           ].each do |path|
             it "should create #{path}" do
               expect(File.exist?(File.expand_path(path, out_dir))).to be true

@@ -8,23 +8,23 @@ module Ajw2::Model
         dbType: "sqlite",
         tables:
         [
-         {
-           name: "users",
-           type: "server",
-           fields: [
-                      { name: "username", type: "string", nullable: false },
-                      { name: "password", type: "password", nullable: true },
-                      { name: "role", type: "role", nullable: true }
-                     ]
-         },
-         {
-           name: "messages",
-           type: "server",
-           fields: [
-                      { name: "user_id", type: "integer", nullable: false },
-                      { name: "content", type: "string", nullable: false }
-                     ]
-         }
+          {
+            name: "users",
+            type: "server",
+            fields: [
+              { name: "username", type: "string", nullable: false },
+              { name: "password", type: "password", nullable: true },
+              { name: "role", type: "role", nullable: true }
+            ]
+          },
+          {
+            name: "messages",
+            type: "server",
+            fields: [
+              { name: "user_id", type: "integer", nullable: false },
+              { name: "content", type: "string", nullable: false }
+            ]
+          }
         ]
       }
     end

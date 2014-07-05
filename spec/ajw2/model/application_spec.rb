@@ -4,29 +4,29 @@ module Ajw2::Model
   describe Application do
     let(:source) do
       {
-       name: "sample",
-       css: [
-             { remote: false, src: "application.css" },
-             { remote: true, src: "http://example.com/sample.css" }
-            ],
-       js: [
-             { remote: false, src: "application.js" },
-             { remote: true, src: "http://example.com/sample.js" }
-           ]
+        name: "sample",
+        css: [
+          { remote: false, src: "application.css" },
+          { remote: true, src: "http://example.com/sample.css" }
+        ],
+        js: [
+          { remote: false, src: "application.js" },
+          { remote: true, src: "http://example.com/sample.js" }
+        ]
       }
     end
 
     let(:dirty_source) do
       {
-       name: "<script>alert('xss');</script>",
-       css: [
-             { remote: false, src: "application.css" },
-             { remote: true, src: "http://example.com/sample.css" }
-            ],
-       js: [
-             { remote: false, src: "application.js" },
-             { remote: true, src: "http://example.com/sample.js" }
-           ]
+        name: "<script>alert('xss');</script>",
+        css: [
+          { remote: false, src: "application.css" },
+          { remote: true, src: "http://example.com/sample.css" }
+        ],
+        js: [
+          { remote: false, src: "application.js" },
+          { remote: true, src: "http://example.com/sample.js" }
+        ]
       }
     end
 

@@ -16,7 +16,7 @@ module Ajw2::Model
 
     let(:js) do
       double("js",
-             render_ajax: (<<-EOS),
+        render_ajax: (<<-EOS),
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   $.ajax({
@@ -36,7 +36,7 @@ $('#submitBtn').click(function() {
   });
 });
 EOS
-             render_realtime: (<<-EOS),
+        render_realtime: (<<-EOS),
 $('#submitBtn').click(function() {
   var message = $('#messageTextBox').val();
   var params = { 'message': message };
@@ -55,7 +55,7 @@ EOS
 
     let(:rb) do
       double("rb",
-             render_ajax: (<<-EOS),
+        render_ajax: (<<-EOS),
 post "/event01" do
   content_type :json
   response = {}
@@ -68,7 +68,7 @@ post "/event01" do
   response.to_json
 end
 EOS
-             render_realtime: (<<-EOS))
+        render_realtime: (<<-EOS))
 when "event01"
   message = params[:message]
   db01 = Message.new(

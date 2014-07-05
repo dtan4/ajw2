@@ -14,22 +14,22 @@ module Ajw2
 
       let(:application) do
         double("application",
-               render_header: "title sample",
-               render_css_include: RENDER_CSS_INCLUDE,
-               render_js_include: RENDER_JS_INCLUDE,
-               name: "sample")
+          render_header: "title sample",
+          render_css_include: RENDER_CSS_INCLUDE,
+          render_js_include: RENDER_JS_INCLUDE,
+          name: "sample")
       end
 
       let(:interface) do
         double("interface",
-               render: "h1 sample")
+          render: "h1 sample")
       end
 
       let(:database) do
         double("database",
-               render_migration: RENDER_MIGRATION,
-               render_definition: RENDER_DEFINITION,
-               render_database_gem: "sqlite")
+          render_migration: RENDER_MIGRATION,
+          render_definition: RENDER_DEFINITION,
+          render_database_gem: "sqlite")
       end
 
       let(:outdir) do
@@ -60,17 +60,17 @@ module Ajw2
           end
 
           [
-           "app.rb",
-           "config.ru",
-           "Rakefile",
-           "Gemfile",
-           "views/layout.slim",
-           "views/index.slim",
-           "config/database.yml",
-           "db/migrate/001_create_users.rb",
-           "db/migrate/002_create_messages.rb",
-           "public/js/jquery.min.js",
-           "public/js/app.js"
+            "app.rb",
+            "config.ru",
+            "Rakefile",
+            "Gemfile",
+            "views/layout.slim",
+            "views/index.slim",
+            "config/database.yml",
+            "db/migrate/001_create_users.rb",
+            "db/migrate/002_create_messages.rb",
+            "public/js/jquery.min.js",
+            "public/js/app.js"
           ].each do |path|
             it "should create #{path}" do
               expect(File.exist?(File.expand_path(path, outdir))).to be true
@@ -101,11 +101,11 @@ module Ajw2
         context "with Ajax event and Websocket event" do
           let(:event) do
             double("event",
-                   render_rb_ajax: RENDER_RB_AJAX,
-                   render_rb_realtime: RENDER_RB_REALTIME,
-                   render_js_ajax: RENDER_JS_AJAX,
-                   render_js_realtime: RENDER_JS_REALTIME,
-                   render_js_onmessage: RENDER_JS_ONMESSAGE)
+              render_rb_ajax: RENDER_RB_AJAX,
+              render_rb_realtime: RENDER_RB_REALTIME,
+              render_js_ajax: RENDER_JS_AJAX,
+              render_js_realtime: RENDER_JS_REALTIME,
+              render_js_onmessage: RENDER_JS_ONMESSAGE)
           end
 
           before do
@@ -126,11 +126,11 @@ module Ajw2
         context "with Ajax event only" do
           let(:event) do
             double("event",
-                   render_rb_ajax: RENDER_RB_AJAX,
-                   render_rb_realtime: [],
-                   render_js_ajax: RENDER_JS_AJAX,
-                   render_js_realtime: [],
-                   render_js_onmessage: [])
+              render_rb_ajax: RENDER_RB_AJAX,
+              render_rb_realtime: [],
+              render_js_ajax: RENDER_JS_AJAX,
+              render_js_realtime: [],
+              render_js_onmessage: [])
           end
 
           let(:generator) do
@@ -155,11 +155,11 @@ module Ajw2
         context "with WebSocket event only" do
           let(:event) do
             double("event",
-                   render_rb_ajax: [],
-                   render_rb_realtime: RENDER_RB_REALTIME,
-                   render_js_ajax: [],
-                   render_js_realtime: RENDER_JS_REALTIME,
-                   render_js_onmessage: RENDER_JS_ONMESSAGE)
+              render_rb_ajax: [],
+              render_rb_realtime: RENDER_RB_REALTIME,
+              render_js_ajax: [],
+              render_js_realtime: RENDER_JS_REALTIME,
+              render_js_onmessage: RENDER_JS_ONMESSAGE)
           end
 
           before do
@@ -180,11 +180,11 @@ module Ajw2
         context "with no event" do
           let(:event) do
             double("event",
-                   render_rb_ajax: [],
-                   render_rb_realtime: [],
-                   render_js_ajax: [],
-                   render_js_realtime: [],
-                   render_js_onmessage: [])
+              render_rb_ajax: [],
+              render_rb_realtime: [],
+              render_js_ajax: [],
+              render_js_realtime: [],
+              render_js_onmessage: [])
           end
 
           before do
@@ -205,33 +205,33 @@ module Ajw2
         context "with external resource" do
           let(:application) do
             double("application",
-                   render_header: "title sample",
-                   render_css_include: RENDER_CSS_INCLUDE,
-                   render_js_include: RENDER_JS_INCLUDE,
-                   name: "sample")
+              render_header: "title sample",
+              render_css_include: RENDER_CSS_INCLUDE,
+              render_js_include: RENDER_JS_INCLUDE,
+              name: "sample")
           end
 
           let(:database) do
             double("database",
-                   render_migration: RENDER_MIGRATION,
-                   render_definition: RENDER_DEFINITION,
-                   render_database_gem: "sqlite")
+              render_migration: RENDER_MIGRATION,
+              render_definition: RENDER_DEFINITION,
+              render_database_gem: "sqlite")
           end
 
           let(:event) do
             double("event",
-                   render_rb_ajax: [],
-                   render_rb_realtime: [],
-                   render_js_ajax: [],
-                   render_js_realtime: [],
-                   render_js_onmessage: [])
+              render_rb_ajax: [],
+              render_rb_realtime: [],
+              render_js_ajax: [],
+              render_js_realtime: [],
+              render_js_onmessage: [])
           end
 
           before do
             allow(application).to receive(:external_local_files)
-            .with(:js, external_file_dir).and_return([File.expand_path("external.js", external_file_dir)])
+              .with(:js, external_file_dir).and_return([File.expand_path("external.js", external_file_dir)])
             allow(application).to receive(:external_local_files)
-            .with(:css, external_file_dir).and_return([File.expand_path("external.css", external_file_dir)])
+              .with(:css, external_file_dir).and_return([File.expand_path("external.css", external_file_dir)])
 
             FileUtils.mkdir_p(external_file_dir)
             open(File.expand_path("external.js", external_file_dir), "w") { |f| f.puts "hoge" }
@@ -258,8 +258,8 @@ module Ajw2
         context "with invalid source" do
           let(:database) do
             double("database",
-                   render_migration: "hoge",
-                   render_definition: "hoge")
+              render_migration: "hoge",
+              render_definition: "hoge")
           end
 
           it "should raise Exception" do
