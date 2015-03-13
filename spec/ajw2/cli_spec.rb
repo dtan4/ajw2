@@ -28,6 +28,7 @@ module Ajw2
           end
 
           it "should create out_dir" do
+            fail
             expect(Dir.exist?(out_dir)).to be true
           end
 
